@@ -16,17 +16,18 @@ _middle = worldSize/2;
 _spawnCenter 	= [_middle,_middle,0];
 _max = _middle;
 
-_maxAIcount = 100;
-_minFPS = 15;
-_debug = false;
+_maxAIcount = 100; // the maximum amount of AI, if the AI count is above this then additional AI won't spawn
+_minFPS = 15; // any lower than 15fps on the server and additional AI won't spawn
+_debug = false; // set to true for debug log information
 
+// more than 10 players on the server and the max AI count drops per additional player
 _currentPlayerCount = count playableUnits;
 if(_currentPlayerCount > 10) then 
 {
 	_maxAIcount = _maxAIcount - _currentPlayerCount ;
 };
 
-// Don't spawn additional AI if the server fps is below 8
+// Don't spawn additional AI if the server fps is below _minFPS
 if(diag_fps < _minFPS) exitWith { diag_log format ["[OCCUPATION]:: Held off spawning more AI as the server FPS is only %1",diag_fps]; };
 
 _aiActive = count(_spawnCenter nearEntities ["O_recon_F", 20000]);
