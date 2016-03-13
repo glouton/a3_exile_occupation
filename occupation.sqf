@@ -25,7 +25,7 @@ _debug = false; // set to true for debug log information
 _currentPlayerCount = count playableUnits;
 if(_currentPlayerCount > _scaleAI) then 
 {
-	_maxAIcount = _maxAIcount - _currentPlayerCount ;
+	_maxAIcount = _maxAIcount - (_currentPlayerCount - _scaleAI) ;
 };
 
 // Don't spawn additional AI if the server fps is below _minFPS
