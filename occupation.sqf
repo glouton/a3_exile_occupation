@@ -18,11 +18,12 @@ _max = _middle;
 
 _maxAIcount = 100; // the maximum amount of AI, if the AI count is above this then additional AI won't spawn
 _minFPS = 15; // any lower than 15fps on the server and additional AI won't spawn
+_scaleAI = 10; // any more than _scaleAI players on the server and _maxAIcount is reduced for each extra player
 _debug = false; // set to true for debug log information
 
-// more than 10 players on the server and the max AI count drops per additional player
+// more than _scaleAI players on the server and the max AI count drops per additional player
 _currentPlayerCount = count playableUnits;
-if(_currentPlayerCount > 10) then 
+if(_currentPlayerCount > _scaleAI) then 
 {
 	_maxAIcount = _maxAIcount - _currentPlayerCount ;
 };
