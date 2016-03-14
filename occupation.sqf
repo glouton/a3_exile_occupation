@@ -15,6 +15,7 @@ diag_log format ["[OCCUPATION]:: Starting Occupation Monitor"];
 _middle = worldSize/2;
 _spawnCenter 	= [_middle,_middle,0];
 _max = _middle;
+_useLaunchers = DMS_ai_use_launchers;
 
 _maxAIcount = 100; // the maximum amount of AI, if the AI count is above this then additional AI won't spawn
 _minFPS = 15; // any lower than 15fps on the server and additional AI won't spawn
@@ -83,7 +84,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			
 			DMS_ai_use_launchers = false;
 			_group = [_spawnPosition, _aiCount, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
-			DMS_ai_use_launchers = true;
+			DMS_ai_use_launchers = _useLaunchers;
 						
 			// Get the AI to shut the fuck up :)
 			enableSentences false;
