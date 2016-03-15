@@ -60,6 +60,9 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 		_nearestMarker = [allMapMarkers, _pos] call BIS_fnc_nearestPosition; // Nearest Marker to the Location		
 		_posNearestMarker = getMarkerPos _nearestMarker;
 		if(_pos distance _posNearestMarker < 500) exitwith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION]:: %1 is too close to a %2",_locationName,_nearestMarker];}; };
+	
+		// Don't spawn additional AI if there are players in range
+		if([_pos, 100] call ExileClient_util_world_isAlivePlayerInRange) exitwith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION]:: %1 has players too close",_locationName];}; };
 		
 		// Don't spawn additional AI if there are already AI in range
 		_aiNear = count(_pos nearEntities ["O_recon_F", 500]);
