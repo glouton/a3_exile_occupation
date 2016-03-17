@@ -12,15 +12,15 @@
 if (!isServer) exitWith {};
 diag_log format ["[OCCUPATION]:: Starting Occupation Monitor"];
 
-_middle = worldSize/2;
-_spawnCenter 	= [_middle,_middle,0];
-_max = _middle;
-_useLaunchers = DMS_ai_use_launchers;
+_middle 			= worldSize/2;			
+_spawnCenter 		= [_middle,_middle,0];		// Centre point for the map
+_maxDistance 		= _middle;				// Max radius for the map
 
-_maxAIcount = 100; // the maximum amount of AI, if the AI count is above this then additional AI won't spawn
-_minFPS = 15; // any lower than 15fps on the server and additional AI won't spawn
-_scaleAI = 10; // any more than _scaleAI players on the server and _maxAIcount is reduced for each extra player
-_debug = false; // set to true for debug log information
+_maxAIcount 		= maxAIcount;
+_minFPS 			= minFPS;
+_debug 				= debug;
+_useLaunchers 		= DMS_ai_use_launchers;
+_scaleAI			= scaleAI;
 
 // more than _scaleAI players on the server and the max AI count drops per additional player
 _currentPlayerCount = count playableUnits;
@@ -35,7 +35,7 @@ if(diag_fps < _minFPS) exitWith { diag_log format ["[OCCUPATION]:: Held off spaw
 _aiActive = count(_spawnCenter nearEntities ["O_recon_F", 20000]);
 if(_aiActive > _maxAIcount) exitWith { diag_log format ["[OCCUPATION]:: %1 active AI, so not spawning AI this time",_aiActive]; };
 
-_locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCityCapital"], _max]);
+_locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCityCapital"], _maxDistance]);
 {
 	_okToSpawn = true;
 	_temppos = position _x;
@@ -62,8 +62,8 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 		if(_pos distance _posNearestMarker < 500) exitwith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION]:: %1 is too close to a %2",_locationName,_nearestMarker];}; };
 	
 		// Don't spawn additional AI if there are players in range
-		if([_pos, 100] call ExileClient_util_world_isAlivePlayerInRange) exitwith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION]:: %1 has players too close",_locationName];}; };
-		
+		if([_pos, 200] call ExileClient_util_world_isAlivePlayerInRange) exitwith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION]:: %1 has players too close",_locationName];}; };
+	
 		// Don't spawn additional AI if there are already AI in range
 		_aiNear = count(_pos nearEntities ["O_recon_F", 500]);
 		if(_aiNear > 0) exitwith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION]:: %1 already has %2 active AI patrolling",_locationName,_aiNear];}; };
@@ -94,9 +94,22 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			enableRadio false;
 			
 			[_group, _pos, _groupRadius] call bis_fnc_taskPatrol;
-			_group setBehaviour "SAFE";
+			_group setBehaviour "DESTROY";
 			_group setCombatMode "RED";
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			
+			if(_debug) then 
+			{
+				_marker = createMarker [format ["%1", _spawnPosition],_pos];
+				_marker setMarkerShape "Icon";
+				_marker setMarkerSize [3,3];
+				_marker setMarkerType "mil_dot";
+				_marker setMarkerBrush "Solid";
+				_marker setMarkerAlpha 0.5;
+				_marker setMarkerColor "ColorOrange";
+				_marker setMarkerText "Occupied Area";	
+			};			
+			
 			diag_log format ["[OCCUPATION]:: Spawning %2 AI in at %3 to patrol %1",_locationName,_aiCount,_spawnPosition];
 			_okToSpawn = false;		
 		};
