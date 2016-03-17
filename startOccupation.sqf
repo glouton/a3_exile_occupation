@@ -4,13 +4,13 @@ diag_log format ["[OCCUPATION]:: Initialised at %1",time];
 // Shared Config for each occupation monitor
 
 maxAIcount 		= 100;					// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
-minFPS 			  = 15;					// any lower than 15fps on the server and additional AI won't spawn
-scaleAI 		  = 10; 					// any more than _scaleAI players on the server and _maxAIcount is reduced for each extra player
-debug 			  = false;				// set to true for debug log information and map markers
+minFPS 			= 15;					// any lower than 15fps on the server and additional AI won't spawn
+scaleAI 		= 10; 					// any more than _scaleAI players on the server and _maxAIcount is reduced for each extra player
+debug 			= false;				// set to true for debug log information and map markers
 
 // Occupy Military?
-_occupyPlaces 	= true;					// true if you want villages,towns,cities patrolled (specify which types of building in occupationMilitary.sqf)
-_occupyMilitary = true;					// true if you want military buildings patrolled (specify which types of building in occupationMilitary.sqf)
+_occupyPlaces 		= true;					// true if you want villages,towns,cities patrolled (specify which types of building in occupationMilitary.sqf)
+_occupyMilitary 	= true;					// true if you want military buildings patrolled (specify which types of building in occupationMilitary.sqf)
 
 
 // Add selected occupation scripts to Exile Threading System
