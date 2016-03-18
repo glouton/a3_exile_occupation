@@ -1,6 +1,9 @@
 ////////////////////////////////////////////////////////////////////////
 //
 //		Server Occupation script by second_coming
+//
+//		Version 2.0
+//
 //		http://www.exilemod.com/profile/60-second_coming/
 //
 //		This script uses the fantastic DMS by Defent and eraser1
@@ -12,15 +15,15 @@
 if (!isServer) exitWith {};
 diag_log format ["[OCCUPATION]:: Starting Occupation Monitor"];
 
-_middle 			= worldSize/2;			
+_middle 		= worldSize/2;			
 _spawnCenter 		= [_middle,_middle,0];		// Centre point for the map
-_maxDistance 		= _middle;				// Max radius for the map
+_maxDistance 		= _middle;			// Max radius for the map
 
 _maxAIcount 		= maxAIcount;
-_minFPS 			= minFPS;
-_debug 				= debug;
+_minFPS 		= minFPS;
+_debug 			= debug;
 _useLaunchers 		= DMS_ai_use_launchers;
-_scaleAI			= scaleAI;
+_scaleAI		= scaleAI;
 
 // more than _scaleAI players on the server and the max AI count drops per additional player
 _currentPlayerCount = count playableUnits;
@@ -93,9 +96,51 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			enableSentences false;
 			enableRadio false;
 			
-			[_group, _pos, _groupRadius] call bis_fnc_taskPatrol;
-			_group setBehaviour "DESTROY";
-			_group setCombatMode "RED";
+			if(!useWaypoints) then
+			{
+				[_group, _pos, _groupRadius] call bis_fnc_taskPatrol;
+				_group setBehaviour "DESTROY";
+				_group setCombatMode "RED";
+			}
+			else
+			{
+				[ _group,_pos,_difficulty,"DESTROY" ] call DMS_fnc_SetGroupBehavior;
+				
+				_buildings = _pos nearObjects ["house", _groupRadius];
+				{
+					_buildingPositions = [_x, 10] call BIS_fnc_buildingPositions;
+					if(count _buildingPositions > 0) then
+					{
+
+						// Find Highest Point
+						_highest = [0,0,0];
+						{
+							if(_x select 2 > _highest select 2) then
+							{
+								_highest = _x;
+							};
+
+						} foreach _buildingPositions;		
+						_spawnPosition = _highest;
+						
+						_i = _buildingPositions find _spawnPosition;
+						_wp = _group addWaypoint [_spawnPosition, 0] ;
+						_wp setWaypointFormation "Column";
+						_wp setWaypointBehaviour "DESTROY";
+						_wp setWaypointCombatMode "RED";
+						_wp setWaypointCompletionRadius 1;
+						_wp waypointAttachObject _x;
+						_wp setwaypointHousePosition _i;
+						_wp setWaypointType "MOVE";
+
+					};
+				} foreach _buildings;
+				if(count _buildings > 0 ) then
+				{
+					_wp setWaypointType "CYCLE";
+				};			
+			};
+
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			
 			if(_debug) then 
