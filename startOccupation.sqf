@@ -4,7 +4,7 @@ diag_log format ["[OCCUPATION]:: Initialised at %1",time];
 // Shared Config for each occupation monitor
 
 maxAIcount 		= 100;				// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
-minFPS 			= 8;				// any lower than 15fps on the server and additional AI won't spawn
+minFPS 			= 8;				// any lower than minFPS on the server and additional AI won't spawn
 scaleAI 		= 10; 				// any more than _scaleAI players on the server and _maxAIcount is reduced for each extra player
 useWaypoints		= false;			// When spawning AI create waypoints to make them enter buildings (can affect performance when the AI is spawned and the waypoints are calculated)
 debug 			= true;				// set to true for debug log information and map markers
