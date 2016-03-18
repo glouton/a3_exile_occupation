@@ -11,6 +11,7 @@
 //		http://www.exilemod.com/topic/61-dms-defents-mission-system/
 //
 ////////////////////////////////////////////////////////////////////////
+private["_wp","_wp2","_wp3"];
 
 if (!isServer) exitWith {};
 diag_log format ["[OCCUPATION]:: Starting Occupation Monitor"];
