@@ -8,8 +8,10 @@ minFPS 			= 8;		// any lower than 15fps on the server and additional AI won't sp
 scaleAI 		= 10; 		// any more than _scaleAI players on the server and _maxAIcount is reduced for each extra player
 useWaypoints		= false;	// When spawning AI create waypoints to make them enter buildings (can affect performance when the AI is spawned and the waypoints are calculated)
 debug 			= false;	// set to true for debug log information and map markers
-_occupyPlaces 		= true;		// true if you want villages,towns,cities patrolled (specify which types of building in occupationMilitary.sqf)
+_occupyPlaces 		= true;		// true if you want villages,towns,cities patrolled
 _occupyMilitary 	= false;	// true if you want military buildings patrolled (specify which types of building in occupationMilitary.sqf)
+
+if (worldName == 'Namalsk') then 	{ maxAIcount = 80; };
 
 // Add selected occupation scripts to Exile Threading System
 if(_occupyPlaces) then
