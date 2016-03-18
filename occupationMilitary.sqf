@@ -1,6 +1,9 @@
 ////////////////////////////////////////////////////////////////////////
 //
 //		Server Occupation script by second_coming
+//
+//		Version 2.0
+//
 //		http://www.exilemod.com/profile/60-second_coming/
 //
 //		This script uses the fantastic DMS by Defent and eraser1
@@ -12,15 +15,15 @@
 if (!isServer) exitWith {};
 diag_log format ["[OCCUPATION Military]:: Starting Monitor"];
 
-_middle 			= worldSize/2;			
+_middle 		= worldSize/2;			
 _spawnCenter 		= [_middle,_middle,0];		// Centre point for the map
-_maxDistance 		= _middle;				// Max radius for the map
+_maxDistance 		= _middle;			// Max radius for the map
 
 _maxAIcount 		= maxAIcount;
-_minFPS 			  = minFPS;
-_debug 				  = debug;
-_useLaunchers 	= DMS_ai_use_launchers;
-_scaleAI			  = scaleAI;
+_minFPS 		= minFPS;
+_debug 			= debug;
+_useLaunchers 		= DMS_ai_use_launchers;
+_scaleAI		= scaleAI;
 
 _buildings = ["Land_Cargo_Patrol_V1_F"]; // Class names for the military buildings to patrol
 _building = [];
@@ -33,7 +36,7 @@ if(_currentPlayerCount > _scaleAI) then
 
 
 // Select an area to scan as nearObjects on the entire map is slooooooooow
-_areaToScan = [ 0, 10, 1, 1000, 1000, 0, 0, 0, true, false ] call DMS_fnc_findSafePos;
+_areaToScan = [ 0, 900, 1, 500, 500, 0, 0, 0, true, false ] call DMS_fnc_findSafePos;
 
 // Don't spawn additional AI if the server fps is below 8
 if(diag_fps < _minFPS) exitWith { diag_log format ["[OCCUPATION Military]:: Held off spawning more AI as the server FPS is only %1",diag_fps]; };
@@ -93,34 +96,86 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 				_side = "bandit";
 				_spawnPosition = _pos;				
 				
-				_buildingPositions = [_foundBuilding, 5] call BIS_fnc_buildingPositions;
-				if(count _buildingPositions > 0) then
-				{
 
-					// Find Highest Point
-					_highest = [0,0,0];
-					{
-						if(_x select 2 > _highest select 2) then
-						{
-							_highest = _x;
-						};
-
-					} foreach _buildingPositions;		
-					_spawnPosition = _highest;
-				};
-				
-								
-				DMS_ai_use_launchers = false;
-				_group = [_spawnPosition, _aiCount, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
-				DMS_ai_use_launchers = true;
 							
 				// Get the AI to shut the fuck up :)
 				enableSentences false;
 				enableRadio false;
 				
-				[_group, _pos, _groupRadius] call bis_fnc_taskPatrol;
-				_group setBehaviour "DESTROY";
-				_group setCombatMode "RED";	
+
+				
+				if(!useWaypoints) then
+				{
+					DMS_ai_use_launchers = false;
+					_group = [_spawnPosition, _aiCount, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
+					DMS_ai_use_launchers = true;
+
+					[_group, _pos, _groupRadius] call bis_fnc_taskPatrol;
+					_group setBehaviour "DESTROY";
+					_group setCombatMode "RED";
+				}
+				else
+				{
+
+					_buildingPositions = [_foundBuilding, 5] call BIS_fnc_buildingPositions;
+					if(count _buildingPositions > 0) then
+					{
+
+						// Find Highest Point
+						_highest = [0,0,0];
+						{
+							if(_x select 2 > _highest select 2) then
+							{
+								_highest = _x;
+							};
+
+						} foreach _buildingPositions;		
+						_spawnPosition = _highest;
+					};
+					
+									
+					DMS_ai_use_launchers = false;
+					_group = [_spawnPosition, _aiCount, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
+					DMS_ai_use_launchers = true;
+
+					[ _group,_pos,_difficulty,"DESTROY" ] call DMS_fnc_SetGroupBehavior;
+					
+					_buildings = _pos nearObjects ["house", _groupRadius];
+					{
+						_buildingPositions = [_x, 10] call BIS_fnc_buildingPositions;
+						if(count _buildingPositions > 0) then
+						{
+
+							// Find Highest Point
+							_highest = [0,0,0];
+							{
+								if(_x select 2 > _highest select 2) then
+								{
+									_highest = _x;
+								};
+
+							} foreach _buildingPositions;		
+							_spawnPosition = _highest;
+							
+							_i = _buildingPositions find _spawnPosition;
+							_wp = _group addWaypoint [_spawnPosition, 0] ;
+							_wp setWaypointFormation "Column";
+							_wp setWaypointBehaviour "DESTROY";
+							_wp setWaypointCombatMode "RED";
+							_wp setWaypointCompletionRadius 1;
+							_wp waypointAttachObject _x;
+							_wp setwaypointHousePosition _i;
+							_wp setWaypointType "MOVE";
+
+						};
+					} foreach _buildings;
+					if(count _buildings > 0 ) then
+					{
+						_wp setWaypointType "CYCLE";
+					};			
+				};				
+				
+				
 				
 			
 				//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
