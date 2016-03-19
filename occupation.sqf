@@ -16,15 +16,15 @@ private["_wp","_wp2","_wp3"];
 if (!isServer) exitWith {};
 diag_log format ["[OCCUPATION]:: Starting Occupation Monitor"];
 
-_middle 		= worldSize/2;			
-_spawnCenter 		= [_middle,_middle,0];		// Centre point for the map
-_maxDistance 		= _middle;			// Max radius for the map
+_middle 	= worldSize/2;			
+_spawnCenter 	= [_middle,_middle,0];		// Centre point for the map
+_maxDistance 	= _middle;			// Max radius for the map
 
-_maxAIcount 		= maxAIcount;
-_minFPS 		= minFPS;
-_debug 			= debug;
-_useLaunchers 		= DMS_ai_use_launchers;
-_scaleAI		= scaleAI;
+_maxAIcount 	= maxAIcount;
+_minFPS 	= minFPS;
+_debug 		= debug;
+_useLaunchers 	= DMS_ai_use_launchers;
+_scaleAI	= scaleAI;
 
 // more than _scaleAI players on the server and the max AI count drops per additional player
 _currentPlayerCount = count playableUnits;
@@ -79,9 +79,9 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			_aiCount = 1;
 			_groupRadius = 100;
-			if(_locationType isEqualTo "NameCityCapital") then { _aiCount = 4 + (round (random 5)) - _aiNear; _groupRadius = 300; };
-			if(_locationType isEqualTo "NameCity") then { _aiCount = 2 + (round (random 3)) - _aiNear; _groupRadius = 200; };
-			if(_locationType isEqualTo "NameVillage") then { _aiCount = 1 + (round (random 2)) - _aiNear; _groupRadius = 100; };
+			if(_locationType isEqualTo "NameCityCapital") then { _aiCount = 5; _groupRadius = 300; };
+			if(_locationType isEqualTo "NameCity") then { _aiCount = 2 + (round (random 3)); _groupRadius = 200; };
+			if(_locationType isEqualTo "NameVillage") then { _aiCount = 1 + (round (random 2)); _groupRadius = 100; };
 				
 			if(_aiCount < 1) then { _aiCount = 1; };
 			_difficulty = "random";
@@ -90,7 +90,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			_spawnPosition = [_spawnPos select 0, _spawnPos select 1,0];
 			
 			DMS_ai_use_launchers = false;
-			_group = [_spawnPosition, _aiCount, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
+			_group = [_spawnPosition, _aiCount, _difficulty, "random", _side, customGearSet1] call DMS_fnc_SpawnAIGroup;
 			DMS_ai_use_launchers = _useLaunchers;
 						
 			// Get the AI to shut the fuck up :)
@@ -142,6 +142,20 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 				};			
 			};
 
+			if(_locationType isEqualTo "NameCityCapital") then
+			{
+				DMS_ai_use_launchers = false;
+				_group2 = [_spawnPosition, 5, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
+				DMS_ai_use_launchers = _useLaunchers;
+							
+				// Get the AI to shut the fuck up :)
+				enableSentences false;
+				enableRadio false;
+				[_group2, _pos, _groupRadius] call bis_fnc_taskPatrol;
+				_group2 setBehaviour "DESTROY";
+				_group2 setCombatMode "RED";
+
+			};
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			
 			if(_debug) then 
