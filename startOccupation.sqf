@@ -1,29 +1,43 @@
+////////////////////////////////////////////////////////////////////////
+//
+//		Server Occupation script by second_coming
+//
+//		Version 2.0
+//
+//		http://www.exilemod.com/profile/60-second_coming/
+//
+//		This script uses the fantastic DMS by Defent and eraser1
+//
+//		http://www.exilemod.com/topic/61-dms-defents-mission-system/
+//
+////////////////////////////////////////////////////////////////////////
+
 diag_log format ["[OCCUPATION]:: Giving the server time to start before starting [OCCUPATION] (%1)",time];
 uiSleep 30;
 diag_log format ["[OCCUPATION]:: Initialised at %1",time];
 // Shared Config for each occupation monitor
 
-maxAIcount 		= 100;									// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
-minFPS 			= 8;									// any lower than minFPS on the server and additional AI won't spawn
-scaleAI 		= 10; 									// any more than _scaleAI players on the server and _maxAIcount is reduced for each extra player
-useWaypoints		= true;									// When spawning AI create waypoints to make them enter buildings (can affect performance when the AI is spawned and the waypoints are calculated)
-debug 			= true;									// set to true for debug log information and map markers
+maxAIcount 			= 100;								// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
+minFPS 				= 8;									// any lower than minFPS on the server and additional AI won't spawn
+scaleAI 				= 10; 								// any more than _scaleAI players on the server and _maxAIcount is reduced for each extra player
+useWaypoints			= true;								// When spawning AI create waypoints to make them enter buildings (can affect performance when the AI is spawned and the waypoints are calculated)
+debug 				= false;								// set to true for debug log information and map markers
 
-_occupyPlaces 		= true;									// true if you want villages,towns,cities patrolled
-_occupyMilitary 	= false;								// true if you want military buildings patrolled (specify which types of building in occupationMilitary.sqf)
-_occupyStatic	 	= false;								// true if you want to garrison AI in specific locations (not working yet)
+_occupyPlaces 		= true;								// true if you want villages,towns,cities patrolled
+_occupyMilitary 		= false;								// true if you want military buildings patrolled (specify which types of building in occupationMilitary.sqf)
+_occupyStatic	 		= false;								// true if you want to garrison AI in specific locations (not working yet)
 
 // Settings for roaming ground vehicle AI
-_occupyVehicle	 	= true;									// true if you want to have roaming AI vehicles
-VehicleClassToUse 	= "Exile_Car_LandRover_Green";			// class name of the ground vehicle to use
+_occupyVehicle		= true;								// true if you want to have roaming AI vehicles
+VehicleClassToUse 	= ["Exile_Car_LandRover_Green","Exile_Car_UAZ_Open_Green","Exile_Car_Offroad_Armed_Guerilla01"];			// class name of the ground vehicle to use
 liveVehicles 		= 0;									// leave as zero
-maxNumberofVehicles = 3;									// Number of roaming vehicles required
+maxNumberofVehicles 	= 3;									// Number of roaming vehicles required
 publicVariable "liveVehicles";
 
-_occupySky		= true;									// true if you want to have roaming AI helis
-HeliClassToUse 		= "Exile_Chopper_Huey_Armed_Green";		// class name of the air vehicle to use
-liveHelis	 	= 0;									// leave as zero
-maxNumberofHelis	= 1;									// Number of roaming vehicles required
+_occupySky			= true;									// true if you want to have roaming AI helis
+HeliClassToUse 		= ["Exile_Chopper_Huey_Armed_Green","Exile_Chopper_Hellcat_Green","Exile_Chopper_Mohawk_FIA"];		// class name of the air vehicle to use
+liveHelis	 		= 0;									// leave as zero
+maxNumberofHelis		= 3;									// Number of roaming vehicles required
 publicVariable "liveHelis";
 
 if (worldName == 'Namalsk') then 	{ maxAIcount = 80; };
