@@ -1,5 +1,16 @@
-/** ROAMING TRADER by JohnO **/
-// Trader vehicle handling added by second_coming 
+////////////////////////////////////////////////////////////////////////
+//
+//		Server Occupation script by second_coming
+//
+//		Version 2.0
+//
+//		http://www.exilemod.com/profile/60-second_coming/
+//
+//		This script uses the fantastic DMS by Defent and eraser1
+//
+//		http://www.exilemod.com/topic/61-dms-defents-mission-system/
+//
+////////////////////////////////////////////////////////////////////////
 
 diag_log format['[OCCUPATION:Vehicle] Started'];
 
@@ -26,6 +37,7 @@ _i = 0;
 		_locations deleteAt _i;
 	};
 	_i = _i + 1;
+	sleep 0.2;
 
 } forEach _locations;
 
@@ -43,7 +55,9 @@ for "_j" from 1 to _vehiclesToSpawn do
 	_nearestRoad = position (_nearRoads select 0);
 	
 	_group = createGroup east;
-	_vehicleObject = [ [_nearestRoad], _group, "assault", "difficult", "bandit",VehicleClassToUse ] call DMS_fnc_SpawnAIVehicle;
+	_VehicleClassToUse = VehicleClassToUse call BIS_fnc_selectRandom;
+	_vehicleObject = [ [_nearestRoad], _group, "assault", "difficult", "bandit",_VehicleClassToUse ] call DMS_fnc_SpawnAIVehicle;
+	diag_log format['[OCCUPATION:Vehicle] %1 spawned @ %2',_VehicleClassToUse,_spawnLocation];
 	_vehicleObject addEventHandler ["killed", "liveVehicles = liveVehicles - 1;"];
 	_vehicleObject setSpeedMode "Normal";
 	_vehicleObject limitSpeed 60;
@@ -53,6 +67,7 @@ for "_j" from 1 to _vehiclesToSpawn do
 	_group setCombatMode "RED";
 
 	liveVehicles = liveVehicles + 1;	
+	sleep 5;
 };
 
 
