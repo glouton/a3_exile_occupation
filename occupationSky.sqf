@@ -10,7 +10,7 @@
 //
 //		http://www.exilemod.com/topic/61-dms-defents-mission-system/
 //
-////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////// 
 
 diag_log format['[OCCUPATION:Sky] Started'];
 
@@ -37,6 +37,7 @@ _i = 0;
 		_locations deleteAt _i;
 	};
 	_i = _i + 1;
+	sleep 0.2;
 
 } forEach _locations;
 
@@ -50,7 +51,9 @@ for "_i" from 1 to _vehiclesToSpawn do
 
 
 	_group = createGroup east;
-	_vehicle1 = [ [_spawnLocation], _group, "assault", "difficult", "bandit", HeliClassToUse ] call DMS_fnc_SpawnAIVehicle;
+	_HeliClassToUse = HeliClassToUse call BIS_fnc_selectRandom;
+	_vehicle1 = [ [_spawnLocation], _group, "assault", "difficult", "bandit", _HeliClassToUse ] call DMS_fnc_SpawnAIVehicle;
+	diag_log format['[OCCUPATION:Sky] %1 spawned @ %2',_HeliClassToUse,_spawnLocation];	
 	_vehicle1 setVehiclePosition [_spawnLocation, [], 0, "FLY"];
 	_vehicle1 setVariable ["vehicleID", _spawnLocation, true];  
 	_vehicle1 setFuel 1;
@@ -61,7 +64,6 @@ for "_i" from 1 to _vehiclesToSpawn do
 	_group setCombatMode "RED";
 	liveHelis = liveHelis + 1;
 	_vehicle1 addEventHandler ["killed", "liveHelis = liveHelis - 1;"];
-	diag_log format['[OCCUPATION:Vehicle] Vehicle spawned @ %1',_spawnLocation];	
 	sleep 5;
 	
 };
