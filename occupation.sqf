@@ -16,15 +16,15 @@ private["_wp","_wp2","_wp3"];
 if (!isServer) exitWith {};
 diag_log format ["[OCCUPATION]:: Starting Occupation Monitor"];
 
-_middle 	= worldSize/2;			
+_middle 		= worldSize/2;			
 _spawnCenter 	= [_middle,_middle,0];		// Centre point for the map
 _maxDistance 	= _middle;			// Max radius for the map
 
 _maxAIcount 	= maxAIcount;
-_minFPS 	= minFPS;
-_debug 		= debug;
+_minFPS 		= minFPS;
+_debug 			= debug;
 _useLaunchers 	= DMS_ai_use_launchers;
-_scaleAI	= scaleAI;
+_scaleAI		= scaleAI;
 
 // more than _scaleAI players on the server and the max AI count drops per additional player
 _currentPlayerCount = count playableUnits;
@@ -90,7 +90,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			_spawnPosition = [_spawnPos select 0, _spawnPos select 1,0];
 			
 			DMS_ai_use_launchers = false;
-			_group = [_spawnPosition, _aiCount, _difficulty, "random", _side, customGearSet1] call DMS_fnc_SpawnAIGroup;
+			_group = [_spawnPosition, _aiCount, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
 			DMS_ai_use_launchers = _useLaunchers;
 						
 			// Get the AI to shut the fuck up :)
@@ -158,7 +158,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			};
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			
-			if(_debug) then 
+			if(mapMarkers) then 
 			{
 				_marker = createMarker [format ["%1", _spawnPosition],_pos];
 				_marker setMarkerShape "Icon";
