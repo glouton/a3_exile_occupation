@@ -16,17 +16,17 @@ private["_wp","_wp2","_wp3"];
 if (!isServer) exitWith {};
 diag_log format ["[OCCUPATION Military]:: Starting Monitor"];
 
-_middle 		= worldSize/2;			
+_middle 			= worldSize/2;			
 _spawnCenter 		= [_middle,_middle,0];		// Centre point for the map
-_maxDistance 		= _middle;			// Max radius for the map
+_maxDistance 		= _middle;				// Max radius for the map
 
 _maxAIcount 		= maxAIcount;
-_minFPS 		= minFPS;
-_debug 			= debug;
+_minFPS 			= minFPS;
+_debug 				= debug;
 _useLaunchers 		= DMS_ai_use_launchers;
-_scaleAI		= scaleAI;
+_scaleAI			= scaleAI;
 
-_buildings = ["Land_Cargo_Patrol_V1_F"]; // Class names for the military buildings to patrol
+_buildings = buildings; // Class names for the military buildings to patrol
 _building = [];
 
 _currentPlayerCount = count playableUnits;
@@ -47,17 +47,16 @@ if(_aiActive > _maxAIcount) exitWith { diag_log format ["[OCCUPATION Military]::
 
 for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 {
-	diag_log format ["[OCCUPATION Military]:: scanning nearObjects started at %1",time];
+	diag_log format ["[OCCUPATION Military]:: scanning buildings around %2 started at %1",time,_areaToScan];
 	
-	_building = _areaToScan nearObjects [_buildings select _i, 1000];
+	_building = _areaToScan nearObjects [_buildings select _i, 750];
+	_currentBuilding = _buildings select _i;
+	diag_log format ["[OCCUPATION Military]:: scan for %2 building finished at %1",time,_currentBuilding];
 	
-	diag_log format ["[OCCUPATION Military]:: scanning nearObjects finished at %1",time];
-	
-    uiSleep 1;
-    for [{_n = 0},{_n < (count _building)},{_n =_n + 1}] do
+    for [{_n = 0},{_n < (count _building)-1},{_n =_n + 1}] do
     {
 		_okToSpawn = true;
-		uiSleep 1;
+		Sleep 0.1;
         _foundBuilding = (_building select _n);
 		_location = getPos _foundBuilding;
 		_pos = [_location select 0, _location select 1, 0];
@@ -182,7 +181,7 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 				//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				diag_log format ["[OCCUPATION Military]:: Spawning %1 AI in at %2 to patrol",_aiCount,_spawnPosition];
 
-				if(_debug) then 
+				if(mapMarkers) then 
 				{
 					_marker = createMarker [format ["%1", _foundBuilding],_pos];
 					_marker setMarkerShape "Icon";
