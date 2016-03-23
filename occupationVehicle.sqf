@@ -5,9 +5,9 @@ diag_log format['[OCCUPATION:Vehicle] Started'];
 
 if (!isServer) exitWith {};
 
-if(liveVehicles >= maxNumberofVehicles) exitWith {};
+if(SC_liveVehicles >= SC_maxNumberofVehicles) exitWith {};
 
-_vehiclesToSpawn = (maxNumberofVehicles - liveVehicles);
+_vehiclesToSpawn = (SC_maxNumberofVehicles - SC_liveVehicles);
 _middle = worldSize/2;
 _spawnCenter = [_middle,_middle,0];
 _maxDistance = _middle;
@@ -44,10 +44,10 @@ for "_j" from 1 to _vehiclesToSpawn do
 	_nearestRoad = position (_nearRoads select 0);
 	
 	_group = createGroup east;
-	_VehicleClassToUse = VehicleClassToUse call BIS_fnc_selectRandom;
+	_VehicleClassToUse = SC_VehicleClassToUse call BIS_fnc_selectRandom;
 	_vehicleObject = [ [_nearestRoad], _group, "assault", "difficult", "bandit",_VehicleClassToUse ] call DMS_fnc_SpawnAIVehicle;
 	diag_log format['[OCCUPATION:Vehicle] %1 spawned @ %2',_VehicleClassToUse,_spawnLocation];
-	_vehicleObject addEventHandler ["killed", "liveVehicles = liveVehicles - 1;"];
+	_vehicleObject addEventHandler ["killed", "SC_liveVehicles = SC_liveVehicles - 1;"];
 	_vehicleObject setSpeedMode "Normal";
 	_vehicleObject limitSpeed 60;
 	_vehicleObject action ["LightOn", _vehicleObject];	
@@ -55,7 +55,7 @@ for "_j" from 1 to _vehiclesToSpawn do
 	_group setBehaviour "AWARE";
 	_group setCombatMode "RED";
 
-	liveVehicles = liveVehicles + 1;	
+	SC_liveVehicles = SC_liveVehicles + 1;	
 	sleep 5;
 };
 

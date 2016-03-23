@@ -11,6 +11,7 @@
 //		http://www.exilemod.com/topic/61-dms-defents-mission-system/
 //
 ////////////////////////////////////////////////////////////////////////
+
 private["_wp","_wp2","_wp3"];
 
 if (!isServer) exitWith {};
@@ -20,11 +21,11 @@ _middle 		= worldSize/2;
 _spawnCenter 	= [_middle,_middle,0];		// Centre point for the map
 _maxDistance 	= _middle;			// Max radius for the map
 
-_maxAIcount 	= maxAIcount;
-_minFPS 		= minFPS;
-_debug 			= debug;
+_maxAIcount 		= SC_maxAIcount;
+_minFPS 			= SC_minFPS;
+_debug 			= SC_debug;
 _useLaunchers 	= DMS_ai_use_launchers;
-_scaleAI		= scaleAI;
+_scaleAI			= SC_scaleAI;
 
 // more than _scaleAI players on the server and the max AI count drops per additional player
 _currentPlayerCount = count playableUnits;
@@ -97,7 +98,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			enableSentences false;
 			enableRadio false;
 			
-			if(!useWaypoints) then
+			if(!SC_useWaypoints) then
 			{
 				[_group, _pos, _groupRadius] call bis_fnc_taskPatrol;
 				_group setBehaviour "DESTROY";
@@ -158,7 +159,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			};
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			
-			if(mapMarkers) then 
+			if(SC_mapMarkers) then 
 			{
 				_marker = createMarker [format ["%1", _spawnPosition],_pos];
 				_marker setMarkerShape "Icon";

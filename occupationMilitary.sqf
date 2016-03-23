@@ -11,6 +11,7 @@
 //		http://www.exilemod.com/topic/61-dms-defents-mission-system/
 //
 ////////////////////////////////////////////////////////////////////////
+
 private["_wp","_wp2","_wp3"];
 
 if (!isServer) exitWith {};
@@ -20,14 +21,14 @@ _middle 			= worldSize/2;
 _spawnCenter 		= [_middle,_middle,0];		// Centre point for the map
 _maxDistance 		= _middle;				// Max radius for the map
 
-_maxAIcount 		= maxAIcount;
-_minFPS 			= minFPS;
-_debug 				= debug;
+_maxAIcount 			= SC_maxAIcount;
+_minFPS 				= SC_minFPS;
+_debug 				= SC_debug;
 _useLaunchers 		= DMS_ai_use_launchers;
-_scaleAI			= scaleAI;
+_scaleAI				= SC_scaleAI;
 
-_buildings = buildings; // Class names for the military buildings to patrol
-_building = [];
+_buildings 			= SC_buildings; // Class names for the military buildings to patrol
+_building 			= [];
 
 _currentPlayerCount = count playableUnits;
 if(_currentPlayerCount > _scaleAI) then 
@@ -65,9 +66,9 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 		
 		while{_okToSpawn} do
 		{			
-			// Percentage chance to spawn (roll 80 or more to spawn AI)
+			// Percentage chance to spawn (roll 60 or more to spawn AI)
 			_spawnChance = round (random 100);
-			if(_spawnChance < 80) exitWith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION Military]:: Rolled %1 so not spawning AI this time",_spawnChance];};};
+			if(_spawnChance < 60) exitWith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION Military]:: Rolled %1 so not spawning AI this time",_spawnChance];};};
 				
 			// Don't spawn if too near a player base
 			_nearBase = (nearestObjects [_pos,["Exile_Construction_Flag_Static"],500]) select 0;
@@ -104,7 +105,7 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 				
 
 				
-				if(!useWaypoints) then
+				if(!SC_useWaypoints) then
 				{
 					DMS_ai_use_launchers = false;
 					_group = [_spawnPosition, _aiCount, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
@@ -181,7 +182,7 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 				//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				diag_log format ["[OCCUPATION Military]:: Spawning %1 AI in at %2 to patrol",_aiCount,_spawnPosition];
 
-				if(mapMarkers) then 
+				if(SC_mapMarkers) then 
 				{
 					_marker = createMarker [format ["%1", _foundBuilding],_pos];
 					_marker setMarkerShape "Icon";
