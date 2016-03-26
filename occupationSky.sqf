@@ -47,24 +47,33 @@ for "_i" from 1 to _vehiclesToSpawn do
    _Location = _locations call BIS_fnc_selectRandom;
    
    _position = position _Location;	
-   _spawnLocation = [_position select 0, _position select 1, 500];
+   _spawnLocation = [_position select 0, _position select 1, 300];
 
 	_group = createGroup east;
 	_HeliClassToUse = SC_HeliClassToUse call BIS_fnc_selectRandom;
 	_vehicle1 = [ [_spawnLocation], _group, "assault", "difficult", "bandit", _HeliClassToUse ] call DMS_fnc_SpawnAIVehicle;
-	diag_log format['[OCCUPATION:Sky] %1 spawned @ %2',_HeliClassToUse,_spawnLocation];	
+	
+	if(SC_infiSTAR_log) then 
+	{ 
+		_logDetail = format['[OCCUPATION:Sky] %1 spawned @ %2',_HeliClassToUse,_spawnLocation];	
+		['A3_EXILE_OCCUPATION',_logDetail] call FNC_A3_CUSTOMLOG;
+	};
 	_vehicle1 setVehiclePosition [_spawnLocation, [], 0, "FLY"];
 	_vehicle1 setVariable ["vehicleID", _spawnLocation, true];  
 	_vehicle1 setFuel 1;
+	_vehicle1 setDamage 0;
 	_vehicle1 engineOn true;
 	_vehicle1 flyInHeight 150;
+	sleep 0.2;
 	
 	[_group, _spawnLocation, 2000] call bis_fnc_taskPatrol;
 	_group setBehaviour "AWARE";
 	_group setCombatMode "RED";
 	SC_liveHelis = SC_liveHelis + 1;
-	_vehicle1 addEventHandler ["killed", "SC_liveHelis = SC_liveHelis - 1;"];
-	sleep 5;
+	_vehicle1 addMPEventHandler ["mpkilled", "SC_liveHelis = SC_liveHelis - 1;"];
+	_vehicle1 addMPEventHandler ["mphit", "_this call SC_fnc_airHit;"];
+	_vehicle1 setVariable ["SC_crewEjected", false,true];	
+	sleep 0.2;
 	
 };
 

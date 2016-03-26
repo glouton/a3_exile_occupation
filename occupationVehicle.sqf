@@ -57,9 +57,21 @@ for "_j" from 1 to _vehiclesToSpawn do
 	_group = createGroup east;
 	_VehicleClassToUse = SC_VehicleClassToUse call BIS_fnc_selectRandom;
 	_vehicleObject = [ [_nearestRoad], _group, "assault", "difficult", "bandit",_VehicleClassToUse ] call DMS_fnc_SpawnAIVehicle;
+
+	// Get the AI to shut the fuck up :)
+	enableSentences false;
+	enableRadio false;
+			
 	diag_log format['[OCCUPATION:Vehicle] %1 spawned @ %2',_VehicleClassToUse,_spawnLocation];
-	_vehicleObject addEventHandler ["killed", "SC_liveVehicles = SC_liveVehicles - 1;"];
-	_vehicleObject setSpeedMode "Normal";
+	_vehicleObject addMPEventHandler ["mpkilled", "SC_liveVehicles = SC_liveVehicles - 1;"];
+	_vehicleObject addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];	
+	
+	_driverVeh = driver _vehicleObject;
+	_driverVeh addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
+	_driverVeh setVariable ["SC_drivenVehicle", _vehicleObject,true];
+	
+	
+	_vehicleObject setSpeedMode "LIMITED";
 	_vehicleObject limitSpeed 60;
 	_vehicleObject action ["LightOn", _vehicleObject];	
 	[_group, _spawnLocation, 2000] call bis_fnc_taskPatrol;
@@ -67,7 +79,7 @@ for "_j" from 1 to _vehiclesToSpawn do
 	_group setCombatMode "RED";
 
 	SC_liveVehicles = SC_liveVehicles + 1;	
-	sleep 5;
+	sleep 0.2;
 };
 
 

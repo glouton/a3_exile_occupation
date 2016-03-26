@@ -176,4 +176,5 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 		};
 	
 	};
+	sleep 0.2;
 } forEach _locations;
