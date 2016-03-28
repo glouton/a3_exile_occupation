@@ -9,3 +9,5 @@ To install place the pbo into the @ExileServer/addons folder
 
 For more info:
 http://www.exilemod.com/topic/12517-release-exile-occupation-roaming-ai
+
+I do not give permission for anyone to sell or charge for the installation of any part of this set of scripts.
