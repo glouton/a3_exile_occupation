@@ -1,17 +1,3 @@
-////////////////////////////////////////////////////////////////////////
-//
-//		Server Occupation script by second_coming
-//
-//		Version 2.0
-//
-//		http://www.exilemod.com/profile/60-second_coming/
-//
-//		This script uses the fantastic DMS by Defent and eraser1
-//
-//		http://www.exilemod.com/topic/61-dms-defents-mission-system/
-//
-////////////////////////////////////////////////////////////////////////
-
 private["_wp","_wp2","_wp3"];
 
 if (!isServer) exitWith {};
@@ -97,7 +83,7 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 			{
 				
 				
-				_buildings = _spawnPosition nearObjects ["house", _groupRadius];
+				_buildings = _spawnPosition nearObjects ["building", _groupRadius];
 				{
 					_buildingPositions = [_x, 10] call BIS_fnc_buildingPositions;
 					if(count _buildingPositions > 0) then
@@ -117,7 +103,7 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 						_i = _buildingPositions find _spawnPosition;
 						_wp = _group addWaypoint [_spawnPosition, 0] ;
 						_wp setWaypointFormation "Column";
-						_wp setWaypointBehaviour "DESTROY";
+						_wp setWaypointBehaviour "SAD";
 						_wp setWaypointCombatMode "RED";
 						_wp setWaypointCompletionRadius 1;
 						_wp waypointAttachObject _x;

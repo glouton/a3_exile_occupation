@@ -1,0 +1,1 @@
+diag_log format ["[OCCUPATION]:: Unit %2 killed at %1",time,_this];

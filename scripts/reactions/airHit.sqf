@@ -1,17 +1,3 @@
-////////////////////////////////////////////////////////////////////////
-//
-//		Server Occupation script by second_coming
-//
-//		Version 2.0
-//
-//		http://www.exilemod.com/profile/60-second_coming/
-//
-//		This script uses the fantastic DMS by Defent and eraser1
-//
-//		http://www.exilemod.com/topic/61-dms-defents-mission-system/
-//
-////////////////////////////////////////////////////////////////////////
-
 _heli = _this select 0;
 _heliDamage = getDammage _heli;
 _heliPosition = getPosATL _heli;
@@ -40,7 +26,7 @@ if(_heliDamage > 0 && _ejectChance > 70 && !_crewEjected) then
 			_unit = _x select 0;
 			if (isNull driver _veh) then
 			{
-                moveOut _unit;
+                //moveOut _unit;
                 _parachute = "Steerable_Parachute_F" createVehicle getPos _unit;
                 _parachute setDir (getDir _unit);
                 _unit moveInDriver _parachute;

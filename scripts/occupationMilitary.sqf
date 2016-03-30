@@ -1,17 +1,3 @@
-////////////////////////////////////////////////////////////////////////
-//
-//		Server Occupation script by second_coming
-//
-//		Version 2.0
-//
-//		http://www.exilemod.com/profile/60-second_coming/
-//
-//		This script uses the fantastic DMS by Defent and eraser1
-//
-//		http://www.exilemod.com/topic/61-dms-defents-mission-system/
-//
-////////////////////////////////////////////////////////////////////////
-
 private["_wp","_wp2","_wp3"];
 
 if (!isServer) exitWith {};
@@ -112,7 +98,7 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 					DMS_ai_use_launchers = true;
 
 					[_group, _pos, _groupRadius] call bis_fnc_taskPatrol;
-					_group setBehaviour "DESTROY";
+					_group setBehaviour "SAD";
 					_group setCombatMode "RED";
 				}
 				else
@@ -139,7 +125,7 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 					_group = [_spawnPosition, _aiCount, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
 					DMS_ai_use_launchers = true;
 
-					[ _group,_pos,_difficulty,"DESTROY" ] call DMS_fnc_SetGroupBehavior;
+					[ _group,_pos,_difficulty,"COMBAT" ] call DMS_fnc_SetGroupBehavior;
 					
 					_buildings = _pos nearObjects ["house", _groupRadius];
 					{
@@ -161,7 +147,7 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 							_i = _buildingPositions find _spawnPosition;
 							_wp = _group addWaypoint [_spawnPosition, 0] ;
 							_wp setWaypointFormation "Column";
-							_wp setWaypointBehaviour "DESTROY";
+							_wp setWaypointBehaviour "SAD";
 							_wp setWaypointCombatMode "RED";
 							_wp setWaypointCompletionRadius 1;
 							_wp waypointAttachObject _x;

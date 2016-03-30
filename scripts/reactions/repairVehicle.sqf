@@ -1,18 +1,3 @@
-////////////////////////////////////////////////////////////////////////
-//
-//		Server Occupation script by second_coming
-//
-//		Version 2.0
-//
-//		http://www.exilemod.com/profile/60-second_coming/
-//
-//		This script uses the fantastic DMS by Defent and eraser1
-//
-//		http://www.exilemod.com/topic/61-dms-defents-mission-system/
-//		special thanks to eichi for pointers on this script :)
-////////////////////////////////////////////////////////////////////////
-
-
 _vehicle	= _this select 0;
 _vehicleDamage = getDammage _vehicle;
 
@@ -29,7 +14,7 @@ if(_damagedWheels >= 1 && alive (driver _vehicle)) then
 {
 	if(SC_infiSTAR_log) then 
 	{
-		_logDetail = format ["[OCCUPATION:repairVehicle]:: Unit %2 reaction to event at %1",time,_this select 0]; 
+		_logDetail = format ["[OCCUPATION:repairVehicle]:: Unit %2 repairing vehicle at %1",time,_this select 0]; 
 		['A3_EXILE_OCCUPATION',_logDetail] call FNC_A3_CUSTOMLOG;
 	};
 

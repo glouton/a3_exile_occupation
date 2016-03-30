@@ -91,7 +91,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			_spawnPosition = [_spawnPos select 0, _spawnPos select 1,0];
 			
 			DMS_ai_use_launchers = false;
-			_group = [_spawnPosition, _aiCount, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
+			_group = [_spawnPosition, _aiCount, "randomEasy", "assault", _side] call DMS_fnc_SpawnAIGroup;
 			DMS_ai_use_launchers = _useLaunchers;
 						
 			// Get the AI to shut the fuck up :)
@@ -101,14 +101,14 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			if(!SC_useWaypoints) then
 			{
 				[_group, _pos, _groupRadius] call bis_fnc_taskPatrol;
-				_group setBehaviour "DESTROY";
+				_group setBehaviour "COMBAT";
 				_group setCombatMode "RED";
 			}
 			else
 			{
-				[ _group,_pos,_difficulty,"DESTROY" ] call DMS_fnc_SetGroupBehavior;
+				[ _group,_pos,_difficulty,"COMBAT" ] call DMS_fnc_SetGroupBehavior;
 				
-				_buildings = _pos nearObjects ["house", _groupRadius];
+				_buildings = _pos nearObjects ["building", _groupRadius];
 				{
 					_buildingPositions = [_x, 10] call BIS_fnc_buildingPositions;
 					if(count _buildingPositions > 0) then
@@ -128,16 +128,16 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 						_i = _buildingPositions find _spawnPosition;
 						_wp = _group addWaypoint [_spawnPosition, 0] ;
 						_wp setWaypointFormation "Column";
-						_wp setWaypointBehaviour "DESTROY";
+						_wp setWaypointBehaviour "COMBAT";
 						_wp setWaypointCombatMode "RED";
 						_wp setWaypointCompletionRadius 1;
 						_wp waypointAttachObject _x;
 						_wp setwaypointHousePosition _i;
-						_wp setWaypointType "MOVE";
+						_wp setWaypointType "SAD";
 
 					};
 				} foreach _buildings;
-				if(count _buildings > 0 ) then
+				if(count _buildings > 0 && !isNil "_wp") then
 				{
 					_wp setWaypointType "CYCLE";
 				};			

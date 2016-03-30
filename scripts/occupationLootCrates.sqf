@@ -1,17 +1,3 @@
-////////////////////////////////////////////////////////////////////////
-//
-//		Server Occupation script by second_coming
-//
-//		Version 2.0
-//
-//		http://www.exilemod.com/profile/60-second_coming/
-//
-//		This script uses the fantastic DMS by Defent and eraser1
-//
-//		http://www.exilemod.com/topic/61-dms-defents-mission-system/
-//
-////////////////////////////////////////////////////////////////////////
-
 if (!isServer) exitWith {};
 
 diag_log format ["[OCCUPATION:LootCrates]:: Starting Occupation Loot Crates"];
@@ -39,6 +25,8 @@ if (worldName == 'Taviana') then
 	_max 			= 12800;
 	_numberofcrates 	= 6; // this is the number of crates that you want to spawn
 };
+
+SC_numberofLootCrates = _numberofcrates;
 
 diag_log format['[OCCUPATION:LootCrates]::  worldname: %1 Centre: %2 radius: %3',worldName,_spawnCenter,_max];
 
@@ -73,9 +61,11 @@ for "_i" from 1 to _numberofcrates do
         if (!isNil "_nearBase") then { _validspot = false;  };	
 	};	
 	
+	_mapMarkerName = format ["loot_marker_%1", _i];
+	
 	if (_marker) then 
 	{
-		_mapMarkerName = format ["loot_marker_%1", _i];
+		
 		_event_marker = createMarker [ format ["loot_marker_%1", _i], _position];
 		_event_marker setMarkerColor "ColorGreen";
 		_event_marker setMarkerAlpha 1;
@@ -87,10 +77,16 @@ for "_i" from 1 to _numberofcrates do
 
 	//Infantry spawn using DMS
 	_AICount = 1 + (round (random 2));	
-	_ai_posx = _position select 0;
-	_ai_posy = _position select 1;
-	_ai_posz = 0;
-	[[_ai_posx, _ai_posy, _ai_posz], _AICount, "random", "random", "bandit"] call DMS_fnc_SpawnAIGroup;
+	_spawnPosition = [_position select 0, _position select 1, 0];
+	_group = [_spawnPosition, _AICount, "random", "random", "bandit"] call DMS_fnc_SpawnAIGroup;
+	
+	// Get the AI to shut the fuck up :)
+	enableSentences false;
+	enableRadio false;
+
+	[_group, _spawnPosition, 100] call bis_fnc_taskPatrol;
+	_group setBehaviour "AWARE";
+	_group setCombatMode "RED";
 
 	diag_log text format ["[OCCUPATION:LootCrates]::  Creating crate %3 @ drop zone %1 with %2 guards",_position,_AICount,_i];
 	
@@ -100,8 +96,8 @@ for "_i" from 1 to _numberofcrates do
 	clearItemCargoGlobal _box;
 	
 	_box enableRopeAttach false; 			// Stop people airlifting the crate
-	_box setVariable ["permaLoot",true]; 	// stay until reset
-	_box allowDamage false; 				// Prevent boxes to explode when spawning
+	_box setVariable ["permaLoot",true]; 	// Crate stays until next server restart
+	_box allowDamage false; 				// Stop crates taking damage
 
 	_box addItemCargoGlobal ["Exile_Melee_Axe", 1];
 	_box addItemCargoGlobal ["Exile_Item_GloriousKnakworst", 1 + (random 2)];
@@ -121,6 +117,5 @@ for "_i" from 1 to _numberofcrates do
 	_box addItemCargoGlobal ["Exile_Item_WoodWindowKit", 1 + (random 1)];
 	_box addItemCargoGlobal ["Exile_Item_WoodDoorwayKit", 1 + (random 1)];
 	_box addItemCargoGlobal ["Exile_Item_WoodFloorPortKit", 1 + (random 2)];
-
 };
 
