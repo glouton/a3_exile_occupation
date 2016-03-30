@@ -1,10 +1,19 @@
-diag_log format['[OCCUPATION:Vehicle] Started'];
-
 if (!isServer) exitWith {};
 
 if(SC_liveVehicles >= SC_maxNumberofVehicles) exitWith {};
 
 _vehiclesToSpawn = (SC_maxNumberofVehicles - SC_liveVehicles);
+
+if(_vehiclesToSpawn > 0) then 
+{ 
+	diag_log format['[OCCUPATION:Vehicle] Started %2 currently active (max %3) spawning %1 extra vehicle(s) @ %4',_vehiclesToSpawn,SC_liveVehicles,SC_maxNumberofVehicles,time]; 
+}
+else
+{
+	diag_log format['[OCCUPATION:Vehicle] Started %2 currently active (max %3) @ %4',_vehiclesToSpawn,SC_liveVehicles,SC_maxNumberofVehicles,time];
+};
+
+
 _middle = worldSize/2;
 _spawnCenter = [_middle,_middle,0];
 _maxDistance = _middle;
