@@ -38,7 +38,7 @@ for "_i" from 1 to _vehiclesToSpawn do
 	_group = createGroup east;
 	_HeliClassToUse = SC_HeliClassToUse call BIS_fnc_selectRandom;
 	_vehicle1 = [ [_spawnLocation], _group, "assault", "difficult", "resistance", _HeliClassToUse ] call DMS_fnc_SpawnAIVehicle;
-	
+	_vehicle1 setVehicleLock "UNLOCKED";
 	if(SC_infiSTAR_log) then 
 	{ 
 		_logDetail = format['[OCCUPATION:Sky] %1 spawned @ %2',_HeliClassToUse,_spawnLocation];	

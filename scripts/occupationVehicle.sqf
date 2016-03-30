@@ -55,6 +55,7 @@ if(_vehiclesToSpawn >= 1) then
 		_group = createGroup east;
 		_VehicleClassToUse = SC_VehicleClassToUse call BIS_fnc_selectRandom;
 		_vehicleObject = [ [_nearestRoad], _group, "assault", "random", "bandit",_VehicleClassToUse ] call DMS_fnc_SpawnAIVehicle;
+		_vehicleObject setVehicleLock "UNLOCKED";
 
 		// Get the AI to shut the fuck up :)
 		enableSentences false;
