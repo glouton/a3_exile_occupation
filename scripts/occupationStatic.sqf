@@ -51,7 +51,7 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 		if(_aiNear > 0) exitwith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION Static]:: %1 already has %2 active AI patrolling",_spawnPosition,_aiNear];}; };
 
 		// Don't spawn additional AI if there are players in range
-		if([_spawnPosition, 1] call ExileClient_util_world_isAlivePlayerInRange) exitwith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION Static]:: %1 has players too close",_spawnPosition];}; };
+		if([_spawnPosition, 200] call ExileClient_util_world_isAlivePlayerInRange) exitwith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION Static]:: %1 has players too close",_spawnPosition];}; };
 		
 		if(_okToSpawn) then
 		{
