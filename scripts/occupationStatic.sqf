@@ -1,20 +1,21 @@
 private["_wp","_wp2","_wp3"];
 
 if (!isServer) exitWith {};
-diag_log format ["[OCCUPATION Static]:: Starting Monitor"];
+_logDetail = format ["[OCCUPATION Static]:: Starting Monitor"];
+[_logDetail] call SC_fnc_log;
 
-_middle 			= worldSize/2;			
-_spawnCenter 		= [_middle,_middle,0];		// Centre point for the map
-_maxDistance 		= _middle;				// Max radius for the map
+_middle 			    = worldSize/2;			
+_spawnCenter 		    = [_middle,_middle,0];		// Centre point for the map
+_maxDistance 		    = _middle;				    // Max radius for the map
 
 _maxAIcount 			= SC_maxAIcount;
 _minFPS 				= SC_minFPS;
-_debug 				= SC_debug;
-_useLaunchers 		= DMS_ai_use_launchers;
+_debug 				    = SC_debug;
+_useLaunchers 		    = DMS_ai_use_launchers;
 _scaleAI				= SC_scaleAI;
 
-_statics 			= SC_statics; // details for the static spawns
-_static 			= [];
+_statics 			    = SC_statics;               // details for the static spawns
+_static 			    = [];
 
 _currentPlayerCount = count playableUnits;
 if(_currentPlayerCount > _scaleAI) then 
@@ -24,10 +25,18 @@ if(_currentPlayerCount > _scaleAI) then
 
 
 // Don't spawn additional AI if the server fps is below 8
-if(diag_fps < _minFPS) exitWith { diag_log format ["[OCCUPATION Static]:: Held off spawning more AI as the server FPS is only %1",diag_fps]; };
+if(diag_fps < _minFPS) exitWith 
+{ 
+    _logDetail = format ["[OCCUPATION Static]:: Held off spawning more AI as the server FPS is only %1",diag_fps]; 
+    [_logDetail] call SC_fnc_log;    
+};
 
 _aiActive = count(_spawnCenter nearEntities ["O_recon_F", _maxDistance+1000]);
-if(_aiActive > _maxAIcount) exitWith { diag_log format ["[OCCUPATION Static]:: %1 active AI, so not spawning AI this time",_aiActive]; };
+if(_aiActive > _maxAIcount) exitWith 
+{ 
+    _logDetail = format ["[OCCUPATION Static]:: %1 active AI, so not spawning AI this time",_aiActive]; 
+    [_logDetail] call SC_fnc_log;
+};
 
 for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 {
@@ -38,7 +47,8 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 	_staticSearch = _currentStatic select 3;
 	_underground = _currentStatic select 4;
 	
-	diag_log format ["[OCCUPATION Static]:: Adding %2 AI to static spawn @ %1",_spawnPosition,_aiCount];
+	_logDetail = format ["[OCCUPATION Static]:: Adding %2 AI to static spawn @ %1",_spawnPosition,_aiCount];
+    [_logDetail] call SC_fnc_log;
 	
 	_okToSpawn = true;
 	Sleep 0.1;
@@ -48,10 +58,26 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 
 		// Don't spawn additional AI if there are already AI in range
 		_aiNear = count(_spawnPosition nearEntities ["O_recon_F", 125]);
-		if(_aiNear > 0) exitwith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION Static]:: %1 already has %2 active AI patrolling",_spawnPosition,_aiNear];}; };
+		if(_aiNear > 0) exitwith 
+        { 
+            _okToSpawn = false; 
+            if(_debug) then 
+            { 
+                _logDetail = format ["[OCCUPATION Static]:: %1 already has %2 active AI patrolling",_spawnPosition,_aiNear];
+                [_logDetail] call SC_fnc_log;
+            };
+        };
 
 		// Don't spawn additional AI if there are players in range
-		if([_spawnPosition, 200] call ExileClient_util_world_isAlivePlayerInRange) exitwith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION Static]:: %1 has players too close",_spawnPosition];}; };
+		if([_spawnPosition, 400] call ExileClient_util_world_isAlivePlayerInRange) exitwith 
+        { 
+            _okToSpawn = false; 
+            if(_debug) then 
+            { 
+                _logDetail = format ["[OCCUPATION Static]:: %1 has players too close",_spawnPosition];
+                [_logDetail] call SC_fnc_log;
+            }; 
+        };
 		
 		if(_okToSpawn) then
 		{
@@ -103,12 +129,12 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 						_i = _buildingPositions find _spawnPosition;
 						_wp = _group addWaypoint [_spawnPosition, 0] ;
 						_wp setWaypointFormation "Column";
-						_wp setWaypointBehaviour "SAD";
+						_wp setWaypointBehaviour "COMBAT";
 						_wp setWaypointCombatMode "RED";
 						_wp setWaypointCompletionRadius 1;
 						_wp waypointAttachObject _x;
 						_wp setwaypointHousePosition _i;
-						_wp setWaypointType "MOVE";
+						_wp setWaypointType "SAD";
 
 					};
 				} foreach _buildings;
@@ -122,7 +148,8 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 			
 		
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			diag_log format ["[OCCUPATION Static]:: Spawning %1 AI in at %2 to patrol",_aiCount,_spawnPosition];
+			_logDetail = format ["[OCCUPATION Static]:: Spawning %1 AI in at %2 to patrol",_aiCount,_spawnPosition];
+            [_logDetail] call SC_fnc_log;
 
 			if(SC_mapMarkers) then 
 			{
@@ -141,4 +168,5 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 	};
     
 };
-diag_log "[OCCUPATION Static]: Ended";
+_logDetail = "[OCCUPATION Static]: Ended";
+[_logDetail] call SC_fnc_log;

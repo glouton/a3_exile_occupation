@@ -1,44 +1,106 @@
-_vehicle	= _this select 0;
-_vehicleDamage = getDammage _vehicle;
+// Triggered when a ground vehicle takes damage
+// Attempts to get the current vehicle driver to repair the vehicle
 
-_wheels = ["HitLF2Wheel","HitLFWheel","HitRFWheel","HitRF2Wheel"];
+_vehicle = _this select 0;
+_vehicle removeAllMPEventHandlers  "mphit";
+
+_vehicleDamage 		= damage _vehicle;
+_damagedWheels 		= 0;
+_damageLimit 		= 0.2;
+_engineDamage 		= false;
+_fueltankDamage 	= false;
+_assignedDriver 	= _vehicle getVariable "SC_assignedDriver";
+
+if(isNull assignedDriver _vehicle) exitWith { [_assignedDriver] call SC_fnc_driverKilled; };
+
+_wheels = ["HitLFWheel","HitLF2Wheel","HitRFWheel","HitRF2Wheel","HitLBWheel","HitLMWheel","HitRBWheel","HitRMWheel"]; 
 _damagedWheels = 0;
 {
-	if ((_vehicle getHitPointDamage _x) >= 0.5) then
+	if ((_vehicle getHitPointDamage _x) > 0) then
 	{	
-		_damagedWheels = _damagedWheels + 1;
+		_damage = _vehicle getHitPointDamage _x;
+        if(SC_extendedLogging) then 
+        {
+            _logDetail = format ["[OCCUPATION:repairVehicle]:: Vehicle %1 checking wheel %2 (damage: %4) @ %3",_vehicle, _x, time,_damage]; 
+            [_logDetail] call SC_fnc_log;
+        };        
+		if(_damage > 0) then { _damagedWheels = _damagedWheels + 1; };
 	};
 } forEach _wheels;
 
-if(_damagedWheels >= 1 && alive (driver _vehicle)) then
+// Check Engine
+if ((_vehicle getHitPointDamage "HitEngine") >= _damageLimit) then { _engineDamage = true; };
+
+// Check Fuel Tank
+if ((_vehicle getHitPointDamage "HitFuel") > 0) then { _fueltankDamage = true; };
+
+
+if(_damagedWheels > 0 OR _engineDamage OR _fueltankDamage) then
 {
-	if(SC_infiSTAR_log) then 
+	if(SC_extendedLogging) then 
 	{
-		_logDetail = format ["[OCCUPATION:repairVehicle]:: Unit %2 repairing vehicle at %1",time,_this select 0]; 
-		['A3_EXILE_OCCUPATION',_logDetail] call FNC_A3_CUSTOMLOG;
+		_logDetail = format ["[OCCUPATION:repairVehicle]:: Unit %2 repairing vehicle at %1",time,_assignedDriver]; 
+        [_logDetail] call SC_fnc_log;
 	};
 
-	_vehicle removeAllMPEventHandlers  "mphit";
-	[_vehicle ] spawn 
+	
+	[_vehicle,_assignedDriver ] spawn 
 	{
-	 _vehicleToFix  = _this select 0;
-	 _driverVeh = driver _vehicleToFix;
-	_vehicleToFix forceSpeed 0;
-	sleep 2;
-	_driverVeh action ["Eject", _vehicleToFix];
-	_driverVeh doWatch (position _vehicleToFix);
-	_driverVeh playActionNow "medicStart";
-	sleep 10;
-	_driverVeh switchMove "";
-	_driverVeh playActionNow "medicStart";
-	sleep 4;
-	_vehicleToFix setDamage 0;
-	_driverVeh switchMove "";
-	_driverVeh playActionNow "medicStop";
-	sleep 2;
-	_driverVeh assignAsDriver _vehicleToFix;
-	_driverVeh moveInDriver _vehicleToFix;
-	_vehicleToFix forceSpeed -1;
-	_vehicleToFix addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];	
+		_vehicle  = _this select 0;
+        _vehicle forceSpeed 0;
+        _vehGroup = group _vehicle;
+        _driver = _this select 1;
+        _driver action ["getOut", _vehicle];
+        
+        if(SC_debug) then
+        {
+            _tag = createVehicle ["Sign_Arrow_Green_F", position _driver, [], 0, "CAN_COLLIDE"];
+            _tag attachTo [_driver,[0,0,0.6],"Head"];  
+        };
+        sleep 0.2;  
+        _driver doMove (position _vehicle);    
+        _driver disableAI "TARGET";
+        _driver disableAI "AUTOTARGET";
+        _driver disableAI "AUTOCOMBAT";
+        _driver disableAI "COVER";   	        
+		_driverDir = _driver getDir _vehicle;
+		//_driver setDir _driverDir + 180;		
+        _driver setUnitPos "MIDDLE";  	
+		sleep 0.5;
+		_driver playMoveNow "Acts_carFixingWheel";
+		sleep 2;
+        _driver playMoveNow "Acts_carFixingWheel";
+        sleep 2;
+        _driver playMoveNow "Acts_carFixingWheel";
+        sleep 2;        
+		_driver switchMove "";
+		if(alive _driver) then
+		{
+			_vehicle setDamage 0;
+			_driver playMoveNow "Acts_carFixingWheel";
+			sleep 2;
+            _driver assignAsDriver _vehicle;
+            _driver action ["movetodriver", _vehicle];					
+		};
+        _wp = _vehGroup addWaypoint [position _vehicle, 0] ;
+        _wp setWaypointFormation "Column";
+        _wp setWaypointCompletionRadius 1;
+        _wp setWaypointType "GETIN";		
+        sleep 10;
+        _spawnLocation = _vehicle getVariable "SC_vehicleSpawnLocation";	
+         _driver action ["movetodriver", _vehicle];	
+        _vehicle forceSpeed -1;	
+        [_vehGroup, _spawnLocation, 2000] call bis_fnc_taskPatrol;
+        _vehGroup setBehaviour "AWARE";
+        _vehGroup setCombatMode "RED";
+	
 	};		
+}
+else
+{
+	_logDetail = format ["[OCCUPATION:repairVehicle]:: Not repairing %2, driver is %3 at %1",time,_vehicle,_assignedDriver]; 
+	[_logDetail] call SC_fnc_log;
+	_logDetail = format ["[OCCUPATION:repairVehicle]:: vehicle:%1 damage:%2 engine:%3 fuelTank:%4",_vehicle,_vehicleDamage,_engineDamage,_fueltankDamage]; 
+	[_logDetail] call SC_fnc_log;
 };
+_vehicle addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];

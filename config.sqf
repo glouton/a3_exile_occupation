@@ -2,7 +2,7 @@
 //
 //		Server Occupation script by second_coming
 //
-//		Version 2.1
+//		Version 3
 //
 //		http://www.exilemod.com/profile/60-second_coming/
 //
@@ -14,30 +14,30 @@
 
 // Shared Config for each occupation monitor
 
-SC_debug 				= false;					// set to true for additional logging and to speed up the spawn rate for testing
-SC_infiSTAR_log			= true;					// Use infiSTAR logging
-SC_maxAIcount 			= 100;					// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
+SC_debug 				    = false;				// set to true to turn on debug features (not for live servers) 
+SC_extendedLogging          = true;                 // set to true for additional logging
+SC_infiSTAR_log			    = true;					// true Use infiSTAR logging, false logs to server rpt
+SC_maxAIcount 			    = 100;					// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
 
-SC_mapMarkers				= false;					// Place map markers at the occupied areas (occupyPlaces and occupyMilitary only) true/false
-SC_minFPS 				= 8;						// any lower than minFPS on the server and additional AI won't spawn
+SC_mapMarkers			    = false;				// Place map markers at the occupied areas (occupyPlaces and occupyMilitary only) true/false
+SC_minFPS 				    = 5;					// any lower than minFPS on the server and additional AI won't spawn
 
-SC_scaleAI 				= 10; 					// any more than _scaleAI players on the server and _maxAIcount is reduced for each extra player
+SC_scaleAI 				    = 10; 					// any more than _scaleAI players on the server and _maxAIcount is reduced for each extra player
 
-SC_useWaypoints			= true;					// When spawning AI create waypoints to make them enter buildings 
-												// (can affect performance when the AI is spawned and the waypoints are calculated)
+SC_useWaypoints			    = true;					// When spawning AI create waypoints to make them enter buildings 
+												    // (can affect performance when the AI is spawned and the waypoints are calculated)
 
-SC_occupyPlaces 			= true;					// true if you want villages,towns,cities patrolled
-SC_occupyMilitary 		= false;					// true if you want military buildings patrolled (specify which types of building in occupationMilitary.sqf)
-SC_occupyStatic	 		= false;					// true if you want to garrison AI in specific locations (not working yet)
+SC_occupyPlaces 			= true;				    // true if you want villages,towns,cities patrolled
+SC_occupyMilitary 		    = false;				// true if you want military buildings patrolled (specify which types of building in occupationMilitary.sqf)
+SC_occupyStatic	 		    = false;			    // true if you want to garrison AI in specific locations (not working yet)
 SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
 SC_occupySky				= true;					// true if you want to have roaming AI helis
-SC_occupyLootCrates		= true;					// true if you want to have random loot crates with guards
+SC_occupyLootCrates		    = true;					// true if you want to have random loot crates with guards
+SC_numberofLootCrates       = 6;                    // if SC_occupyLootCrates = true spawn this many loot crates (overrided for Namalsk in occupationLootCrates.sqf)
 SC_occupyLootCratesMarkers	= true;					// true if you want to have markers on the loot crate spawns
 SC_occupyHeliCrashes		= true;					// true if you want to have Dayz style helicrashes
 
-SC_statics = [
-			[[1178,2524,0],4,100,true]
-			]; //[[pos],ai count,radius,search buildings]
+SC_statics = [	[[1178,2524,0],4,100,true]	];      //[[pos],ai count,radius,search buildings]
 
 // Which buildings to patrol with the occupyMilitary option (adding more classnames could affect server performance when the spawning occurs)
 SC_buildings = [	"Land_Cargo_Patrol_V1_F",
@@ -71,17 +71,13 @@ SC_buildings = [	"Land_Cargo_Patrol_V1_F",
 		   ]; 
 
 // Settings for roaming ground vehicle AI
-SC_maxNumberofVehicles 	= 3;						// Number of roaming vehicles required, randomly selected from VehicleClassToUse
-SC_VehicleClassToUse 		= [	"Exile_Car_LandRover_Green",
-							"Exile_Car_UAZ_Open_Green",
-							"Exile_Car_UAZ_Green",
-							"Exile_Car_Offroad_Guerilla03"
-							];
+SC_maxNumberofVehicles 	= 3;						
+SC_VehicleClassToUse 		= [	"Exile_Car_LandRover_Green","Exile_Car_UAZ_Open_Green","Exile_Car_Offroad_Guerilla03"];
 
 
 
-// Settings for roaming airborne AI
-SC_maxNumberofHelis		= 1;						// Number of roaming vehicles required, randomly selected from HeliClassToUse (only use armed helis for now)
+// Settings for roaming airborne AI (non armed helis will just fly around)
+SC_maxNumberofHelis		= 1;
 SC_HeliClassToUse 		= [	"Exile_Chopper_Huey_Armed_Green"];
 						
 
@@ -89,12 +85,12 @@ SC_HeliClassToUse 		= [	"Exile_Chopper_Huey_Armed_Green"];
 if (worldName == 'Namalsk') then 
 { 
 	SC_maxAIcount 			= 80; 
-	SC_occupySky				= false;
+	SC_occupySky			= false;
 };
 
 // Don't alter anything below this point
 SC_liveVehicles 		= 0;
-publicVariable "SC_liveVehicles";
+publicVariable          "SC_liveVehicles";
 SC_liveHelis	 		= 0;
-publicVariable "SC_liveHelis";
-publicVariable "SC_numberofLootCrates";
+publicVariable          "SC_liveHelis";
+publicVariable          "SC_numberofLootCrates";

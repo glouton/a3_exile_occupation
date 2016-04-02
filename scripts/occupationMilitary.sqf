@@ -1,17 +1,13 @@
 private["_wp","_wp2","_wp3"];
 
 if (!isServer) exitWith {};
-diag_log format ["[OCCUPATION Military]:: Starting Monitor"];
+_logDetail = format ["[OCCUPATION Military]:: Starting Monitor"];
+[_logDetail] call SC_fnc_log;
 
-_middle 			= worldSize/2;			
-_spawnCenter 		= [_middle,_middle,0];		// Centre point for the map
-_maxDistance 		= _middle;				// Max radius for the map
-
-_maxAIcount 			= SC_maxAIcount;
-_minFPS 				= SC_minFPS;
-_debug 				= SC_debug;
+_maxAIcount 		= SC_maxAIcount;
+_minFPS 			= SC_minFPS;
 _useLaunchers 		= DMS_ai_use_launchers;
-_scaleAI				= SC_scaleAI;
+_scaleAI			= SC_scaleAI;
 
 _buildings 			= SC_buildings; // Class names for the military buildings to patrol
 _building 			= [];
@@ -22,23 +18,34 @@ if(_currentPlayerCount > _scaleAI) then
 	_maxAIcount = _maxAIcount - (_currentPlayerCount - _scaleAI) ;
 };
 
-
 // Select an area to scan as nearObjects on the entire map is slooooooooow
 _areaToScan = [ 0, 900, 1, 500, 500, 0, 0, 0, true, false ] call DMS_fnc_findSafePos;
 
 // Don't spawn additional AI if the server fps is below 8
-if(diag_fps < _minFPS) exitWith { diag_log format ["[OCCUPATION Military]:: Held off spawning more AI as the server FPS is only %1",diag_fps]; };
+if(diag_fps < _minFPS) exitWith 
+{ 
+    _logDetail = format ["[OCCUPATION Military]:: Held off spawning more AI as the server FPS is only %1",diag_fps]; 
+    [_logDetail] call SC_fnc_log;
+};
 
-_aiActive = count(_spawnCenter nearEntities ["O_recon_F", _maxDistance+1000]);
-if(_aiActive > _maxAIcount) exitWith { diag_log format ["[OCCUPATION Military]:: %1 active AI, so not spawning AI this time",_aiActive]; };
+_aiActive = {alive _x && side _x == EAST} count allUnits;
+
+//_aiActive = count(_spawnCenter nearEntities ["O_recon_F", _maxDistance+1000]);
+if(_aiActive > _maxAIcount) exitWith 
+{ 
+    _logDetail = format ["[OCCUPATION Military]:: %1 active AI, so not spawning AI this time",_aiActive]; 
+    [_logDetail] call SC_fnc_log;
+};
 
 for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 {
-	diag_log format ["[OCCUPATION Military]:: scanning buildings around %2 started at %1",time,_areaToScan];
+	_logDetail = format ["[OCCUPATION Military]:: scanning buildings around %2 started at %1",time,_areaToScan];
+    [_logDetail] call SC_fnc_log;
 	
 	_building = _areaToScan nearObjects [_buildings select _i, 750];
 	_currentBuilding = _buildings select _i;
-	diag_log format ["[OCCUPATION Military]:: scan for %2 building finished at %1",time,_currentBuilding];
+	_logDetail = format ["[OCCUPATION Military]:: scan for %2 building finished at %1",time,_currentBuilding];
+    [_logDetail] call SC_fnc_log;
 	
     for [{_n = 0},{_n < (count _building)-1},{_n =_n + 1}] do
     {
@@ -48,29 +55,73 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 		_location = getPos _foundBuilding;
 		_pos = [_location select 0, _location select 1, 0];
 		
-		if(_debug) then { diag_log format ["[OCCUPATION Military]:: Testing position: %1",_pos];};
+		if(SC_extendedLogging) then 
+        { 
+            _logDetail = format ["[OCCUPATION Military]:: Testing position: %1",_pos];
+            [_logDetail] call SC_fnc_log;
+        };
 		
 		while{_okToSpawn} do
 		{			
 			// Percentage chance to spawn (roll 60 or more to spawn AI)
 			_spawnChance = round (random 100);
-			if(_spawnChance < 60) exitWith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION Military]:: Rolled %1 so not spawning AI this time",_spawnChance];};};
+			if(_spawnChance < 60) exitWith 
+            { 
+                _okToSpawn = false; 
+                if(SC_extendedLogging) then 
+                { 
+                    _logDetail = format ["[OCCUPATION Military]:: Rolled %1 so not spawning AI this time",_spawnChance];
+                    [_logDetail] call SC_fnc_log;
+                };
+            };
 				
 			// Don't spawn if too near a player base
 			_nearBase = (nearestObjects [_pos,["Exile_Construction_Flag_Static"],500]) select 0;
-			if (!isNil "_nearBase") exitwith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION Military]:: %1 is too close to player base",_pos];};};
+			if (!isNil "_nearBase") exitwith 
+            { 
+                _okToSpawn = false; 
+                if(SC_extendedLogging) then 
+                { 
+                    _logDetail = format ["[OCCUPATION Military]:: %1 is too close to player base",_pos];
+                    [_logDetail] call SC_fnc_log;
+                };
+            };
 			
 			// Don't spawn AI near traders and spawn zones
 			_nearestMarker = [allMapMarkers, _pos] call BIS_fnc_nearestPosition; // Nearest Marker to the Location		
 			_posNearestMarker = getMarkerPos _nearestMarker;
-			if(_pos distance _posNearestMarker < 500) exitwith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION Military]:: %1 is too close to a %2",_pos,_nearestMarker];}; };
+			if(_pos distance _posNearestMarker < 500) exitwith 
+            { 
+                _okToSpawn = false; 
+                if(SC_extendedLogging) then 
+                { 
+                    _logDetail = format ["[OCCUPATION Military]:: %1 is too close to a %2",_pos,_nearestMarker];
+                    [_logDetail] call SC_fnc_log;
+                }; 
+            };
 			
 			// Don't spawn additional AI if there are already AI in range
 			_aiNear = count(_pos nearEntities ["O_recon_F", 500]);
-			if(_aiNear > 0) exitwith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION Military]:: %1 already has %2 active AI patrolling",_pos,_aiNear];}; };
+			if(_aiNear > 0) exitwith 
+            { 
+                _okToSpawn = false; 
+                if(SC_extendedLogging) then 
+                { 
+                    _logDetail = format ["[OCCUPATION Military]:: %1 already has %2 active AI patrolling",_pos,_aiNear];
+                    [_logDetail] call SC_fnc_log;
+                }; 
+            };
 
 			// Don't spawn additional AI if there are players in range
-			if([_pos, 200] call ExileClient_util_world_isAlivePlayerInRange) exitwith { _okToSpawn = false; if(_debug) then { diag_log format ["[OCCUPATION Military]:: %1 has players too close",_pos];}; };
+			if([_pos, 200] call ExileClient_util_world_isAlivePlayerInRange) exitwith 
+            { 
+                _okToSpawn = false; 
+                if(SC_extendedLogging) then 
+                { 
+                    _logDetail = format ["[OCCUPATION Military]:: %1 has players too close",_pos];
+                    [_logDetail] call SC_fnc_log;
+                }; 
+            };
 			
 			if(_okToSpawn) then
 			{
@@ -82,15 +133,11 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 				_difficulty = "random";
 				_side = "bandit";
 				_spawnPosition = _pos;				
-				
-
-							
+										
 				// Get the AI to shut the fuck up :)
 				enableSentences false;
 				enableRadio false;
-				
-
-				
+					
 				if(!SC_useWaypoints) then
 				{
 					DMS_ai_use_launchers = false;
@@ -162,11 +209,9 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 					};			
 				};				
 				
-				
-				
-			
 				//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				diag_log format ["[OCCUPATION Military]:: Spawning %1 AI in at %2 to patrol",_aiCount,_spawnPosition];
+				_logDetail = format ["[OCCUPATION Military]:: Spawning %1 AI in at %2 to patrol",_aiCount,_spawnPosition];
+                [_logDetail] call SC_fnc_log;
 
 				if(SC_mapMarkers) then 
 				{
@@ -178,11 +223,11 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 					_marker setMarkerAlpha 0.5;
 					_marker setMarkerColor "ColorRed";
 					_marker setMarkerText "Occupied Military Area";	
-				};
-				
+				};		
 				_okToSpawn = false;			
 			};	
 		};
     };
 };
-diag_log "[OCCUPATION Military]: Ended";
+_logDetail = "[OCCUPATION Military]: Ended";
+[_logDetail] call SC_fnc_log;

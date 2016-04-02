@@ -1,6 +1,8 @@
-diag_log format ["[OCCUPATION]:: Giving the server time to start before starting [OCCUPATION] (%1)",time];
+_logDetail = format ["[OCCUPATION]:: Occupation v%2 Giving the server time to start before starting [OCCUPATION] (%1)",time,SC_occupationVersion];
+[_logDetail] call SC_fnc_log;
 uiSleep 30;
-diag_log format ["[OCCUPATION]:: Initialised at %1",time];
+_logDetail = format ["[OCCUPATION]:: Occupation v%2 Initialised at %1",time,SC_occupationVersion];
+[_logDetail] call SC_fnc_log;
 
 
 if(SC_debug) then { SC_refreshTime = 60; }else{ SC_refreshTime = 300; };
@@ -19,7 +21,8 @@ if(SC_occupyLootCrates) then
 
 if(SC_occupyHeliCrashes) then
 {
-	call compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationHeliCrashes.sqf";
+	uiSleep 15; // delay the start
+    call compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationHeliCrashes.sqf";
 };
 
 if(SC_occupyStatic) then
@@ -46,11 +49,9 @@ if(SC_occupyVehicle) then
 if(SC_occupyPlaces) then
 {
 	uiSleep 15; // delay the start
-	fnc_occupationMonitor 			= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupation.sqf";
+	fnc_occupationMonitor 			= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationPlaces.sqf";
 	[SC_refreshTime, fnc_occupationMonitor, [], true] call ExileServer_system_thread_addTask;
 };
-
-
 
 if(SC_occupyMilitary) then
 {
@@ -59,7 +60,5 @@ if(SC_occupyMilitary) then
 	[SC_refreshTime, fnc_occupationMilitaryMonitor, [], true] call ExileServer_system_thread_addTask;
 };
 
-
-
-
-diag_log format ["[OCCUPATION]:: threads added at %1",time];
+_logDetail = format ["[OCCUPATION]:: threads added at %1",time];
+[_logDetail] call SC_fnc_log;

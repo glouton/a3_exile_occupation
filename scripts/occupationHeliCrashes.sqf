@@ -7,19 +7,12 @@ if (worldName == 'Namalsk') then
 	_numberofCrashes = 2; // lower number for a smaller map
 };
 
-_middle 				= worldSize/2;
-_spawnCenter 		= [_middle,_middle,0];
-_max 				= _middle;
-_min 				= 0; // minimum distance from the center position (Number) in meters
-_mindist 			= 15; // minimum distance from the nearest object (Number) in meters, ie. spawn at least this distance away from anything within x meters..
-_water 				= 0; // water mode (Number)	0: cannot be in water , 1: can either be in water or not , 2: must be in water
-_shoremode 			= 0; // 0: does not have to be at a shore , 1: must be at a shore
-_markersize 			= 100; // Radius of the marker in meters
-_displayMarkers 		= SC_debug; // only use for debug, no need for actual gameplay
+_displayMarkers 	= SC_debug; // only use for debug, no need for actual gameplay
 
 private['_position'];
 
-diag_log format ["[OCCUPATION:HeliCrashes]:: Initialised at %1",time];
+_logDetail = format ["[OCCUPATION:HeliCrashes]:: Initialised at %1",time];
+[_logDetail] call SC_fnc_log;
 
 for "_i" from 1 to _numberofCrashes do
 {
@@ -27,7 +20,7 @@ for "_i" from 1 to _numberofCrashes do
 	while{!_validspot} do 
 	{
 		sleep 0.2;
-		_position = [_spawnCenter,_min,_max,_mindist,_water,20,_shoremode] call BIS_fnc_findSafePos;
+		_position = [ 0, 50, 1, 500, 500, 200, 200, 200, true, false ] call DMS_fnc_findSafePos;
 		_validspot	= true;
 	
 		// Check for nearby spawn points and traders
@@ -49,7 +42,9 @@ for "_i" from 1 to _numberofCrashes do
 		
 	};	
 	
-	diag_log format['[OCCUPATION:HeliCrashes] Crash %1 : Location %2',_i,_position];
+	_logDetail = format['[OCCUPATION:HeliCrashes] Crash %1 : Location %2',_i,_position];
+    [_logDetail] call SC_fnc_log;
+    
 	_helicopter = "Land_UWreck_MV22_F";
 	_vehHeli = _helicopter createVehicle [0,0,0];
 	_heliFire = "test_EmptyObjectForFireBig" createVehicle (position _vehHeli);  

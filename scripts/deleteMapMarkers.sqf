@@ -1,3 +1,5 @@
+// Delete the map marker on a loot crate when a player gets in range
+
 for "_i" from 1 to SC_numberofLootCrates do
 {
     _markerName = format ["loot_marker_%1", _i];
@@ -9,7 +11,8 @@ for "_i" from 1 to SC_numberofLootCrates do
 		if(_nearPlayers > 0) then 
 		{ 
 			deleteMarker _markerName; 
-			diag_log format ["[OCCUPATION:LootCrates]:: marker %1 removed at %2",_markerName,time];
+			_logDetail =  format ["[OCCUPATION:LootCrates]:: marker %1 removed at %2",_markerName,time];
+            [_logDetail] call SC_fnc_log;
 		};
 		
 	};

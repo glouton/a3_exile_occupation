@@ -1,69 +1,36 @@
 if (!isServer) exitWith {};
 
-diag_log format ["[OCCUPATION:LootCrates]:: Starting Occupation Loot Crates"];
+_logDetail = format ["[OCCUPATION:LootCrates]:: Starting Occupation Loot Crates"];
+[_logDetail] call SC_fnc_log;
 
-_middle 			= worldSize/2;
-_spawnCenter 		= [_middle,_middle,0];
-_max 			= _middle;
-_numberofcrates 	= 3; // this is the number of crates that you want to spawn
-
-if (worldName == 'Altis') then
+if (worldName == 'Namalsk') then
 {
-	_spawnCenter 		= [15834.2,15787.8,0];
-	_max 			= 16000;
-	_numberofcrates 	= 6; // this is the number of crates that you want to spawn
-};
-if (worldName == 'Chernarus') then
-{
-	_spawnCenter 		= [7652.9634, 7870.8076,0];
-	_max 			= 7500;
-	_numberofcrates 	= 6; // this is the number of crates that you want to spawn
-};
-if (worldName == 'Taviana') then
-{
-	_spawnCenter 		= [12800, 12800,0];
-	_max 			= 12800;
-	_numberofcrates 	= 6; // this is the number of crates that you want to spawn
+	SC_numberofLootCrates 	= 3; // this is the number of crates that you want to spawn
 };
 
-SC_numberofLootCrates = _numberofcrates;
-
-diag_log format['[OCCUPATION:LootCrates]::  worldname: %1 Centre: %2 radius: %3',worldName,_spawnCenter,_max];
-
-_min 			= 0; 		// minimum distance from the center position (Number) in meters
-_mindist 		= 15; 		// minimum distance from the nearest object (Number) in meters, ie. spawn at least this distance away from anything within x meters..
-_water 			= 0; 		// water mode (Number)	0: cannot be in water , 1: can either be in water or not , 2: must be in water
-_shoremode 		= 0; 		// 0: does not have to be at a shore , 1: must be at a shore
-_marker 			= SC_occupyLootCratesMarkers; 		// Draw a green circle in which the crate will be spawned randomly
+_logDetail = format['[OCCUPATION:LootCrates]::  worldname: %1 crates to spawn: %2',worldName,SC_numberofLootCrates];
+[_logDetail] call SC_fnc_log;
 
 private['_position'];
 
-for "_i" from 1 to _numberofcrates do
+for "_i" from 1 to SC_numberofLootCrates do
 {
 	_validspot 	= false;
 	while{!_validspot} do 
 	{
 		sleep 0.2;
-		_position = [_spawnCenter,_min,_max,_mindist,_water,20,_shoremode] call BIS_fnc_findSafePos;
+		_position = [ 0, 50, 1, 500, 500, 200, 200, 200, true, false ] call DMS_fnc_findSafePos;
 		_validspot	= true;
-		
-		// Check for nearby spawn points and traders
-		_nearestMarker = [allMapMarkers, _position] call BIS_fnc_nearestPosition;
-		_posNearestMarker = getMarkerPos _nearestMarker;
-		if(_position distance _posNearestMarker < 500) then { _validspot = false; };		
 		
 		//Check if near another crate site
 		_nearOtherCrate = (nearestObjects [_position,["CargoNet_01_box_F"],500]) select 0;	
 		if (!isNil "_nearOtherCrate") then { _validspot = false; };		
 	
-		//Check if near player base
-        _nearBase = (nearestObjects [_position,["Exile_Construction_Flag_Static"],350]) select 0;
-        if (!isNil "_nearBase") then { _validspot = false;  };	
 	};	
 	
 	_mapMarkerName = format ["loot_marker_%1", _i];
 	
-	if (_marker) then 
+	if (SC_occupyLootCratesMarkers) then 
 	{
 		
 		_event_marker = createMarker [ format ["loot_marker_%1", _i], _position];
@@ -88,7 +55,7 @@ for "_i" from 1 to _numberofcrates do
 	_group setBehaviour "AWARE";
 	_group setCombatMode "RED";
 
-	diag_log text format ["[OCCUPATION:LootCrates]::  Creating crate %3 @ drop zone %1 with %2 guards",_position,_AICount,_i];
+	_logDetail = text format ["[OCCUPATION:LootCrates]::  Creating crate %3 @ drop zone %1 with %2 guards",_position,_AICount,_i];
 	
 	_box = "CargoNet_01_box_F" createvehicle _position;
 	clearMagazineCargoGlobal _box;
