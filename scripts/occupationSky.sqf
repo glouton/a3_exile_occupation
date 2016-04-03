@@ -48,7 +48,7 @@ for "_i" from 1 to _vehiclesToSpawn do
    
 	_group = createGroup east;
 	_HeliClassToUse = SC_HeliClassToUse call BIS_fnc_selectRandom;
-	_vehicle1 = [ [_helispawnLocation], _group, "assault", "difficult", "resistance", _HeliClassToUse ] call DMS_fnc_SpawnAIVehicle;
+	_vehicle1 = [ [_helispawnLocation], _group, "assault", "difficult", "bandit", _HeliClassToUse ] call DMS_fnc_SpawnAIVehicle;
 	SC_liveHelis = SC_liveHelis + 1;
 	_vehicle1 setVehicleLock "UNLOCKED";
 	_vehicle1 setVariable ["ExileIsLocked", 0, true];
