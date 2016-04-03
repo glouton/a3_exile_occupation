@@ -1,4 +1,4 @@
-# a3_exile_occupation
+# Exile Occupation (a3_exile_occupation)
 
 WTF is Occupation?
 An AI spawner and monitor to be used in conjunction with DMS and will not work without it:
