@@ -37,21 +37,22 @@ if(count(crew _vehicle) > 0)then
 
                 if(_vehicle isKindOf "LandVehicle") then
                 {
-                    //_newPos = [ _curPos, 1, 15, [ 0, 0, 1, 0, 0, 0, 0, 0, true] ] call DMS_fnc_FindSafePos_InRange; 
-                    //_newPos = [_curPos, 5, 20, 3, 0, 20, 0] call BIS_fnc_findSafePos; 
-                    _tempPos = _curPos findEmptyPosition [0,50,_vehClass];
+                    //_newPos = [ _curPos, 1, 50, [ 0, 0, 1, 0, 0, 0, 0, 0, true] ] call DMS_fnc_FindSafePos_InRange; 
+                    //_newPos = [_curPos, 5, 100, 3, 0, 20, 0] call BIS_fnc_findSafePos; 
+                    _tempPos = _curPos findEmptyPosition [0,100,_vehClass];
                     _newPos = [_tempPos select 0, _tempPos select 1, 0];
-                    _vehicle setPosATL _newPos;                                                    
+                    //_newPos = _curPos;
+                    //_vehicle setDamage 0.2;                                                   
                 };
                 
                 if(_vehicle isKindOf "Ship") then
                 {
-                    //_newPos = [ _curPos, 1,15, [ 0, 0, 1, 0, 0, 0, 0, 0, true, true ] ] call DMS_fnc_FindSafePos_InRange;
-                    //_newPos = [_curPos, 5, 20, 3, 2, 20, 0] call BIS_fnc_findSafePos; 
-                    _newPos = _curPos findEmptyPosition [0,50,_vehClass];
-                    _newPos = [_newPos select 0, _newPos select 1, 0];
-                    _vehicle setPosATL _newPos;       
-               
+                    //_newPos = [ _curPos, 1,50, [ 0, 0, 1, 0, 0, 0, 0, 0, true, true ] ] call DMS_fnc_FindSafePos_InRange;
+                    _newPos = [_curPos, 5, 100, 3, 2, 20, 0] call BIS_fnc_findSafePos; 
+                    //_tempPos = _curPos findEmptyPosition [0,100,_vehClass];
+                    //_newPos = [_tempPos select 0, _tempPos select 1, 0];
+                    _newPos = _curPos;
+                    _vehicle setDamage 0.2; 
                 };
                 
                 if(_vehicle isKindOf "Air") then

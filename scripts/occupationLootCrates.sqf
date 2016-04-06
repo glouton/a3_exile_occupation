@@ -3,11 +3,6 @@ if (!isServer) exitWith {};
 _logDetail = format ["[OCCUPATION:LootCrates]:: Starting Occupation Loot Crates"];
 [_logDetail] call SC_fnc_log;
 
-if (worldName == 'Namalsk') then
-{
-	SC_numberofLootCrates 	= 3; // this is the number of crates that you want to spawn
-};
-
 _logDetail = format['[OCCUPATION:LootCrates]::  worldname: %1 crates to spawn: %2',worldName,SC_numberofLootCrates];
 [_logDetail] call SC_fnc_log;
 

@@ -29,6 +29,7 @@ for "_i" from 1 to _vehiclesToSpawn do
     _vehicle1 setPosASL _spawnLocation;
     _vehicle1 setVariable["vehPos",_spawnLocation,true];
     _vehicle1 setVariable["vehClass",_BoatClassToUse,true];
+    _vehicle1 setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];
     
     // Remove the overpowered weapons from boats
     _vehicle1 removeWeaponTurret  ["HMG_01",[0]];

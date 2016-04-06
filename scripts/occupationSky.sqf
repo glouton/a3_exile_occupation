@@ -50,6 +50,7 @@ for "_i" from 1 to _vehiclesToSpawn do
 	_vehicle1 = [ [_helispawnLocation], _group, "assault", "difficult", "bandit", _HeliClassToUse ] call DMS_fnc_SpawnAIVehicle;
     _vehicle1 setVariable["vehPos",_helispawnLocation,true];
     _vehicle1 setVariable["vehClass",_HeliClassToUse,true];
+    _vehicle1 setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];
     {
         _unit = _x;
         removeBackpackGlobal _unit;

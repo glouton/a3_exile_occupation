@@ -1,10 +1,5 @@
 if (!isServer) exitWith {};
 
-if (worldName == 'Namalsk') then
-{
-	SC_numberofHeliCrashes = 2; // lower number for a smaller map
-};
-
 _displayMarkers 	= SC_debug; // only use for debug, no need for actual gameplay
 
 private['_position'];
