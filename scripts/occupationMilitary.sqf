@@ -145,7 +145,7 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 					DMS_ai_use_launchers = true;
 
 					[_group, _pos, _groupRadius] call bis_fnc_taskPatrol;
-					_group setBehaviour "SAD";
+					_group setBehaviour "COMBAT";
 					_group setCombatMode "RED";
 				}
 				else

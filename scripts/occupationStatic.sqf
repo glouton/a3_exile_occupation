@@ -47,7 +47,7 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 	_staticSearch = _currentStatic select 3;
 	_underground = _currentStatic select 4;
 	
-	_logDetail = format ["[OCCUPATION Static]:: Adding %2 AI to static spawn @ %1",_spawnPosition,_aiCount];
+	_logDetail = format ["[OCCUPATION Static]:: Checking static spawn @ %1",_spawnPosition,_aiCount];
     [_logDetail] call SC_fnc_log;
 	
 	_okToSpawn = true;
@@ -57,7 +57,7 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 	{			
 
 		// Don't spawn additional AI if there are already AI in range
-		_aiNear = count(_spawnPosition nearEntities ["O_recon_F", 125]);
+		_aiNear = count(_spawnPosition nearEntities ["O_recon_F", 250]);
 		if(_aiNear > 0) exitwith 
         { 
             _okToSpawn = false; 
@@ -151,7 +151,7 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 			_logDetail = format ["[OCCUPATION Static]:: Spawning %1 AI in at %2 to patrol",_aiCount,_spawnPosition];
             [_logDetail] call SC_fnc_log;
 
-			if(SC_mapMarkers) then 
+			if(SC_mapMarkers && !isNil "_foundBuilding") then 
 			{
 				_marker = createMarker [format ["%1", _foundBuilding],_spawnPosition];
 				_marker setMarkerShape "Icon";

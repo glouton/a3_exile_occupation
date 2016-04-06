@@ -28,7 +28,13 @@ if(count units _vehGroup > 0) then
     _groupMembers = units _vehGroup;
     _replacementDriver = _groupMembers call BIS_fnc_selectRandom;
     
-    if(!alive _replacementDriver) exitWith { [_replacementDriver] call SC_fnc_driverKilled; }; 
+    while(!(alive _replacementDriver) && (count units _vehGroup > 0)) do 
+    { 
+        [_replacementDriver] join grpNull;
+        if(count units _vehGroup < 1) exitWith {};
+        _groupMembers = units _vehGroup; 
+        _replacementDriver = _groupMembers call BIS_fnc_selectRandom;
+    }; 
  
     if (isNil "_replacementDriver") exitWith 
     {
@@ -36,24 +42,25 @@ if(count units _vehGroup > 0) then
         [_logDetail] call SC_fnc_log;        
     };
     
-    if(SC_debug) then
-    {
-        _tag = createVehicle ["Sign_Arrow_Green_F", position _replacementDriver, [], 0, "CAN_COLLIDE"];
-        _tag attachTo [_replacementDriver,[0,0,0.6],"Head"];  
-    };
-        
+
     _replacementDriver disableAI "TARGET";
     _replacementDriver disableAI "AUTOTARGET";
     _replacementDriver disableAI "AUTOCOMBAT";
     _replacementDriver disableAI "COVER"; 
     
     _replacementDriver assignAsDriver _vehicleDriven;
-        
-    _vehicleDriven addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];
-    _replacementDriver addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
     _replacementDriver setVariable ["DMS_AssignedVeh",_vehicleDriven];  
     _replacementDriver setVariable ["SC_drivenVehicle", _vehicleDriven,true];	 
-    _vehicleDriven setVariable ["SC_assignedDriver", _replacementDriver,true];
+    _vehicleDriven setVariable ["SC_assignedDriver", _replacementDriver,true];        
+    _vehicleDriven addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];
+    _replacementDriver addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
+
+    if(SC_debug) then
+    {
+        _tag = createVehicle ["Sign_Arrow_Green_F", position _replacementDriver, [], 0, "CAN_COLLIDE"];
+        _tag attachTo [_replacementDriver,[0,0,0.6],"Head"];  
+    };
+
     _replacementDriver doMove (position _vehicleDriven);   	
     _replacementDriver action ["movetodriver", _vehicleDriven];
     

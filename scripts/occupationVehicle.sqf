@@ -59,7 +59,7 @@ if(_vehiclesToSpawn >= 1) then
 		private["_group"];
 		_Location = _locations call BIS_fnc_selectRandom; 
 		_position = position _Location;	
-		_pos = [_position,10,100,5,0,20,0] call BIS_fnc_findSafePos;
+		_pos = [_position,10,250,5,0,20,0] call BIS_fnc_findSafePos;
 		
 		
 		// Get position of nearest roads
@@ -69,9 +69,14 @@ if(_vehiclesToSpawn >= 1) then
 		_spawnLocation = [_nearestRoad select 0, _pos select 1, 0];
 
 		_group = createGroup east;
-		SC_liveVehicles = SC_liveVehicles + 1;
 		_VehicleClassToUse = SC_VehicleClassToUse call BIS_fnc_selectRandom;
 		_vehicle = createVehicle [_VehicleClassToUse, _spawnLocation, [], 0, "NONE"];
+        _vehicle setVariable["vehPos",_spawnLocation,true];
+        _vehicle setVariable["vehClass",_VehicleClassToUse,true];
+        
+        SC_liveVehicles = SC_liveVehicles + 1;
+        SC_liveVehiclesArray = SC_liveVehiclesArray + [_vehicle];
+
 		_vehicle setFuel 1;
 		_vehicle engineOn true;
 		_vehicle lock 0;			
@@ -81,25 +86,29 @@ if(_vehiclesToSpawn >= 1) then
 		_vehicle limitSpeed 60;
 		_vehicle action ["LightOn", _vehicle];			
 		
-		_vehicle addEventHandler ["getin", "_this call SC_fnc_getIn;"];
-		_vehicle addMPEventHandler ["mpkilled", "SC_liveVehicles = SC_liveVehicles - 1;"];
-		_vehicle addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];		
-		_vehicle setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];			
-		
+	
 		_group addVehicle _vehicle;	
-		_driver = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;	
+		_driver = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;
+         sleep 0.5;	
         if(SC_debug) then
         {
             _tag = createVehicle ["Sign_Arrow_Green_F", position _driver, [], 0, "CAN_COLLIDE"];
             _tag attachTo [_driver,[0,0,0.6],"Head"];  
         };
-        sleep 1;
+        sleep 0.5;
 		_driver setVariable ["DMS_AssignedVeh",_vehicle];
-		_driver addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
 		_driver setVariable ["SC_drivenVehicle", _vehicle,true];	
-		_vehicle setVariable ["SC_assignedDriver", _driver,true];
         _driver action ["movetodriver", _vehicle];
-        _driver assignAsDriver _vehicle;        		
+        _driver assignAsDriver _vehicle;    
+        _driver addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
+        
+        _vehicle setVariable ["SC_assignedDriver", _driver,true];
+        _vehicle setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];	
+        _vehicle addEventHandler ["getin", "_this call SC_fnc_getIn;"];
+		_vehicle addMPEventHandler ["mpkilled", "_this call SC_fnc_vehicleDestroyed;"];
+		_vehicle addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];	
+        _group setBehaviour "CARELESS";
+		_group setCombatMode "BLUE";    		
 		sleep 0.2;
 		_crewCount =
 		{
@@ -108,13 +117,11 @@ if(_vehiclesToSpawn >= 1) then
 			_unit setVariable ["DMS_AssignedVeh",_vehicle];
             _unit assignAsCargo _vehicle;
             sleep 0.2;
+            _group setBehaviour "CARELESS";
+		    _group setCombatMode "BLUE";
 			true
 		} count (allTurrets [_vehicle, true]);		
-		_group setBehaviour "CARELESS";
-		_group setCombatMode "BLUE";		
-		sleep 10;
 		
-
 
 		// Get the AI to shut the fuck up :)
 		enableSentences false;

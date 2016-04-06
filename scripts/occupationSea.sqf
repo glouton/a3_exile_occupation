@@ -1,72 +1,50 @@
-_logDetail = format['[OCCUPATION:Sky] Started'];
+_logDetail = format['[OCCUPATION:Sea] Started'];
 [_logDetail] call SC_fnc_log;
 
 if (!isServer) exitWith {};
 
-if(SC_liveHelis >= SC_maxNumberofHelis) exitWith 
+if(SC_liveBoats >= SC_maxNumberofBoats) exitWith 
 {
     if(SC_extendedLogging) then 
     { 
-        _logDetail = format['[OCCUPATION:Sky] End check %1 currently active (max %2) @ %3',SC_liveHelis,SC_maxNumberofHelis,time]; 
+        _logDetail = format['[OCCUPATION:Sea] End check %1 currently active (max %2) @ %3',SC_liveBoats,SC_maxNumberofBoats,time]; 
         [_logDetail] call SC_fnc_log;
     };    
 };
 
-_vehiclesToSpawn = (SC_maxNumberofHelis - SC_liveHelis);
+_vehiclesToSpawn = (SC_maxNumberofBoats - SC_liveBoats);
 _middle = worldSize/2;
 _spawnCenter = [_middle,_middle,0];
 _maxDistance = _middle;
 
-_locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCityCapital"], _maxDistance]);
-_i = 0;
-{
-	_okToUse = true;
-	_pos = position _x;	
-	_nearestMarker = [allMapMarkers, _pos] call BIS_fnc_nearestPosition; // Nearest Marker to the Location		
-	_posNearestMarker = getMarkerPos _nearestMarker;
-	if(_pos distance _posNearestMarker < 2500) exitwith { _okToUse = false; };
-
-	if(!_okToUse) then
-	{
-		_locations deleteAt _i;
-	};
-	_i = _i + 1;
-	sleep 0.2;
-
-} forEach _locations;
-
 for "_i" from 1 to _vehiclesToSpawn do
 {
 	private["_group"];
-	_Location = _locations call BIS_fnc_selectRandom;
-	_pos = position _Location;	
-	_position = [_pos select 0, _pos select 1, 300];
-	_spawnLocation = [_position,10,100,5,0,20,0] call BIS_fnc_findSafePos;
-	_height = 250 + (round (random 200));
-	_helispawnLocation = [_spawnLocation select 0, _spawnLocation select 1, _height];
-   
+
+	_spawnLocation = [ 250, 0, 1, 1000, 1000, 1000, 1000, 1000, true, true ] call DMS_fnc_findSafePos;
+    //_spawnLocation = [(_pos), 80, 10] call ExileClient_util_world_findWaterPosition;
 	_group = createGroup east;
-	_HeliClassToUse = SC_HeliClassToUse call BIS_fnc_selectRandom;
-	_vehicle1 = [ [_helispawnLocation], _group, "assault", "difficult", "bandit", _HeliClassToUse ] call DMS_fnc_SpawnAIVehicle;
-    _vehicle1 setVariable["vehPos",_helispawnLocation,true];
-    _vehicle1 setVariable["vehClass",_HeliClassToUse,true];
-    {
-        _unit = _x;
-        removeBackpackGlobal _unit;
-        _unit addBackpackGlobal "B_Parachute";
-    }forEach units _group;
+	_BoatClassToUse = SC_BoatClassToUse call BIS_fnc_selectRandom;
+	_vehicle1 = [ [_spawnLocation], _group, "assault", "difficult", "bandit", _BoatClassToUse ] call DMS_fnc_SpawnAIVehicle;
+    _vehicle1 setPosASL _spawnLocation;
+    _vehicle1 setVariable["vehPos",_spawnLocation,true];
+    _vehicle1 setVariable["vehClass",_BoatClassToUse,true];
+    
+    // Remove the overpowered weapons from boats
+    _vehicle1 removeWeaponTurret  ["HMG_01",[0]];
+    _vehicle1 removeWeaponTurret  ["GMG_40mm",[0]];
 	
-    SC_liveHelis = SC_liveHelis + 1;
-    SC_liveHelisArray = SC_liveHelisArray + [_vehicle1];
+    SC_liveBoats = SC_liveBoats + 1;
+    SC_liveBoatsArray = SC_liveBoatsArray + [_vehicle1];
     
 	_vehicle1 setVehicleLock "UNLOCKED";
 	_vehicle1 setVariable ["ExileIsLocked", 0, true];
 	if(SC_infiSTAR_log) then 
 	{ 
-		_logDetail = format['[OCCUPATION:Sky] %1 spawned @ %2',_HeliClassToUse,_spawnLocation];	
+		_logDetail = format['[OCCUPATION:Sea] %1 spawned @ %2',_BoatClassToUse,_spawnLocation];	
 		[_logDetail] call SC_fnc_log;
 	};
-	_vehicle1 setVehiclePosition [_spawnLocation, [], 0, "FLY"];
+	_vehicle1 setVehiclePosition [_spawnLocation, [], 0, "NONE"];
 	_vehicle1 setVariable ["vehicleID", _spawnLocation, true];  
 	_vehicle1 setFuel 1;
 	_vehicle1 setDamage 0;
@@ -124,17 +102,17 @@ for "_i" from 1 to _vehiclesToSpawn do
 	};
 
 	
-	[_group, _spawnLocation, 2000] call bis_fnc_taskPatrol;
+	[_group, _spawnLocation, 4000] call bis_fnc_taskPatrol;
 	_group setBehaviour "CARELESS";
 	_group setCombatMode "RED";
 	_vehicle1 addEventHandler ["getin", "_this call SC_fnc_claimVehicle;"];	
 	_vehicle1 addMPEventHandler ["mpkilled", "_this call SC_fnc_vehicleDestroyed;"];
-	_vehicle1 addMPEventHandler ["mphit", "_this call SC_fnc_airHit;"];
+	_vehicle1 addMPEventHandler ["mphit", "_this call SC_fnc_boatHit;"];
 	_vehicle1 setVariable ["SC_crewEjected", false,true];	
 	sleep 0.2;
 	
 };
 
 
-_logDetail = format['[OCCUPATION:Sky] Running'];
+_logDetail = format['[OCCUPATION:Sea] Running'];
 [_logDetail] call SC_fnc_log;

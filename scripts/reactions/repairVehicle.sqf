@@ -48,6 +48,7 @@ if(_damagedWheels > 0 OR _engineDamage OR _fueltankDamage) then
 	{
 		_vehicle  = _this select 0;
         _vehicle forceSpeed 0;
+        sleep 1;
         _vehGroup = group _vehicle;
         _driver = _this select 1;
         _driver action ["getOut", _vehicle];
