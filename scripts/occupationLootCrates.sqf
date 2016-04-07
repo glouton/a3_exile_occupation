@@ -56,8 +56,9 @@ for "_i" from 1 to SC_numberofLootCrates do
 	_group setBehaviour "AWARE";
 	_group setCombatMode "RED";
 
-	_logDetail = text format ["[OCCUPATION:LootCrates]::  Creating crate %3 @ drop zone %1 with %2 guards",_position,_AICount,_i];
+	_logDetail = format ["[OCCUPATION:LootCrates]::  Creating crate %3 at drop zone %1 with %2 guards",_position,_AICount,_i];
 	[_logDetail] call SC_fnc_log;
+    
     
 	_box = "CargoNet_01_box_F" createvehicle _position;
 	clearMagazineCargoGlobal _box;
@@ -87,4 +88,3 @@ for "_i" from 1 to SC_numberofLootCrates do
 	_box addItemCargoGlobal ["Exile_Item_WoodDoorwayKit", 1 + (random 1)];
 	_box addItemCargoGlobal ["Exile_Item_WoodFloorPortKit", 1 + (random 2)];
 };
-

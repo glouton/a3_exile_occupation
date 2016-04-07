@@ -24,6 +24,12 @@ SC_occupationVersion = "v5 (06-04-2016)";
 
 diag_log format ["[OCCUPATION MOD]:: Occupation v%2 Initialised at %1",time,SC_occupationVersion];
 
+// Get the config for Occupation
+call compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\config.sqf";
+
+// Select the log style depending on config settings
+SC_fnc_log			        = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationLog.sqf";
+
 // EventHandlers for AI reactions
 SC_fnc_repairVehicle 		= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\repairVehicle.sqf";
 SC_fnc_vehicleDestroyed     = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\vehicleDestroyed.sqf"; 
@@ -34,12 +40,6 @@ SC_fnc_boatHit 			    = compile preprocessFileLineNumbers "\x\addons\a3_exile_oc
 SC_fnc_getIn			    = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\getIn.sqf";
 SC_fnc_refuel               = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\refuel.sqf";
 SC_comeUnstuck              = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\comeUnstuck.sqf";
-
-// Get the config for Occupation
-call compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\config.sqf";
-
-// Select the log style depending on config settings
-SC_fnc_log			        = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationLog.sqf";
 
 _logDetail = "=============================================================================================================";
 [_logDetail] call SC_fnc_log;

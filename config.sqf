@@ -14,9 +14,9 @@
 
 // Shared Config for each occupation monitor
 
-SC_debug 				    = true;				// set to true to turn on debug features (not for live servers) 
+SC_debug 				    = true;				    // set to true to turn on debug features (not for live servers) 
 SC_extendedLogging          = true;                 // set to true for additional logging
-SC_infiSTAR_log			    = true;					// true Use infiSTAR logging, false logs to server rpt
+SC_infiSTAR_log			    = false;				// true Use infiSTAR logging, false logs to server rpt
 SC_maxAIcount 			    = 100;					// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
 
 SC_mapMarkers			    = false;			    // Place map markers at the occupied areas (occupyPlaces and occupyMilitary only) true/false
@@ -46,14 +46,14 @@ SC_occupyStatic	 		    = false;			    // true if you want to garrison AI in spec
 
 SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
 SC_occupySky				= true;					// true if you want to have roaming AI helis
-SC_occupySea				= true;		        // true if you want to have roaming AI boats
+SC_occupySea				= false;		        // true if you want to have roaming AI boats
 
 
 
 SC_occupyLootCrates		    = true;					// true if you want to have random loot crates with guards
 SC_numberofLootCrates       = 6;                    // if SC_occupyLootCrates = true spawn this many loot crates (overrided below for Namalsk)
 SC_LootCrateGuards          = 4;                    // number of AI to spawn at each crate
-SC_LootCrateGuardsRandomize = true;                 // Use a random number of guards up to a maximum = SC_numberofGuards (so between 1 and SC_numberofGuards)
+SC_LootCrateGuardsRandomize = false;                // Use a random number of guards up to a maximum = SC_numberofGuards (so between 1 and SC_numberofGuards)
 SC_occupyLootCratesMarkers	= true;					// true if you want to have markers on the loot crate spawns
 
 
