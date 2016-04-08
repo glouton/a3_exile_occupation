@@ -54,7 +54,7 @@ if(_heliDamage > 0.2 && _damagedEssentials > 0 && !_crewEjected && _ejectChance 
             [_logDetail] call SC_fnc_log;	
         };
 		{				
-            _unit = _x select 0;
+            _unit = _x;
             _unit joinSilent _group2;
 			_unit action ["EJECT", _veh];
 		} forEach (assignedCargo  _veh);
