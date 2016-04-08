@@ -47,10 +47,15 @@ if(_damagedWheels > 0 OR _engineDamage OR _fueltankDamage) then
 	[_vehicle,_assignedDriver ] spawn 
 	{
 		_vehicle  = _this select 0;
-        _vehicle forceSpeed 0;
-        sleep 1;
-        _vehGroup = group _vehicle;
+        _vehicle forceSpeed 0;    
+        _group = group _vehicle;
         _driver = _this select 1;
+        _driver disableAI "TARGET";
+        _driver disableAI "AUTOTARGET";
+        _driver disableAI "AUTOCOMBAT";
+        _driver disableAI "COVER";  
+        _driver disableAI "SUPPRESSION";              
+        sleep 1;
         _driver action ["getOut", _vehicle];
         
         if(SC_debug) then
@@ -59,41 +64,34 @@ if(_damagedWheels > 0 OR _engineDamage OR _fueltankDamage) then
             _tag attachTo [_driver,[0,0,0.6],"Head"];  
         };
         sleep 0.2;  
-        _driver doMove (position _vehicle);    
-        _driver disableAI "TARGET";
-        _driver disableAI "AUTOTARGET";
-        _driver disableAI "AUTOCOMBAT";
-        _driver disableAI "COVER";   	        
+        _driver doMove (position _vehicle);    	        
 		_driverDir = _driver getDir _vehicle;
-		//_driver setDir _driverDir + 180;		
         _driver setUnitPos "MIDDLE";  	
 		sleep 0.5;
 		_driver playMoveNow "Acts_carFixingWheel";
-		sleep 2;
-        _driver playMoveNow "Acts_carFixingWheel";
-        sleep 2;
-        _driver playMoveNow "Acts_carFixingWheel";
-        sleep 2;        
+		sleep 8;      
 		_driver switchMove "";
 		if(alive _driver) then
 		{
 			_vehicle setDamage 0;
 			_driver playMoveNow "Acts_carFixingWheel";
 			sleep 2;
+            _driver switchMove "";
             _driver assignAsDriver _vehicle;
+            _driver moveInDriver _vehicle;
             _driver action ["movetodriver", _vehicle];					
 		};
-        _wp = _vehGroup addWaypoint [position _vehicle, 0] ;
+        _wp = _group addWaypoint [position _vehicle, 0] ;
         _wp setWaypointFormation "Column";
         _wp setWaypointCompletionRadius 1;
         _wp setWaypointType "GETIN";		
-        sleep 10;
+        sleep 5;
         _spawnLocation = _vehicle getVariable "SC_vehicleSpawnLocation";	
          _driver action ["movetodriver", _vehicle];	
         _vehicle forceSpeed -1;	
-        [_vehGroup, _spawnLocation, 2000] call bis_fnc_taskPatrol;
-        _vehGroup setBehaviour "AWARE";
-        _vehGroup setCombatMode "RED";
+        [_group, _spawnLocation, 2000] call bis_fnc_taskPatrol;
+        _group setBehaviour "AWARE";
+        _group setCombatMode "RED";
 	
 	};		
 }

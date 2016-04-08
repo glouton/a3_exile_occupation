@@ -15,6 +15,7 @@
 private["_wp","_wp2","_wp3"];
 
 if (!isServer) exitWith {};
+
 _logDetail = format ["[OCCUPATION]:: Starting Occupation Monitor"];
 [_logDetail] call SC_fnc_log;
 
@@ -161,10 +162,11 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 				
 				_buildings = _pos nearObjects ["building", _groupRadius];
 				{
-					_buildingPositions = [_x, 10] call BIS_fnc_buildingPositions;
-					if(count _buildingPositions > 0) then
+					_isEnterable = [_x] call BIS_fnc_isBuildingEnterable;
+             
+					if(_isEnterable) then
 					{
-
+                        _buildingPositions = [_x, 10] call BIS_fnc_buildingPositions;
 						// Find Highest Point
 						_highest = [0,0,0];
 						{

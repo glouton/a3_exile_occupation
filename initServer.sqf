@@ -2,7 +2,7 @@
 //
 //		Server Occupation script by second_coming
 //
-SC_occupationVersion = "v6 (07-04-2016)";
+SC_occupationVersion = "v7 (08-04-2016)";
 //
 //		http://www.exilemod.com/profile/60-second_coming/
 //
@@ -22,7 +22,7 @@ SC_occupationVersion = "v6 (07-04-2016)";
 
 
 
-diag_log format ["[OCCUPATION MOD]:: Occupation v%2 Initialised at %1",time,SC_occupationVersion];
+diag_log format ["[OCCUPATION MOD]:: Occupation %2 Initialised at %1",time,SC_occupationVersion];
 
 // Get the config for Occupation
 call compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\config.sqf";
@@ -43,7 +43,7 @@ SC_comeUnstuck              = compile preprocessFileLineNumbers "\x\addons\a3_ex
 
 _logDetail = "=============================================================================================================";
 [_logDetail] call SC_fnc_log;
-_logDetail = format ["[OCCUPATION MOD]:: Occupation v%2 Initialised at %1",time,SC_occupationVersion];
+_logDetail = format ["[OCCUPATION MOD]:: Occupation %2 Initialised at %1",time,SC_occupationVersion];
 [_logDetail] call SC_fnc_log;
 _logDetail = "=============================================================================================================";
 [_logDetail] call SC_fnc_log;

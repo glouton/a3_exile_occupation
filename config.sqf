@@ -2,7 +2,6 @@
 //
 //		Server Occupation script by second_coming
 //
-//		v5 (06-04-2016)
 //
 //		http://www.exilemod.com/profile/60-second_coming/
 //
@@ -14,9 +13,9 @@
 
 // Shared Config for each occupation monitor
 
-SC_debug 				    = true;				    // set to true to turn on debug features (not for live servers) 
+SC_debug 				    = false;				// set to true to turn on debug features (not for live servers) 
 SC_extendedLogging          = true;                 // set to true for additional logging
-SC_infiSTAR_log			    = false;				// true Use infiSTAR logging, false logs to server rpt
+SC_infiSTAR_log			    = true;				    // true Use infiSTAR logging, false logs to server rpt
 SC_maxAIcount 			    = 100;					// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
 
 SC_mapMarkers			    = false;			    // Place map markers at the occupied areas (occupyPlaces and occupyMilitary only) true/false
@@ -53,7 +52,7 @@ SC_occupySea				= false;		        // true if you want to have roaming AI boats
 SC_occupyLootCrates		    = true;					// true if you want to have random loot crates with guards
 SC_numberofLootCrates       = 6;                    // if SC_occupyLootCrates = true spawn this many loot crates (overrided below for Namalsk)
 SC_LootCrateGuards          = 4;                    // number of AI to spawn at each crate
-SC_LootCrateGuardsRandomize = false;                // Use a random number of guards up to a maximum = SC_numberofGuards (so between 1 and SC_numberofGuards)
+SC_LootCrateGuardsRandomize = true;                 // Use a random number of guards up to a maximum = SC_numberofGuards (so between 1 and SC_numberofGuards)
 SC_occupyLootCratesMarkers	= true;					// true if you want to have markers on the loot crate spawns
 
 
@@ -65,7 +64,7 @@ SC_statics                  = [	[[1178,2524,0],4,100,true]	];      //[[pos],ai c
 
 
 // Settings for roaming ground vehicle AI
-SC_maxNumberofVehicles 	    = 5;						
+SC_maxNumberofVehicles 	    = 3;						
 SC_VehicleClassToUse 		= [	"Exile_Car_LandRover_Green","Exile_Car_UAZ_Open_Green","Exile_Car_Offroad_Guerilla03"];
 
 // Settings for roaming airborne AI (non armed helis will just fly around)
@@ -73,19 +72,20 @@ SC_maxNumberofHelis		    = 1;
 SC_HeliClassToUse 		    = [	"Exile_Chopper_Huey_Armed_Green"];
 
 // Settings for roaming seaborne AI (non armed boats will just sail around)
-SC_maxNumberofBoats		    = 2;
+SC_maxNumberofBoats		    = 1;
 SC_BoatClassToUse 		    = [	"B_Boat_Armed_01_minigun_F","I_Boat_Armed_01_minigun_F","O_Boat_Transport_01_F","O_G_Boat_Transport_01_F" ];
-						
+		
+// AI Custom Loadouts        				
 
- // namalsk specific settings
+ // namalsk specific settings 
 if (worldName == 'Namalsk') then 
 { 
 	SC_maxAIcount 			= 80; 
 	SC_occupySky			= false;
-    SC_maxNumberofVehicles 	= 3;
+    SC_maxNumberofVehicles 	= 2;
     SC_numberofLootCrates 	= 3;
     SC_numberofHeliCrashes  = 2;
-    SC_maxNumberofBoats		= 2;
+    SC_maxNumberofBoats		= 1;
 };
 
 
