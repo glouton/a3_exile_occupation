@@ -20,8 +20,8 @@ if(SC_debug) then
 // Select a replacement driver
 _vehicle removeAllMPEventHandlers  "mphit";
 _group = group _vehicle;
-[_deadDriver] join grpNull;
 
+// Remove dead units from the group
 {
     if(!alive _x) then { [_x] join grpNull; };     
 }forEach units _group;
@@ -68,7 +68,7 @@ if(count units _group > 0) then
 
     if(damage _vehicle > 0) then 
     {
-        [_driver] call SC_fnc_repairVehicle;
+        [_vehicle] call SC_fnc_repairVehicle;
         
     };  
 }
