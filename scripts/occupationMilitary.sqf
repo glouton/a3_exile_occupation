@@ -42,8 +42,9 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 	_logDetail = format ["[OCCUPATION Military]:: scanning buildings around %2 started at %1",time,_areaToScan];
     [_logDetail] call SC_fnc_log;
 	
-	_building = _areaToScan nearObjects [_buildings select _i, 750];
-	_currentBuilding = _buildings select _i;
+    _currentBuilding = _buildings select _i;
+	_building = _areaToScan nearObjects [_currentBuilding, 750];
+	
 	_logDetail = format ["[OCCUPATION Military]:: scan for %2 building finished at %1",time,_currentBuilding];
     [_logDetail] call SC_fnc_log;
 	
@@ -150,23 +151,6 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 				}
 				else
 				{
-
-					_buildingPositions = [_foundBuilding, 5] call BIS_fnc_buildingPositions;
-					if(count _buildingPositions > 0) then
-					{
-
-						// Find Highest Point
-						_highest = [0,0,0];
-						{
-							if(_x select 2 > _highest select 2) then
-							{
-								_highest = _x;
-							};
-
-						} foreach _buildingPositions;		
-						_spawnPosition = _highest;
-					};
-					
 									
 					DMS_ai_use_launchers = false;
 					_group = [_spawnPosition, _aiCount, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
@@ -179,7 +163,8 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 						_buildingPositions = [_x, 10] call BIS_fnc_buildingPositions;
 						if(count _buildingPositions > 0) then
 						{
-
+                             _y = _x;
+                             
 							// Find Highest Point
 							_highest = [0,0,0];
 							{
@@ -194,12 +179,12 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 							_i = _buildingPositions find _spawnPosition;
 							_wp = _group addWaypoint [_spawnPosition, 0] ;
 							_wp setWaypointFormation "Column";
-							_wp setWaypointBehaviour "SAD";
+							_wp setWaypointBehaviour "AWARE";
 							_wp setWaypointCombatMode "RED";
 							_wp setWaypointCompletionRadius 1;
-							_wp waypointAttachObject _x;
+							_wp waypointAttachObject _y;
 							_wp setwaypointHousePosition _i;
-							_wp setWaypointType "MOVE";
+							_wp setWaypointType "SAD";
 
 						};
 					} foreach _buildings;

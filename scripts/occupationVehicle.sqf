@@ -165,9 +165,7 @@ if(_vehiclesToSpawn >= 1) then
                 [_logDetail] call SC_fnc_log;
             };                    
         } forEach _vehicleRoles;
-		
-        _group setBehaviour "CARELESS";
-        _group setCombatMode "BLUE";		
+			
 
 		// Get the AI to shut the fuck up :)
 		enableSentences false;

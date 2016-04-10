@@ -130,7 +130,7 @@ for "_i" from 1 to _vehiclesToSpawn do
             [_logDetail] call SC_fnc_log;
         };                    
     } forEach _vehicleRoles;
-    
+
 
 	if(SC_infiSTAR_log) then 
 	{ 

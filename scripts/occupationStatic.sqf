@@ -45,7 +45,6 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 	_aiCount = _currentStatic select 1;
 	_radius = _currentStatic select 2;
 	_staticSearch = _currentStatic select 3;
-	_underground = _currentStatic select 4;
 	
 	_logDetail = format ["[OCCUPATION Static]:: Checking static spawn @ %1",_spawnPosition,_aiCount];
     [_logDetail] call SC_fnc_log;
@@ -89,7 +88,7 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 			_side = "bandit";		
 						
 			DMS_ai_use_launchers = false;
-			_group = [_spawnPosition, _aiCount, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
+			_group = [_spawnPosition, _aiCount, _difficulty, "assault", _side] call DMS_fnc_SpawnAIGroup;
 			[ _group,_spawnPosition,_difficulty,"AWARE" ] call DMS_fnc_SetGroupBehavior;
 			DMS_ai_use_launchers = true;						
 						
@@ -107,46 +106,42 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 			}
 			else
 			{
-				
-				
 				_buildings = _spawnPosition nearObjects ["building", _groupRadius];
 				{
-					_buildingPositions = [_x, 10] call BIS_fnc_buildingPositions;
-					if(count _buildingPositions > 0) then
+					_isEnterable = [_x] call BIS_fnc_isBuildingEnterable;
+             
+					if(_isEnterable) then
 					{
-
+                        _buildingPositions = [_x, 10] call BIS_fnc_buildingPositions;
+                        _y = _x;
 						// Find Highest Point
 						_highest = [0,0,0];
 						{
-							if(_x select 2 > _highest select 2) then
+                            if(_x select 2 > _highest select 2) then
 							{
 								_highest = _x;
 							};
 
 						} foreach _buildingPositions;		
-						_spawnPosition = _highest;
-						
-						_i = _buildingPositions find _spawnPosition;
-						_wp = _group addWaypoint [_spawnPosition, 0] ;
-						_wp setWaypointFormation "Column";
-						_wp setWaypointBehaviour "COMBAT";
+						_wpPosition = _highest;
+						//diag_log format ["Static Patrol %3 waypoint added - building: %1 position: %2",_y,_highest,_group];
+						_i = _buildingPositions find _wpPosition;
+						_wp = _group addWaypoint [_wpPosition, 0] ;
+						_wp setWaypointBehaviour "AWARE";
 						_wp setWaypointCombatMode "RED";
 						_wp setWaypointCompletionRadius 1;
-						_wp waypointAttachObject _x;
+						_wp waypointAttachObject _y;
 						_wp setwaypointHousePosition _i;
 						_wp setWaypointType "SAD";
 
 					};
 				} foreach _buildings;
-				if(count _buildings > 0 ) then
+				if(count _buildings > 0 && !isNil "_wp") then
 				{
 					_wp setWaypointType "CYCLE";
 				};			
-			};				
-			
-			
-			
-		
+			};
+
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			_logDetail = format ["[OCCUPATION Static]:: Spawning %1 AI in at %2 to patrol",_aiCount,_spawnPosition];
             [_logDetail] call SC_fnc_log;

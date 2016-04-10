@@ -16,7 +16,7 @@ private["_wp","_wp2","_wp3"];
 
 if (!isServer) exitWith {};
 
-_logDetail = format ["[OCCUPATION]:: Starting Occupation Monitor"];
+_logDetail = format ["[OCCUPATION]:: Starting Occupation Monitor @ %1",time];
 [_logDetail] call SC_fnc_log;
 
 _middle 		    = worldSize/2;			
@@ -38,15 +38,21 @@ if(_currentPlayerCount > _scaleAI) then
 // Don't spawn additional AI if the server fps is below _minFPS
 if(diag_fps < _minFPS) exitWith 
 { 
-    _logDetail = format ["[OCCUPATION:Places]:: Held off spawning more AI as the server FPS is only %1",diag_fps]; 
-    [_logDetail] call SC_fnc_log; 
+    if(SC_extendedLogging) then 
+    { 
+        _logDetail = format ["[OCCUPATION:Places]:: Held off spawning more AI as the server FPS is only %1",diag_fps]; 
+        [_logDetail] call SC_fnc_log; 
+    };
 };
 
 _aiActive = {alive _x && side _x == EAST} count allUnits;
 if(_aiActive > _maxAIcount) exitWith 
 { 
-    _logDetail = format ["[OCCUPATION:Places]:: %1 active AI, so not spawning AI this time",_aiActive]; 
-    [_logDetail] call SC_fnc_log; 
+    if(SC_extendedLogging) then 
+    { 
+        _logDetail = format ["[OCCUPATION:Places]:: %1 active AI, so not spawning AI this time",_aiActive]; 
+        [_logDetail] call SC_fnc_log;
+    };
 };
 
 _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCityCapital"], _maxDistance]);
@@ -167,6 +173,8 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 					if(_isEnterable) then
 					{
                         _buildingPositions = [_x, 10] call BIS_fnc_buildingPositions;
+                        _y = _x;
+                        
 						// Find Highest Point
 						_highest = [0,0,0];
 						{
@@ -176,15 +184,14 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 							};
 
 						} foreach _buildingPositions;		
-						_spawnPosition = _highest;
+						_wpPosition = _highest;
 						
-						_i = _buildingPositions find _spawnPosition;
-						_wp = _group addWaypoint [_spawnPosition, 0] ;
-						_wp setWaypointFormation "Column";
+						_i = _buildingPositions find _wpPosition;
+						_wp = _group addWaypoint [_wpPosition, 0] ;
 						_wp setWaypointBehaviour "COMBAT";
 						_wp setWaypointCombatMode "RED";
 						_wp setWaypointCompletionRadius 1;
-						_wp waypointAttachObject _x;
+						_wp waypointAttachObject _y;
 						_wp setwaypointHousePosition _i;
 						_wp setWaypointType "SAD";
 

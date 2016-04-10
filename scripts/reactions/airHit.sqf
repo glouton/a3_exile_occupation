@@ -24,7 +24,7 @@ _damagedEssentials = 0;
 {
 	if ((_heli getHitPointDamage _x) > 0) then
 	{	
-		if(_x == "HitFuel") then
+		if(_x == "HitFuel" && _heliDamage < 1) then
         {
             _heli setHitPointDamage ["HitFuel", 0]; 
             _heli setFuel 1;      

@@ -5,6 +5,8 @@
 private["_vehicle","_curPos","_oldvehPos","_engineTime","_newPos"];
 _vehicle = _this select 0;
 
+if(isNil "_vehicle") exitWith{};
+
 if(count(crew _vehicle) > 0)then
 {
     _curPos = position _vehicle;

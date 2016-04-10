@@ -15,7 +15,7 @@
 
 SC_debug 				    = false;				// set to true to turn on debug features (not for live servers) 
 SC_extendedLogging          = true;                 // set to true for additional logging
-SC_infiSTAR_log			    = true;				    // true Use infiSTAR logging, false logs to server rpt
+SC_infiSTAR_log			    = false;			    // true Use infiSTAR logging, false logs to server rpt
 SC_maxAIcount 			    = 100;					// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
 
 SC_mapMarkers			    = false;			    // Place map markers at the occupied areas (occupyPlaces and occupyMilitary only) true/false
@@ -59,13 +59,13 @@ SC_occupyLootCratesMarkers	= true;					// true if you want to have markers on th
 SC_occupyHeliCrashes		= true;					// true if you want to have Dayz style helicrashes
 SC_numberofHeliCrashes      = 5;                    // if SC_occupyHeliCrashes = true spawn this many loot crates (overrided below for Namalsk)
 
-SC_statics                  = [	[[1178,2524,0],4,100,true]	];      //[[pos],ai count,radius,search buildings]
+SC_statics                  = [	[[1178,2524,0],8,250,true]	];      //[[pos],ai count,radius,search buildings]
 
 
 
 // Settings for roaming ground vehicle AI
-SC_maxNumberofVehicles 	    = 3;						
-SC_VehicleClassToUse 		= [	"Exile_Car_LandRover_Green","Exile_Car_UAZ_Open_Green","Exile_Car_Offroad_Guerilla03"];
+SC_maxNumberofVehicles 	    = 4;						
+SC_VehicleClassToUse 		= [	"Exile_Car_LandRover_Green","Exile_Bike_QuadBike_Black","Exile_Car_Octavius_White"];
 
 // Settings for roaming airborne AI (non armed helis will just fly around)
 SC_maxNumberofHelis		    = 1;
@@ -73,7 +73,7 @@ SC_HeliClassToUse 		    = [	"Exile_Chopper_Huey_Armed_Green"];
 
 // Settings for roaming seaborne AI (non armed boats will just sail around)
 SC_maxNumberofBoats		    = 1;
-SC_BoatClassToUse 		    = [	"B_Boat_Armed_01_minigun_F","I_Boat_Armed_01_minigun_F","O_Boat_Transport_01_F","O_G_Boat_Transport_01_F" ];
+SC_BoatClassToUse 		    = [	"B_Boat_Armed_01_minigun_F","I_Boat_Armed_01_minigun_F","O_Boat_Transport_01_F","Exile_Boat_MotorBoat_Police" ];
 		
 // AI Custom Loadouts        				
 
