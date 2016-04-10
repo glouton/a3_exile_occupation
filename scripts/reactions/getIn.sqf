@@ -6,9 +6,7 @@ _unit	= _this select 0;
 if(isPlayer _unit) then
 {
 	_vehicle = vehicle _unit;
-    _vehicle removeAllMPEventHandlers  "mphit";
-	_vehicle removeAllMPEventHandlers  "mpkilled";
-	SC_liveVehicles = SC_liveVehicles - 1;
+    [_vehicle]  call SC_fnc_vehicleDestroyed;
 
 	if(SC_extendedLogging) then 
 	{

@@ -15,7 +15,8 @@
 private["_wp","_wp2","_wp3"];
 
 if (!isServer) exitWith {};
-_logDetail = format ["[OCCUPATION]:: Starting Occupation Monitor"];
+
+_logDetail = format ["[OCCUPATION]:: Starting Occupation Monitor @ %1",time];
 [_logDetail] call SC_fnc_log;
 
 _middle 		    = worldSize/2;			
@@ -37,15 +38,21 @@ if(_currentPlayerCount > _scaleAI) then
 // Don't spawn additional AI if the server fps is below _minFPS
 if(diag_fps < _minFPS) exitWith 
 { 
-    _logDetail = format ["[OCCUPATION]:: Held off spawning more AI as the server FPS is only %1",diag_fps]; 
-    [_logDetail] call SC_fnc_log; 
+    if(SC_extendedLogging) then 
+    { 
+        _logDetail = format ["[OCCUPATION:Places]:: Held off spawning more AI as the server FPS is only %1",diag_fps]; 
+        [_logDetail] call SC_fnc_log; 
+    };
 };
 
-_aiActive = count(_spawnCenter nearEntities ["O_recon_F", 20000]);
+_aiActive = {alive _x && side _x == EAST} count allUnits;
 if(_aiActive > _maxAIcount) exitWith 
 { 
-    _logDetail = format ["[OCCUPATION]:: %1 active AI, so not spawning AI this time",_aiActive]; 
-    [_logDetail] call SC_fnc_log; 
+    if(SC_extendedLogging) then 
+    { 
+        _logDetail = format ["[OCCUPATION:Places]:: %1 active AI, so not spawning AI this time",_aiActive]; 
+        [_logDetail] call SC_fnc_log;
+    };
 };
 
 _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCityCapital"], _maxDistance]);
@@ -58,7 +65,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 	
 	if(SC_extendedLogging) then 
     { 
-        _logDetail = format ["[OCCUPATION]:: Testing location name: %1 position: %2",_locationName,_pos]; 
+        _logDetail = format ["[OCCUPATION:Places]:: Testing location name: %1 position: %2",_locationName,_pos]; 
         [_logDetail] call SC_fnc_log; 
     };
 	
@@ -71,7 +78,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
             _okToSpawn = false; 
             if(SC_extendedLogging) then 
             { 
-                _logDetail = format ["[OCCUPATION]:: Rolled %1 so not spawning AI this time",_spawnChance,_locationName];
+                _logDetail = format ["[OCCUPATION:Places]:: Rolled %1 so not spawning AI this time",_spawnChance,_locationName];
                 [_logDetail] call SC_fnc_log;
             };
         };
@@ -83,7 +90,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
             _okToSpawn = false; 
             if(SC_extendedLogging) then 
             { 
-                _logDetail = format ["[OCCUPATION]:: %1 is too close to player base",_locationName];
+                _logDetail = format ["[OCCUPATION:Places]:: %1 is too close to player base",_locationName];
                 [_logDetail] call SC_fnc_log;
             };
         };
@@ -96,7 +103,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
             _okToSpawn = false; 
             if(SC_extendedLogging) then 
             { 
-                _logDetail = format ["[OCCUPATION]:: %1 is too close to a %2",_locationName,_nearestMarker];
+                _logDetail = format ["[OCCUPATION:Places]:: %1 is too close to a %2",_locationName,_nearestMarker];
                 [_logDetail] call SC_fnc_log;
             }; 
         };
@@ -107,7 +114,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
             _okToSpawn = false; 
             if(SC_extendedLogging) then 
             { 
-                _logDetail = format ["[OCCUPATION]:: %1 has players too close",_locationName];
+                _logDetail = format ["[OCCUPATION:Places]:: %1 has players too close",_locationName];
                 [_logDetail] call SC_fnc_log;
             }; 
         };
@@ -119,7 +126,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
             _okToSpawn = false; 
             if(SC_extendedLogging) then 
             { 
-                _logDetail = format ["[OCCUPATION]:: %1 already has %2 active AI patrolling",_locationName,_aiNear];
+                _logDetail = format ["[OCCUPATION:Places]:: %1 already has %2 active AI patrolling",_locationName,_aiNear];
                 [_logDetail] call SC_fnc_log;
             }; 
         };
@@ -131,9 +138,9 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			_aiCount = 1;
 			_groupRadius = 100;
-			if(_locationType isEqualTo "NameCityCapital") then { _aiCount = 5; _groupRadius = 300; };
-			if(_locationType isEqualTo "NameCity") then { _aiCount = 2 + (round (random 3)); _groupRadius = 200; };
-			if(_locationType isEqualTo "NameVillage") then { _aiCount = 1 + (round (random 2)); _groupRadius = 100; };
+			if(_locationType isEqualTo "NameCityCapital") then  { _aiCount = 5; _groupRadius = 300; };
+			if(_locationType isEqualTo "NameCity") then         { _aiCount = 2 + (round (random 3)); _groupRadius = 200; };
+			if(_locationType isEqualTo "NameVillage") then      { _aiCount = 1 + (round (random 2)); _groupRadius = 100; };
 				
 			if(_aiCount < 1) then { _aiCount = 1; };
 			_difficulty = "random";
@@ -161,10 +168,13 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 				
 				_buildings = _pos nearObjects ["building", _groupRadius];
 				{
-					_buildingPositions = [_x, 10] call BIS_fnc_buildingPositions;
-					if(count _buildingPositions > 0) then
+					_isEnterable = [_x] call BIS_fnc_isBuildingEnterable;
+             
+					if(_isEnterable) then
 					{
-
+                        _buildingPositions = [_x, 10] call BIS_fnc_buildingPositions;
+                        _y = _x;
+                        
 						// Find Highest Point
 						_highest = [0,0,0];
 						{
@@ -174,15 +184,14 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 							};
 
 						} foreach _buildingPositions;		
-						_spawnPosition = _highest;
+						_wpPosition = _highest;
 						
-						_i = _buildingPositions find _spawnPosition;
-						_wp = _group addWaypoint [_spawnPosition, 0] ;
-						_wp setWaypointFormation "Column";
+						_i = _buildingPositions find _wpPosition;
+						_wp = _group addWaypoint [_wpPosition, 0] ;
 						_wp setWaypointBehaviour "COMBAT";
 						_wp setWaypointCombatMode "RED";
 						_wp setWaypointCompletionRadius 1;
-						_wp waypointAttachObject _x;
+						_wp waypointAttachObject _y;
 						_wp setwaypointHousePosition _i;
 						_wp setWaypointType "SAD";
 
@@ -204,7 +213,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 				enableSentences false;
 				enableRadio false;
 				[_group2, _pos, _groupRadius] call bis_fnc_taskPatrol;
-				_group2 setBehaviour "DESTROY";
+				_group2 setBehaviour "AWARE";
 				_group2 setCombatMode "RED";
 
 			};
@@ -222,7 +231,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 				_marker setMarkerText "Occupied Area";	
 			};			
 			
-			_logDetail = format ["[OCCUPATION]:: Spawning %2 AI in at %3 to patrol %1",_locationName,_aiCount,_spawnPosition];
+			_logDetail = format ["[OCCUPATION:Places]:: Spawning %2 AI in at %3 to patrol %1",_locationName,_aiCount,_spawnPosition];
             [_logDetail] call SC_fnc_log;
 			_okToSpawn = false;		
 		};

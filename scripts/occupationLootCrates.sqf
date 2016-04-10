@@ -3,11 +3,6 @@ if (!isServer) exitWith {};
 _logDetail = format ["[OCCUPATION:LootCrates]:: Starting Occupation Loot Crates"];
 [_logDetail] call SC_fnc_log;
 
-if (worldName == 'Namalsk') then
-{
-	SC_numberofLootCrates 	= 3; // this is the number of crates that you want to spawn
-};
-
 _logDetail = format['[OCCUPATION:LootCrates]::  worldname: %1 crates to spawn: %2',worldName,SC_numberofLootCrates];
 [_logDetail] call SC_fnc_log;
 
@@ -43,7 +38,13 @@ for "_i" from 1 to SC_numberofLootCrates do
 	};	
 
 	//Infantry spawn using DMS
-	_AICount = 1 + (round (random 2));	
+    _AICount = SC_LootCrateGuards;
+    
+    if(SC_LootCrateGuardsRandomize) then 
+    {
+        _AICount = 1 + (round (random (SC_LootCrateGuards-1)));    
+    };
+		
 	_spawnPosition = [_position select 0, _position select 1, 0];
 	_group = [_spawnPosition, _AICount, "random", "random", "bandit"] call DMS_fnc_SpawnAIGroup;
 	
@@ -55,8 +56,10 @@ for "_i" from 1 to SC_numberofLootCrates do
 	_group setBehaviour "AWARE";
 	_group setCombatMode "RED";
 
-	_logDetail = text format ["[OCCUPATION:LootCrates]::  Creating crate %3 @ drop zone %1 with %2 guards",_position,_AICount,_i];
-	
+	_logDetail = format ["[OCCUPATION:LootCrates]::  Creating crate %3 at drop zone %1 with %2 guards",_position,_AICount,_i];
+	[_logDetail] call SC_fnc_log;
+    
+    
 	_box = "CargoNet_01_box_F" createvehicle _position;
 	clearMagazineCargoGlobal _box;
 	clearWeaponCargoGlobal _box;
@@ -85,4 +88,3 @@ for "_i" from 1 to SC_numberofLootCrates do
 	_box addItemCargoGlobal ["Exile_Item_WoodDoorwayKit", 1 + (random 1)];
 	_box addItemCargoGlobal ["Exile_Item_WoodFloorPortKit", 1 + (random 2)];
 };
-

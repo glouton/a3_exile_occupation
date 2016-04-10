@@ -3,6 +3,30 @@ if (!isServer) exitWith {};
 _logDetail = format['[OCCUPATION:Vehicle] Started'];
 [_logDetail] call SC_fnc_log;
 
+
+// more than _scaleAI players on the server and the max AI count drops per additional player
+_currentPlayerCount = count playableUnits;
+_maxAIcount 		= SC_maxAIcount;
+
+if(_currentPlayerCount > SC_scaleAI) then 
+{
+	_maxAIcount = _maxAIcount - (_currentPlayerCount - SC_scaleAI) ;
+};
+
+// Don't spawn additional AI if the server fps is below _minFPS
+if(diag_fps < SC_minFPS) exitWith 
+{ 
+    _logDetail = format ["[OCCUPATION:Vehicle]:: Held off spawning more AI as the server FPS is only %1",diag_fps]; 
+    [_logDetail] call SC_fnc_log; 
+};
+
+_aiActive = {alive _x && side _x == EAST} count allUnits;
+if(_aiActive > _maxAIcount) exitWith 
+{ 
+    _logDetail = format ["[OCCUPATION:Vehicle]:: %1 active AI, so not spawning AI this time",_aiActive]; 
+    [_logDetail] call SC_fnc_log; 
+};
+
 if(SC_liveVehicles >= SC_maxNumberofVehicles) exitWith 
 {
     if(SC_extendedLogging) then 
@@ -59,7 +83,7 @@ if(_vehiclesToSpawn >= 1) then
 		private["_group"];
 		_Location = _locations call BIS_fnc_selectRandom; 
 		_position = position _Location;	
-		_pos = [_position,10,100,5,0,20,0] call BIS_fnc_findSafePos;
+		_pos = [_position,10,250,5,0,20,0] call BIS_fnc_findSafePos;
 		
 		
 		// Get position of nearest roads
@@ -69,9 +93,16 @@ if(_vehiclesToSpawn >= 1) then
 		_spawnLocation = [_nearestRoad select 0, _pos select 1, 0];
 
 		_group = createGroup east;
-		SC_liveVehicles = SC_liveVehicles + 1;
 		_VehicleClassToUse = SC_VehicleClassToUse call BIS_fnc_selectRandom;
 		_vehicle = createVehicle [_VehicleClassToUse, _spawnLocation, [], 0, "NONE"];
+        _group addVehicle _vehicle;	
+      
+        SC_liveVehicles = SC_liveVehicles + 1;
+        SC_liveVehiclesArray = SC_liveVehiclesArray + [_vehicle];
+
+        _vehicle setVariable["vehPos",_spawnLocation,true];
+        _vehicle setVariable["vehClass",_VehicleClassToUse,true];
+        _vehicle setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];
 		_vehicle setFuel 1;
 		_vehicle engineOn true;
 		_vehicle lock 0;			
@@ -81,40 +112,60 @@ if(_vehiclesToSpawn >= 1) then
 		_vehicle limitSpeed 60;
 		_vehicle action ["LightOn", _vehicle];			
 		
-		_vehicle addEventHandler ["getin", "_this call SC_fnc_getIn;"];
-		_vehicle addMPEventHandler ["mpkilled", "SC_liveVehicles = SC_liveVehicles - 1;"];
-		_vehicle addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];		
-		_vehicle setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];			
-		
-		_group addVehicle _vehicle;	
-		_driver = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;	
-        if(SC_debug) then
-        {
-            _tag = createVehicle ["Sign_Arrow_Green_F", position _driver, [], 0, "CAN_COLLIDE"];
-            _tag attachTo [_driver,[0,0,0.6],"Head"];  
-        };
-        sleep 1;
-		_driver setVariable ["DMS_AssignedVeh",_vehicle];
-		_driver addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
-		_driver setVariable ["SC_drivenVehicle", _vehicle,true];	
-		_vehicle setVariable ["SC_assignedDriver", _driver,true];
-        _driver action ["movetodriver", _vehicle];
-        _driver assignAsDriver _vehicle;        		
-		sleep 0.2;
-		_crewCount =
-		{
-			private _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;
-			_unit moveInTurret [_vehicle, _x];
-			_unit setVariable ["DMS_AssignedVeh",_vehicle];
-            _unit assignAsCargo _vehicle;
-            sleep 0.2;
-			true
-		} count (allTurrets [_vehicle, true]);		
-		_group setBehaviour "CARELESS";
-		_group setCombatMode "BLUE";		
-		sleep 10;
-		
 
+        // Calculate the crew requried
+        _vehicleRoles = (typeOf _vehicle) call bis_fnc_vehicleRoles;
+        {
+            _unitPlaced = false;
+            _vehicleRole = _x select 0;
+            _vehicleSeat = _x select 1;
+            if(_vehicleRole == "Driver") then
+            {
+                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;
+                _unit disableAI "TARGET";
+                _unit disableAI "AUTOTARGET";
+                _unit disableAI "AUTOCOMBAT";
+                _unit disableAI "COVER";  
+                _unit disableAI "SUPPRESSION";   
+                sleep 0.1;	
+                if(SC_debug) then
+                {
+                    _tag = createVehicle ["Sign_Arrow_Green_F", position _unit, [], 0, "CAN_COLLIDE"];
+                    _tag attachTo [_unit,[0,0,0.6],"Head"];  
+                };
+                sleep 0.1;                   
+                _unit assignAsDriver _vehicle;
+                _unit moveInDriver _vehicle;
+                _unit setVariable ["DMS_AssignedVeh",_vehicle];
+                _unit setVariable ["SC_drivenVehicle", _vehicle,true]; 
+                _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
+                _vehicle setVariable ["SC_assignedDriver", _unit,true];	
+                _vehicle addEventHandler ["getin", "_this call SC_fnc_getIn;"];
+                _vehicle addMPEventHandler ["mpkilled", "_this call SC_fnc_vehicleDestroyed;"];
+                _vehicle addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];
+            };
+            if(_vehicleRole == "Turret") then
+            {
+                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;   
+                _unit moveInTurret [_vehicle, _vehicleSeat];
+			    _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
+                _unitPlaced = true;
+            };
+            if(_vehicleRole == "CARGO") then
+            {
+                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;   
+                _unit assignAsCargo _vehicle; 
+                _unit moveInCargo _vehicle;
+			    _unit setVariable ["DMS_AssignedVeh",_vehicle];
+                _unitPlaced = true; 
+            };    
+            if(SC_extendedLogging && _unitPlaced) then 
+            { 
+                _logDetail = format['[OCCUPATION:Vehicle] %1 added to vehicle %2',_vehicleRole,_vehicle]; 
+                [_logDetail] call SC_fnc_log;
+            };                    
+        } forEach _vehicleRoles;
+			
 
 		// Get the AI to shut the fuck up :)
 		enableSentences false;

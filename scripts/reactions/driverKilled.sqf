@@ -9,7 +9,7 @@ if(SC_extendedLogging) then
 
 _deadDriver	= _this select 0;
 _deadDriver removeAllMPEventHandlers  "mpkilled";
-_vehicleDriven = _deadDriver getVariable "SC_drivenVehicle";
+_vehicle = _deadDriver getVariable "SC_drivenVehicle";
 
 
 if(SC_debug) then
@@ -18,55 +18,62 @@ if(SC_debug) then
 };
 
 // Select a replacement driver
-_vehicleDriven removeAllMPEventHandlers  "mphit";
-_vehGroup = group _vehicleDriven;
-[_deadDriver] join grpNull;
-if(count units _vehGroup > 0) then
+_vehicle removeAllMPEventHandlers  "mphit";
+_group = group _vehicle;
+
+// Remove dead units from the group
 {
-    _logDetail = format ["[OCCUPATION:Vehicle]:: vehicle: %1 group: %2 units left:%3",_vehicleDriven,_vehGroup,count units _vehGroup]; 
-    [_logDetail] call SC_fnc_log;       
-    _groupMembers = units _vehGroup;
-    _replacementDriver = _groupMembers call BIS_fnc_selectRandom;
+    if(!alive _x) then { [_x] join grpNull; };     
+}forEach units _group;
+
+if(count units _group > 0) then
+{
+    if(SC_extendedLogging) then 
+    { 
+        _logDetail = format ["[OCCUPATION:Vehicle]:: vehicle: %1 group: %2 units left:%3",_vehicle,_group,count units _group]; 
+        [_logDetail] call SC_fnc_log; 
+    };      
+
     
-    if(!alive _replacementDriver) exitWith { [_replacementDriver] call SC_fnc_driverKilled; }; 
- 
-    if (isNil "_replacementDriver") exitWith 
-    {
-        _logDetail = format ["[OCCUPATION:Vehicle]:: No replacement Driver found for vehicle %1",_vehicleDriven]; 
-        [_logDetail] call SC_fnc_log;        
-    };
+    _groupMembers = units _group;
+    _driver = _groupMembers call BIS_fnc_selectRandom;
+
+    _driver disableAI "TARGET";
+    _driver disableAI "AUTOTARGET";
+    _driver disableAI "AUTOCOMBAT";
+    _driver disableAI "COVER"; 
     
+    _driver assignAsDriver _vehicle;
+    _driver setVariable ["DMS_AssignedVeh",_vehicle];  
+    _driver setVariable ["SC_drivenVehicle", _vehicle,true];	 
+    _vehicle setVariable ["SC_assignedDriver", _driver,true];        
+    _vehicle addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];
+    _driver addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
+
     if(SC_debug) then
     {
-        _tag = createVehicle ["Sign_Arrow_Green_F", position _replacementDriver, [], 0, "CAN_COLLIDE"];
-        _tag attachTo [_replacementDriver,[0,0,0.6],"Head"];  
+        _tag = createVehicle ["Sign_Arrow_Green_F", position _driver, [], 0, "CAN_COLLIDE"];
+        _tag attachTo [_driver,[0,0,0.6],"Head"];  
     };
-        
-    _replacementDriver disableAI "TARGET";
-    _replacementDriver disableAI "AUTOTARGET";
-    _replacementDriver disableAI "AUTOCOMBAT";
-    _replacementDriver disableAI "COVER"; 
-    
-    _replacementDriver assignAsDriver _vehicleDriven;
-        
-    _vehicleDriven addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];
-    _replacementDriver addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
-    _replacementDriver setVariable ["DMS_AssignedVeh",_vehicleDriven];  
-    _replacementDriver setVariable ["SC_drivenVehicle", _vehicleDriven,true];	 
-    _vehicleDriven setVariable ["SC_assignedDriver", _replacementDriver,true];
-    _replacementDriver doMove (position _vehicleDriven);   	
-    _replacementDriver action ["movetodriver", _vehicleDriven];
+
+    _driver doMove (position _vehicle);   	
+    _driver action ["movetodriver", _vehicle];
     
 
     if(SC_extendedLogging) then 
     {
-        _logDetail = format ["[OCCUPATION:Vehicle]:: Replacement Driver found (%1) for vehicle %2",_replacementDriver,_vehicleDriven]; 
+        _logDetail = format ["[OCCUPATION:Vehicle]:: Replacement Driver found (%1) for vehicle %2",_driver,_vehicle]; 
         [_logDetail] call SC_fnc_log;
     };
 
-    if(damage _vehicleDriven > 0) then 
+    if(damage _vehicle > 0) then 
     {
-        [_replacementDriver] call SC_fnc_repairVehicle;
+        [_vehicle] call SC_fnc_repairVehicle;
         
     };  
+}
+else
+{
+    _logDetail = format ["[OCCUPATION:Vehicle]:: No replacement Driver found for vehicle %1",_vehicle]; 
+    [_logDetail] call SC_fnc_log;        
 };

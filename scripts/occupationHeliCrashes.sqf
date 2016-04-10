@@ -1,12 +1,5 @@
 if (!isServer) exitWith {};
 
-_numberofCrashes = 5; // this is the number of helicrashes that you want to spawn
-
-if (worldName == 'Namalsk') then
-{
-	_numberofCrashes = 2; // lower number for a smaller map
-};
-
 _displayMarkers 	= SC_debug; // only use for debug, no need for actual gameplay
 
 private['_position'];
@@ -14,7 +7,10 @@ private['_position'];
 _logDetail = format ["[OCCUPATION:HeliCrashes]:: Initialised at %1",time];
 [_logDetail] call SC_fnc_log;
 
-for "_i" from 1 to _numberofCrashes do
+_logDetail = format['[OCCUPATION:HeliCrashes]::  worldname: %1 crashes to spawn: %2',worldName,SC_numberofHeliCrashes];
+[_logDetail] call SC_fnc_log;
+
+for "_i" from 1 to SC_numberofHeliCrashes do
 {
 	_validspot 	= false;
 	while{!_validspot} do 
