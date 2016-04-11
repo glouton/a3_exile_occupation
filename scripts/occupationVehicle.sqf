@@ -122,8 +122,6 @@ if(_vehiclesToSpawn >= 1) then
             if(_vehicleRole == "Driver") then
             {
                 _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;
-                [_unit] joinSilent grpNull;
-                [_unit] joinSilent _group;
                 _unit disableAI "TARGET";
                 _unit disableAI "AUTOTARGET";
                 _unit disableAI "AUTOCOMBAT";
@@ -149,17 +147,13 @@ if(_vehiclesToSpawn >= 1) then
             if(_vehicleRole == "Turret") then
             {
                 _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;   
-                [_unit] joinSilent grpNull;
-                [_unit] joinSilent _group;
                 _unit moveInTurret [_vehicle, _vehicleSeat];
 			    _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
                 _unitPlaced = true;
             };
             if(_vehicleRole == "CARGO") then
             {
-                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;  
-                [_unit] joinSilent grpNull;
-                [_unit] joinSilent _group;                 
+                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;               
                 _unit assignAsCargo _vehicle; 
                 _unit moveInCargo _vehicle;
 			    _unit setVariable ["DMS_AssignedVeh",_vehicle];
