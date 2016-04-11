@@ -156,6 +156,12 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 					_group = [_spawnPosition, _aiCount, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
 					DMS_ai_use_launchers = true;
 
+                    {	
+                        _unit = _x;
+                        [_unit] joinSilent grpNull;
+                        [_unit] joinSilent _group;
+                    }foreach units _group;
+
 					[ _group,_pos,_difficulty,"COMBAT" ] call DMS_fnc_SetGroupBehavior;
 					
 					_buildings = _pos nearObjects ["house", _groupRadius];

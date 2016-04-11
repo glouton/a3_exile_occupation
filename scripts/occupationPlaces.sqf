@@ -151,6 +151,12 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			DMS_ai_use_launchers = false;
 			_group = [_spawnPosition, _aiCount, "randomEasy", "assault", _side] call DMS_fnc_SpawnAIGroup;
 			DMS_ai_use_launchers = _useLaunchers;
+
+            {	
+                _unit = _x;
+                [_unit] joinSilent grpNull;
+                [_unit] joinSilent _group;
+            }foreach units _group;
 						
 			// Get the AI to shut the fuck up :)
 			enableSentences false;

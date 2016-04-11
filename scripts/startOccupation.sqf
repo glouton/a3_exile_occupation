@@ -9,10 +9,16 @@ if(SC_debug) then { SC_refreshTime = 60; }else{ SC_refreshTime = 300; };
 
 // Add selected occupation scripts to Exile Threading System
 
+if(SC_occupyPublicBus) then
+{
+	[] execVM  "\x\addons\a3_exile_occupation\scripts\occupationPublicBus.sqf";
+};
+
 if(SC_occupyLootCrates) then
 {
 	if(SC_occupyLootCratesMarkers) then
 	{
+	    uiSleep 15; // delay the start
 		fnc_occupationDeleteMapMarker 	= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\deleteMapMarkers.sqf";
 		[10, fnc_occupationDeleteMapMarker, [], true] call ExileServer_system_thread_addTask;	
 	};
@@ -66,6 +72,7 @@ if(SC_occupyMilitary) then
 	fnc_occupationMilitary = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationMilitary.sqf";
 	[SC_refreshTime, fnc_occupationMilitary, [], true] call ExileServer_system_thread_addTask;
 };
+
 
 uiSleep 15; // delay the start
 fnc_occupationMonitor = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationMonitor.sqf";

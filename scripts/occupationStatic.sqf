@@ -89,6 +89,13 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 						
 			DMS_ai_use_launchers = false;
 			_group = [_spawnPosition, _aiCount, _difficulty, "assault", _side] call DMS_fnc_SpawnAIGroup;
+            
+            {	
+                _unit = _x;
+                [_unit] joinSilent grpNull;
+                [_unit] joinSilent _group;
+            }foreach units _group;
+            
 			[ _group,_spawnPosition,_difficulty,"AWARE" ] call DMS_fnc_SetGroupBehavior;
 			DMS_ai_use_launchers = true;						
 						
@@ -124,7 +131,7 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 
 						} foreach _buildingPositions;		
 						_wpPosition = _highest;
-						//diag_log format ["Static Patrol %3 waypoint added - building: %1 position: %2",_y,_highest,_group];
+						diag_log format ["Static Patrol %3 waypoint added - building: %1 position: %2",_y,_highest,_group];
 						_i = _buildingPositions find _wpPosition;
 						_wp = _group addWaypoint [_wpPosition, 0] ;
 						_wp setWaypointBehaviour "AWARE";

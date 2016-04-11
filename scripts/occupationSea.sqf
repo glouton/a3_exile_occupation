@@ -108,6 +108,11 @@ for "_i" from 1 to _vehiclesToSpawn do
         };                    
     } forEach _vehicleRoles;
     
+    {	
+        _unit = _x;
+        [_unit] joinSilent grpNull;
+        [_unit] joinSilent _group;
+    }foreach units _group;
 
 	if(SC_infiSTAR_log) then 
 	{ 
