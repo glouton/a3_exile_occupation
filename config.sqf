@@ -44,10 +44,13 @@ SC_buildings                = [	"Land_Cargo_Patrol_V1_F","Land_i_Barracks_V1_F",
 SC_occupyStatic	 		    = false;			    // true if you want to garrison AI in specific locations (not working yet)
 
 SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
+SC_occupyVehiclesLocked		= true;					// true if AI vehicles to stay locked until all the linked AI are dead
+
 SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
 
 SC_occupyPublicBus			= true;					// true if you want a roaming bus service
+SC_occupyPublicBusClass 	= "Exile_Car_Ikarus_Party";
 
 SC_occupyLootCrates		    = true;					// true if you want to have random loot crates with guards
 SC_numberofLootCrates       = 6;                    // if SC_occupyLootCrates = true spawn this many loot crates (overrided below for Namalsk)
@@ -86,6 +89,7 @@ if (worldName == 'Namalsk') then
     SC_numberofLootCrates 	= 3;
     SC_numberofHeliCrashes  = 2;
     SC_maxNumberofBoats		= 1;
+    SC_occupyPublicBusClass = "Exile_Car_LandRover_Urban";
 };
 
 

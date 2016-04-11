@@ -27,7 +27,7 @@ busDriver addHeadgear "H_Cap_blk";
 busDriver setCaptive true;
 
 // Spawn busDrivers Vehicle
-_publicBus = createVehicle ["Exile_Car_Ikarus_Party", _spawnLocation, [], 0, "CAN_COLLIDE"];
+_publicBus = createVehicle [SC_occupyPublicBusClass, _spawnLocation, [], 0, "CAN_COLLIDE"];
 SC_publicBusArray = SC_publicBusArray + [_publicBus];
 _publicBus setVariable ["SC_assignedDriver", busDriver,true];
 _publicBus setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];
@@ -52,7 +52,7 @@ busDriver assignasdriver _publicBus;
 {
 	_markerName = _x;
 	_markerPos = getMarkerPos _markerName;
-	if (markerType _markerName == "ExileTraderZone") then 
+	if (markerType _markerName == "ExileTraderZone" OR markerType _markerName == "o_unknown") then 
 	{
 		_wp = _group addWaypoint [_markerPos, 100];
 		_wp setWaypointType "MOVE";
@@ -71,7 +71,7 @@ _wp setWaypointspeed "LIMITED";
  
 _busPos = position _publicBus;
 _mk = createMarker ["busLocation",_busPos];
-"busLocation" setMarkerType "mil_warning";
+"busLocation" setMarkerType "Vehicle";
 "busLocation" setMarkerText "Public Bus";
 
 diag_log format['[OCCUPATION:publicBus] Running'];
@@ -83,7 +83,7 @@ while {true} do
     
     _pos = position _publicBus;
     _mk setMarkerPos _pos;
-    _nearPlayers = (count (_pos nearEntities [['Exile_Unit_Player'],75]));
+    _nearPlayers = (count (_pos nearEntities [['Exile_Unit_Player'],25]));
 
     if (_nearPlayers >= 1) then
     {

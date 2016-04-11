@@ -76,4 +76,7 @@ else
 {
     _logDetail = format ["[OCCUPATION:Vehicle]:: No replacement Driver found for vehicle %1",_vehicle]; 
     [_logDetail] call SC_fnc_log;        
+    _vehicle lock 0;			
+    _vehicle setVehicleLock "UNLOCKED";
+    _vehicle setVariable ["ExileIsLocked", 0, true];    
 };

@@ -105,9 +105,19 @@ if(_vehiclesToSpawn >= 1) then
         _vehicle setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];
 		_vehicle setFuel 1;
 		_vehicle engineOn true;
-		_vehicle lock true;			
-		_vehicle setVehicleLock "LOCKED";
-		_vehicle setVariable ["ExileIsLocked", 1, true];
+        if(SC_occupyVehiclesLocked) then 
+        {
+            _vehicle lock 2;			
+            _vehicle setVehicleLock "LOCKED";
+            _vehicle setVariable ["ExileIsLocked", 1, true];            
+        }
+        else
+        {
+            _vehicle lock 0;			
+            _vehicle setVehicleLock "UNLOCKED";
+            _vehicle setVariable ["ExileIsLocked", 0, true];             
+        };
+
 		_vehicle setSpeedMode "LIMITED";
 		_vehicle limitSpeed 60;
 		_vehicle action ["LightOn", _vehicle];			
@@ -179,7 +189,7 @@ if(_vehiclesToSpawn >= 1) then
 
 	
 		[_group, _spawnLocation, 2000] call bis_fnc_taskPatrol;
-		_group setBehaviour "AWARE";
+		_group setBehaviour "SAFE";
 		_group setCombatMode "RED";
 		sleep 0.2;
 		
