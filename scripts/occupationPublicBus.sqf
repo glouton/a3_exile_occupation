@@ -71,7 +71,7 @@ _wp setWaypointspeed "LIMITED";
  
 _busPos = position _publicBus;
 _mk = createMarker ["busLocation",_busPos];
-"busLocation" setMarkerType "Vehicle";
+"busLocation" setMarkerType "mil_warning";
 "busLocation" setMarkerText "Public Bus";
 
 diag_log format['[OCCUPATION:publicBus] Running'];
