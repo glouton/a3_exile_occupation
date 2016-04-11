@@ -30,6 +30,9 @@ busDriver setCaptive true;
 _publicBus = createVehicle ["Exile_Car_Ikarus_Party", _spawnLocation, [], 0, "CAN_COLLIDE"];
 SC_publicBusArray = SC_publicBusArray + [_publicBus];
 _publicBus setVariable ["SC_assignedDriver", busDriver,true];
+_publicBus setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];
+_publicBus addEventHandler ["getin", "_this call SC_fnc_getInBus;"];
+
 _group addVehicle _publicBus;	
 clearBackpackCargoGlobal _publicBus;
 clearItemCargoGlobal _publicBus;
@@ -93,17 +96,20 @@ while {true} do
     else
     {	
         _currentDriver = driver _publicBus;
-        if(isPlayer _currentDriver) then 
+        if(_currentDriver != busDriver) then 
         {   
+            _publicBus setFuel 0;
             [_currentDriver] orderGetin false; 
+            _currentDriver action ["eject", _publicBus];
         };
         
         if(isnull _currentDriver) then
         {
             sleep 0.1;
             busDriver assignAsDriver _publicBus;
-            busDriver moveInDriver _publicBus;
+            busDriver moveInDriver _publicBus;      
             [busDriver] orderGetin true;
+            _publicBus lockDriver true;
         };
         _publicBus setFuel 1;
         uiSleep 3;
