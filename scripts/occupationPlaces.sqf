@@ -1,20 +1,6 @@
-////////////////////////////////////////////////////////////////////////
-//
-//		Server Occupation script by second_coming
-//
-//		Version 2.0
-//
-//		http://www.exilemod.com/profile/60-second_coming/
-//
-//		This script uses the fantastic DMS by Defent and eraser1
-//
-//		http://www.exilemod.com/topic/61-dms-defents-mission-system/
-//
-////////////////////////////////////////////////////////////////////////
+if (!isServer) exitWith {};
 
 private["_wp","_wp2","_wp3"];
-
-if (!isServer) exitWith {};
 
 _logDetail = format ["[OCCUPATION]:: Starting Occupation Monitor @ %1",time];
 [_logDetail] call SC_fnc_log;
@@ -36,6 +22,8 @@ if(SC_occupyPlacesSurvivors) then
     WEST setFriend[RESISTANCE,1];
     WEST setFriend[EAST,0];
     EAST setFriend[WEST,0];
+    
+    if(!isNil "DMS_Enable_RankChange") then { DMS_Enable_RankChange = true;  };
 };
 
 

@@ -1,7 +1,7 @@
+if (!isServer) exitWith {};
+
 _logDetail = format['[OCCUPATION:Sea] Started'];
 [_logDetail] call SC_fnc_log;
-
-if (!isServer) exitWith {};
 
 // more than _scaleAI players on the server and the max AI count drops per additional player
 _currentPlayerCount = count playableUnits;

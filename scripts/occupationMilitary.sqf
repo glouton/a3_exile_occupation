@@ -1,6 +1,6 @@
-private["_wp","_wp2","_wp3"];
-
 if (!isServer) exitWith {};
+
+private["_wp","_wp2","_wp3"];
 _logDetail = format ["[OCCUPATION Military]:: Starting Monitor"];
 [_logDetail] call SC_fnc_log;
 

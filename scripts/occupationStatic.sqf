@@ -1,8 +1,9 @@
-private["_wp","_wp2","_wp3"];
-
 if (!isServer) exitWith {};
+
 _logDetail = format ["[OCCUPATION Static]:: Starting Monitor"];
 [_logDetail] call SC_fnc_log;
+
+private["_wp","_wp2","_wp3"];
 
 _middle 			    = worldSize/2;			
 _spawnCenter 		    = [_middle,_middle,0];		// Centre point for the map

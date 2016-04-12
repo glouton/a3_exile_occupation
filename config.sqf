@@ -2,7 +2,6 @@
 //
 //		Server Occupation script by second_coming
 //
-//
 //		http://www.exilemod.com/profile/60-second_coming/
 //
 //		This script uses the fantastic DMS by Defent and eraser1
@@ -31,7 +30,7 @@ SC_occupyPlaces 			= true;				    // true if you want villages,towns,cities patr
 SC_occupyPlacesSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyPlaces must be true to use this option)
 
                                                     // Occupation Military (roaming AI near military buildings)
-SC_occupyMilitary 		    = true;			        // true if you want military buildings patrolled (specify which types of building below)
+SC_occupyMilitary 		    = false;			    // true if you want military buildings patrolled (specify which types of building below)
 
 SC_buildings                = [	"Land_Cargo_Patrol_V1_F","Land_i_Barracks_V1_F","Land_i_Barracks_V1_dam_F",	"Land_i_Barracks_V2_F",
                                 "Land_Cargo_House_V1_F","Land_Cargo_HQ_V1_F","Land_Cargo_HQ_V2_F","Land_Cargo_HQ_V3_F","Land_Cargo_Patrol_V2_F",
@@ -42,7 +41,7 @@ SC_buildings                = [	"Land_Cargo_Patrol_V1_F","Land_i_Barracks_V1_F",
                                 "Land_Army_hut_int","Land_Army_hut2_int"
                                 ]; 
 
-SC_occupyStatic	 		    = true;		    	    // true if you want to garrison AI in specific locations (not working yet)
+SC_occupyStatic	 		    = false;		    	    // true if you want to garrison AI in specific locations (not working yet)
 
 SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
 SC_occupyVehiclesLocked		= true;					// true if AI vehicles to stay locked until all the linked AI are dead
@@ -51,7 +50,7 @@ SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
 
 SC_occupyPublicBus			= true;					// true if you want a roaming bus service
-SC_occupyPublicBusClass 	= "Exile_Car_Ikarus_Party";
+SC_occupyPublicBusClass 	= "Exile_Car_Ikarus_Party"; // class name for the vehicle to use as the public bus
 
 SC_occupyLootCrates		    = true;					// true if you want to have random loot crates with guards
 SC_numberofLootCrates       = 6;                    // if SC_occupyLootCrates = true spawn this many loot crates (overrided below for Namalsk)
@@ -90,7 +89,7 @@ if (worldName == 'Namalsk') then
     SC_numberofLootCrates 	= 3;
     SC_numberofHeliCrashes  = 2;
     SC_maxNumberofBoats		= 1;
-    SC_occupyPublicBusClass = "Exile_Car_LandRover_Urban";
+    SC_occupyPublicBusClass = "Exile_Car_LandRover_Urban"; // the ikarus bus gets stuck on Namalsk
 };
 
 
