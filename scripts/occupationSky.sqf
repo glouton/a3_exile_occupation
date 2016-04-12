@@ -102,7 +102,7 @@ for "_i" from 1 to _vehiclesToSpawn do
             _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;   
             _unit assignAsDriver _vehicle;
             _unit moveInDriver _vehicle;
-            _vehicle lockDriver true;
+            //_vehicle lockDriver true;
             _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
             removeBackpackGlobal _unit;
             _unit addBackpackGlobal "B_Parachute";
