@@ -292,7 +292,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                     _unit = _x;
                     [_unit] joinSilent grpNull;
                     [_unit] joinSilent _group2;
-                    if(side _unit == "survivor") then
+                    if(_side == "survivor") then
                     {
                         removeUniform _unit;
                         _unit forceAddUniform "Exile_Uniform_BambiOverall";     
