@@ -20,7 +20,7 @@ if(diag_fps < SC_minFPS) exitWith
     [_logDetail] call SC_fnc_log; 
 };
 
-_aiActive = {alive _x && side _x == EAST} count allUnits;
+_aiActive = {alive _x && (side _x == EAST OR side _x == WEST)} count allUnits;
 if(_aiActive > _maxAIcount) exitWith 
 { 
     _logDetail = format ["[OCCUPATION:Vehicle]:: %1 active AI, so not spawning AI this time",_aiActive]; 
@@ -105,9 +105,19 @@ if(_vehiclesToSpawn >= 1) then
         _vehicle setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];
 		_vehicle setFuel 1;
 		_vehicle engineOn true;
-		_vehicle lock 0;			
-		_vehicle setVehicleLock "UNLOCKED";
-		_vehicle setVariable ["ExileIsLocked", 0, true];
+        if(SC_occupyVehiclesLocked) then 
+        {
+            _vehicle lock 2;			
+            _vehicle setVehicleLock "LOCKED";
+            _vehicle setVariable ["ExileIsLocked", 1, true];            
+        }
+        else
+        {
+            _vehicle lock 0;			
+            _vehicle setVehicleLock "UNLOCKED";
+            _vehicle setVariable ["ExileIsLocked", 0, true];             
+        };
+
 		_vehicle setSpeedMode "LIMITED";
 		_vehicle limitSpeed 60;
 		_vehicle action ["LightOn", _vehicle];			
@@ -135,7 +145,7 @@ if(_vehiclesToSpawn >= 1) then
                 };
                 sleep 0.1;                   
                 _unit assignAsDriver _vehicle;
-                _unit moveInDriver _vehicle;
+                _unit moveInDriver _vehicle;                
                 _unit setVariable ["DMS_AssignedVeh",_vehicle];
                 _unit setVariable ["SC_drivenVehicle", _vehicle,true]; 
                 _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
@@ -153,7 +163,7 @@ if(_vehiclesToSpawn >= 1) then
             };
             if(_vehicleRole == "CARGO") then
             {
-                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;   
+                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;               
                 _unit assignAsCargo _vehicle; 
                 _unit moveInCargo _vehicle;
 			    _unit setVariable ["DMS_AssignedVeh",_vehicle];
@@ -179,7 +189,7 @@ if(_vehiclesToSpawn >= 1) then
 
 	
 		[_group, _spawnLocation, 2000] call bis_fnc_taskPatrol;
-		_group setBehaviour "AWARE";
+		_group setBehaviour "SAFE";
 		_group setCombatMode "RED";
 		sleep 0.2;
 		

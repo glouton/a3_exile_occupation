@@ -1,7 +1,7 @@
+if (!isServer) exitWith {};
+
 _logDetail = format['[OCCUPATION:Sea] Started'];
 [_logDetail] call SC_fnc_log;
-
-if (!isServer) exitWith {};
 
 // more than _scaleAI players on the server and the max AI count drops per additional player
 _currentPlayerCount = count playableUnits;
@@ -19,7 +19,7 @@ if(diag_fps < SC_minFPS) exitWith
     [_logDetail] call SC_fnc_log; 
 };
 
-_aiActive = {alive _x && side _x == EAST} count allUnits;
+_aiActive = {alive _x && (side _x == EAST OR side _x == WEST)} count allUnits;
 if(_aiActive > _maxAIcount) exitWith 
 { 
     _logDetail = format ["[OCCUPATION:Sea]:: %1 active AI, so not spawning AI this time",_aiActive]; 
@@ -108,6 +108,11 @@ for "_i" from 1 to _vehiclesToSpawn do
         };                    
     } forEach _vehicleRoles;
     
+    {	
+        _unit = _x;
+        [_unit] joinSilent grpNull;
+        [_unit] joinSilent _group;
+    }foreach units _group;
 
 	if(SC_infiSTAR_log) then 
 	{ 

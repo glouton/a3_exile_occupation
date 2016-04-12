@@ -1,8 +1,9 @@
-private["_wp","_wp2","_wp3"];
-
 if (!isServer) exitWith {};
+
 _logDetail = format ["[OCCUPATION Static]:: Starting Monitor"];
 [_logDetail] call SC_fnc_log;
+
+private["_wp","_wp2","_wp3"];
 
 _middle 			    = worldSize/2;			
 _spawnCenter 		    = [_middle,_middle,0];		// Centre point for the map
@@ -31,7 +32,7 @@ if(diag_fps < _minFPS) exitWith
     [_logDetail] call SC_fnc_log;    
 };
 
-_aiActive = count(_spawnCenter nearEntities ["O_recon_F", _maxDistance+1000]);
+_aiActive = {alive _x && (side _x == EAST OR side _x == WEST)} count allUnits;
 if(_aiActive > _maxAIcount) exitWith 
 { 
     _logDetail = format ["[OCCUPATION Static]:: %1 active AI, so not spawning AI this time",_aiActive]; 
@@ -89,6 +90,13 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 						
 			DMS_ai_use_launchers = false;
 			_group = [_spawnPosition, _aiCount, _difficulty, "assault", _side] call DMS_fnc_SpawnAIGroup;
+            
+            {	
+                _unit = _x;
+                [_unit] joinSilent grpNull;
+                [_unit] joinSilent _group;
+            }foreach units _group;
+            
 			[ _group,_spawnPosition,_difficulty,"AWARE" ] call DMS_fnc_SetGroupBehavior;
 			DMS_ai_use_launchers = true;						
 						
@@ -124,7 +132,7 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 
 						} foreach _buildingPositions;		
 						_wpPosition = _highest;
-						//diag_log format ["Static Patrol %3 waypoint added - building: %1 position: %2",_y,_highest,_group];
+						diag_log format ["Static Patrol %3 waypoint added - building: %1 position: %2",_y,_highest,_group];
 						_i = _buildingPositions find _wpPosition;
 						_wp = _group addWaypoint [_wpPosition, 0] ;
 						_wp setWaypointBehaviour "AWARE";

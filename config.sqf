@@ -2,7 +2,6 @@
 //
 //		Server Occupation script by second_coming
 //
-//
 //		http://www.exilemod.com/profile/60-second_coming/
 //
 //		This script uses the fantastic DMS by Defent and eraser1
@@ -14,8 +13,8 @@
 // Shared Config for each occupation monitor
 
 SC_debug 				    = false;				// set to true to turn on debug features (not for live servers) 
-SC_extendedLogging          = true;                 // set to true for additional logging
-SC_infiSTAR_log			    = false;			    // true Use infiSTAR logging, false logs to server rpt
+SC_extendedLogging          = false;                // set to true for additional logging
+SC_infiSTAR_log			    = true;			        // true Use infiSTAR logging, false logs to server rpt
 SC_maxAIcount 			    = 100;					// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
 
 SC_mapMarkers			    = false;			    // Place map markers at the occupied areas (occupyPlaces and occupyMilitary only) true/false
@@ -27,7 +26,8 @@ SC_useWaypoints			    = true;					// When spawning AI create waypoints to make t
 												    // (can affect performance when the AI is spawned and the waypoints are calculated)
 
                                                     // Occupation Places (towns, villages & cities roaming AI)
-SC_occupyPlaces 			= true;				    // true if you want villages,towns,cities patrolled
+SC_occupyPlaces 			= true;				    // true if you want villages,towns,cities patrolled by bandits
+SC_occupyPlacesSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyPlaces must be true to use this option)
 
                                                     // Occupation Military (roaming AI near military buildings)
 SC_occupyMilitary 		    = false;			    // true if you want military buildings patrolled (specify which types of building below)
@@ -41,13 +41,16 @@ SC_buildings                = [	"Land_Cargo_Patrol_V1_F","Land_i_Barracks_V1_F",
                                 "Land_Army_hut_int","Land_Army_hut2_int"
                                 ]; 
 
-SC_occupyStatic	 		    = false;			    // true if you want to garrison AI in specific locations (not working yet)
+SC_occupyStatic	 		    = false;		    	    // true if you want to garrison AI in specific locations (not working yet)
 
 SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
+SC_occupyVehiclesLocked		= true;					// true if AI vehicles to stay locked until all the linked AI are dead
+
 SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
 
-
+SC_occupyPublicBus			= true;					// true if you want a roaming bus service
+SC_occupyPublicBusClass 	= "Exile_Car_Ikarus_Party"; // class name for the vehicle to use as the public bus
 
 SC_occupyLootCrates		    = true;					// true if you want to have random loot crates with guards
 SC_numberofLootCrates       = 6;                    // if SC_occupyLootCrates = true spawn this many loot crates (overrided below for Namalsk)
@@ -86,6 +89,7 @@ if (worldName == 'Namalsk') then
     SC_numberofLootCrates 	= 3;
     SC_numberofHeliCrashes  = 2;
     SC_maxNumberofBoats		= 1;
+    SC_occupyPublicBusClass = "Exile_Car_LandRover_Urban"; // the ikarus bus gets stuck on Namalsk
 };
 
 
@@ -97,6 +101,7 @@ SC_liveHelis	 		= 0;
 SC_liveHelisArray       = [];
 SC_liveBoats	 		= 0;
 SC_liveBoatsArray       = [];
+SC_publicBusArray         = [];
 
 publicVariable "SC_liveVehicles";
 publicVariable "SC_liveVehiclesArray";
@@ -105,3 +110,4 @@ publicVariable "SC_liveHelisArray";
 publicVariable "SC_liveBoats";
 publicVariable "SC_liveBoatsArray";
 publicVariable "SC_numberofLootCrates";
+publicVariable "SC_publicBusArray";

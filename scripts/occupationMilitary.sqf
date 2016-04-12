@@ -1,6 +1,6 @@
-private["_wp","_wp2","_wp3"];
-
 if (!isServer) exitWith {};
+
+private["_wp","_wp2","_wp3"];
 _logDetail = format ["[OCCUPATION Military]:: Starting Monitor"];
 [_logDetail] call SC_fnc_log;
 
@@ -28,7 +28,7 @@ if(diag_fps < _minFPS) exitWith
     [_logDetail] call SC_fnc_log;
 };
 
-_aiActive = {alive _x && side _x == EAST} count allUnits;
+_aiActive = {alive _x && (side _x == EAST OR side _x == WEST)} count allUnits;
 
 //_aiActive = count(_spawnCenter nearEntities ["O_recon_F", _maxDistance+1000]);
 if(_aiActive > _maxAIcount) exitWith 
@@ -155,6 +155,12 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 					DMS_ai_use_launchers = false;
 					_group = [_spawnPosition, _aiCount, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
 					DMS_ai_use_launchers = true;
+
+                    {	
+                        _unit = _x;
+                        [_unit] joinSilent grpNull;
+                        [_unit] joinSilent _group;
+                    }foreach units _group;
 
 					[ _group,_pos,_difficulty,"COMBAT" ] call DMS_fnc_SetGroupBehavior;
 					

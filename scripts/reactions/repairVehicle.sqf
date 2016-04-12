@@ -90,7 +90,7 @@ if(_damagedWheels > 0 OR _engineDamage OR _fueltankDamage) then
          _driver action ["movetodriver", _vehicle];	
         _vehicle forceSpeed -1;	
         [_group, _spawnLocation, 2000] call bis_fnc_taskPatrol;
-        _group setBehaviour "AWARE";
+        _group setBehaviour "SAFE";
         _group setCombatMode "RED";
 	
 	};		
