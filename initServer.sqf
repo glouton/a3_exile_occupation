@@ -2,7 +2,7 @@
 //
 //		Server Occupation script by second_coming
 //
-SC_occupationVersion = "v9 (11-04-2016)";
+SC_occupationVersion = "v10 (12-04-2016)";
 //
 //		http://www.exilemod.com/profile/60-second_coming/
 //
@@ -22,9 +22,9 @@ SC_occupationVersion = "v9 (11-04-2016)";
 
 [] spawn 
 {
-	waitUntil { !(isNil "DMS_MinMax_Y_Coords") };
-    sleep 30;
-    
+    diag_log format ["[OCCUPATION]:: Occupation %2 Giving the server time to start before starting [OCCUPATION] (%1)",time,SC_occupationVersion];
+    waitUntil { !(isNil "DMS_MinMax_Y_Coords") };
+    sleep 1;
     diag_log format ["[OCCUPATION MOD]:: Occupation %2 Loading Config at %1",time,SC_occupationVersion];
 
     // Get the config for Occupation

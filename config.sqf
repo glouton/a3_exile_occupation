@@ -13,8 +13,8 @@
 
 // Shared Config for each occupation monitor
 
-SC_debug 				    = true;				    // set to true to turn on debug features (not for live servers) 
-SC_extendedLogging          = true;                 // set to true for additional logging
+SC_debug 				    = false;				// set to true to turn on debug features (not for live servers) 
+SC_extendedLogging          = false;                // set to true for additional logging
 SC_infiSTAR_log			    = true;			        // true Use infiSTAR logging, false logs to server rpt
 SC_maxAIcount 			    = 100;					// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
 
@@ -27,10 +27,11 @@ SC_useWaypoints			    = true;					// When spawning AI create waypoints to make t
 												    // (can affect performance when the AI is spawned and the waypoints are calculated)
 
                                                     // Occupation Places (towns, villages & cities roaming AI)
-SC_occupyPlaces 			= true;				    // true if you want villages,towns,cities patrolled
+SC_occupyPlaces 			= true;				    // true if you want villages,towns,cities patrolled by bandits
+SC_occupyPlacesSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyPlaces must be true to use this option)
 
                                                     // Occupation Military (roaming AI near military buildings)
-SC_occupyMilitary 		    = false;			    // true if you want military buildings patrolled (specify which types of building below)
+SC_occupyMilitary 		    = true;			        // true if you want military buildings patrolled (specify which types of building below)
 
 SC_buildings                = [	"Land_Cargo_Patrol_V1_F","Land_i_Barracks_V1_F","Land_i_Barracks_V1_dam_F",	"Land_i_Barracks_V2_F",
                                 "Land_Cargo_House_V1_F","Land_Cargo_HQ_V1_F","Land_Cargo_HQ_V2_F","Land_Cargo_HQ_V3_F","Land_Cargo_Patrol_V2_F",
@@ -41,7 +42,7 @@ SC_buildings                = [	"Land_Cargo_Patrol_V1_F","Land_i_Barracks_V1_F",
                                 "Land_Army_hut_int","Land_Army_hut2_int"
                                 ]; 
 
-SC_occupyStatic	 		    = false;			    // true if you want to garrison AI in specific locations (not working yet)
+SC_occupyStatic	 		    = true;		    	    // true if you want to garrison AI in specific locations (not working yet)
 
 SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
 SC_occupyVehiclesLocked		= true;					// true if AI vehicles to stay locked until all the linked AI are dead

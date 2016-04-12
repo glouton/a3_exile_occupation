@@ -28,7 +28,7 @@ if(diag_fps < _minFPS) exitWith
     [_logDetail] call SC_fnc_log;
 };
 
-_aiActive = {alive _x && side _x == EAST} count allUnits;
+_aiActive = {alive _x && (side _x == EAST OR side _x == WEST)} count allUnits;
 
 //_aiActive = count(_spawnCenter nearEntities ["O_recon_F", _maxDistance+1000]);
 if(_aiActive > _maxAIcount) exitWith 

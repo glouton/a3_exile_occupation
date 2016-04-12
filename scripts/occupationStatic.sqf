@@ -31,7 +31,7 @@ if(diag_fps < _minFPS) exitWith
     [_logDetail] call SC_fnc_log;    
 };
 
-_aiActive = count(_spawnCenter nearEntities ["O_recon_F", _maxDistance+1000]);
+_aiActive = {alive _x && (side _x == EAST OR side _x == WEST)} count allUnits;
 if(_aiActive > _maxAIcount) exitWith 
 { 
     _logDetail = format ["[OCCUPATION Static]:: %1 active AI, so not spawning AI this time",_aiActive]; 

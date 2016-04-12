@@ -1,6 +1,3 @@
-_logDetail = format ["[OCCUPATION]:: Occupation %2 Giving the server time to start before starting [OCCUPATION] (%1)",time,SC_occupationVersion];
-[_logDetail] call SC_fnc_log;
-uiSleep 60;
 _logDetail = format ["[OCCUPATION]:: Occupation %2 Initialised at %1",time,SC_occupationVersion];
 [_logDetail] call SC_fnc_log;
 
