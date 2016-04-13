@@ -185,7 +185,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
             if(_side == "survivor") then 
             { 
                 deleteGroup _group;
-                _group = createGroup WEST; 
+                _group = createGroup WEST;              
             };
             
             _group setVariable ["DMS_LockLocality",nil];
@@ -193,11 +193,12 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
             _group setVariable ["DMS_Group_Side", _side];
             
             {	
-                _unit = _x;
+                _unit = _x;           
                 [_unit] joinSilent grpNull;
                 [_unit] joinSilent _group;
                 if(_side == "survivor") then
                 {
+                    _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
                     removeUniform _unit;
                     _unit forceAddUniform "Exile_Uniform_BambiOverall";     
                     if(SC_debug) then
@@ -275,9 +276,9 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 
                 _group2 = createGroup EAST;
                 if(_side == "survivor") then 
-                { 
+                {                   
                     deleteGroup _group2;
-                    _group2 = createGroup WEST; 
+                    _group2 = createGroup WEST;
                 };
                          
                 _group2 setVariable ["DMS_LockLocality",nil];
@@ -294,21 +295,22 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                     [_unit] joinSilent _group2;
                     if(_side == "survivor") then
                     {
+                        _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
                         removeUniform _unit;
                         _unit forceAddUniform "Exile_Uniform_BambiOverall";     
                         if(SC_debug) then
                         {
                             _tag = createVehicle ["Sign_Arrow_Green_F", position _unit, [], 0, "CAN_COLLIDE"];
                             _tag attachTo [_unit,[0,0,0.6],"Head"];  
-                        }
-                        else
+                        };
+                    }
+                    else
+                    {
+                        if(SC_debug) then
                         {
-                            if(SC_debug) then
-                            {
-                                _tag = createVehicle ["Sign_Arrow_F", position _unit, [], 0, "CAN_COLLIDE"];
-                                _tag attachTo [_unit,[0,0,0.6],"Head"];  
-                            };                      
-                        };          
+                            _tag = createVehicle ["Sign_Arrow_F", position _unit, [], 0, "CAN_COLLIDE"];
+                            _tag attachTo [_unit,[0,0,0.6],"Head"];  
+                        };                                                       
                     };
                 }foreach units _initialGroup2;
                 

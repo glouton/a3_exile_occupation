@@ -30,29 +30,28 @@ if(diag_fps < _minFPS) exitWith
 
 _aiActive = {alive _x && (side _x == EAST OR side _x == WEST)} count allUnits;
 
-//_aiActive = count(_spawnCenter nearEntities ["O_recon_F", _maxDistance+1000]);
 if(_aiActive > _maxAIcount) exitWith 
 { 
     _logDetail = format ["[OCCUPATION Military]:: %1 active AI, so not spawning AI this time",_aiActive]; 
     [_logDetail] call SC_fnc_log;
 };
 
-for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
+
 {
 	_logDetail = format ["[OCCUPATION Military]:: scanning buildings around %2 started at %1",time,_areaToScan];
     [_logDetail] call SC_fnc_log;
 	
-    _currentBuilding = _buildings select _i;
+    _currentBuilding = _x;
 	_building = _areaToScan nearObjects [_currentBuilding, 750];
 	
 	_logDetail = format ["[OCCUPATION Military]:: scan for %2 building finished at %1",time,_currentBuilding];
     [_logDetail] call SC_fnc_log;
 	
-    for [{_n = 0},{_n < (count _building)-1},{_n =_n + 1}] do
+
     {
 		_okToSpawn = true;
 		Sleep 0.1;
-        _foundBuilding = (_building select _n);
+        _foundBuilding = _x;
 		_location = getPos _foundBuilding;
 		_pos = [_location select 0, _location select 1, 0];
 		
@@ -114,7 +113,7 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
             };
 
 			// Don't spawn additional AI if there are players in range
-			if([_pos, 200] call ExileClient_util_world_isAlivePlayerInRange) exitwith 
+			if([_pos, 250] call ExileClient_util_world_isAlivePlayerInRange) exitwith 
             { 
                 _okToSpawn = false; 
                 if(SC_extendedLogging) then 
@@ -218,7 +217,7 @@ for [{_i = 0},{_i < (count _buildings)},{_i =_i + 1}] do
 				_okToSpawn = false;			
 			};	
 		};
-    };
-};
+    }foreach _building;
+}foreach _buildings;
 _logDetail = "[OCCUPATION Military]: Ended";
 [_logDetail] call SC_fnc_log;

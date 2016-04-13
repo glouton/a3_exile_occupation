@@ -197,6 +197,7 @@ if(_vehiclesToSpawn >= 1) then
                  _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier;                               
                 if(_side == "survivor") then
                 {
+                    _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
                     removeUniform _unit;
                     _unit forceAddUniform "Exile_Uniform_BambiOverall"; 
                 };                             
@@ -209,6 +210,7 @@ if(_vehiclesToSpawn >= 1) then
                 _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier;              
                 if(_side == "survivor") then
                 {
+                    _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
                     removeUniform _unit;
                     _unit forceAddUniform "Exile_Uniform_BambiOverall"; 
                 };                                                   

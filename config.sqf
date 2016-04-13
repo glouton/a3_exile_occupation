@@ -37,7 +37,7 @@ SC_SurvivorsChance          = 33;                   // chance in % to spawn surv
 
 
                                                     // Occupation Military (roaming AI near military buildings)
-SC_occupyMilitary 		    = false;			    // true if you want military buildings patrolled (specify which types of building below)
+SC_occupyMilitary 		    = true;			    // true if you want military buildings patrolled (specify which types of building below)
 
 SC_buildings                = [	"Land_Cargo_Patrol_V1_F","Land_i_Barracks_V1_F","Land_i_Barracks_V1_dam_F",	"Land_i_Barracks_V2_F",
                                 "Land_Cargo_House_V1_F","Land_Cargo_HQ_V1_F","Land_Cargo_HQ_V2_F","Land_Cargo_HQ_V3_F","Land_Cargo_Patrol_V2_F",
