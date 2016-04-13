@@ -6,6 +6,15 @@ _logDetail = format ["[OCCUPATION:Unstick]:: Initialised at %1",time];
     [_logDetail] call SC_fnc_log; 
     _x setFuel 1;
     sleep 5;
+    _originalSpawnLocation = _x getVariable "SC_vehicleSpawnLocation";
+	_pos = position _x;	
+	_nearestMarker = [allMapMarkers, _pos] call BIS_fnc_nearestPosition; // Nearest Marker to the Location		
+	_posNearestMarker = getMarkerPos _nearestMarker;
+	if(_pos distance _posNearestMarker < 750) then 
+    {
+        _GroupLeader = leader (group _x); 
+        _GroupLeader doMove _originalSpawnLocation;
+    };    
 }forEach SC_liveHelisArray;
 
 {

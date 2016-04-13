@@ -130,13 +130,13 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
             if(_nearEastAI == 0 AND _nearWestAI == 0) then 
             { 
                 _sideToSpawn = random 100; 
-                if(_sideToSpawn < 50) then  
+                if(_sideToSpawn <= SC_SurvivorsChance) then  
                 { 
-                    _side = "bandit"; 
+                    _side = "survivor";    
                 }
                 else
                 { 
-                    _side = "survivor"; 
+                    _side = "bandit";            
                 };
             };
             if(_nearEastAI > 0 AND _nearWestAI == 0) then 

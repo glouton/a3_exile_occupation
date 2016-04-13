@@ -29,6 +29,13 @@ SC_useWaypoints			    = true;					// When spawning AI create waypoints to make t
 SC_occupyPlaces 			= true;				    // true if you want villages,towns,cities patrolled by bandits
 SC_occupyPlacesSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyPlaces must be true to use this option)
 
+SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
+SC_occupyVehiclesLocked		= true;					// true if AI vehicles to stay locked until all the linked AI are dead
+SC_occupyVehicleSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyVehicle must be true to use this option)
+
+SC_SurvivorsChance          = 33;                   // chance in % to spawn survivors instead of bandits (for places and land vehicles)
+
+
                                                     // Occupation Military (roaming AI near military buildings)
 SC_occupyMilitary 		    = false;			    // true if you want military buildings patrolled (specify which types of building below)
 
@@ -41,10 +48,9 @@ SC_buildings                = [	"Land_Cargo_Patrol_V1_F","Land_i_Barracks_V1_F",
                                 "Land_Army_hut_int","Land_Army_hut2_int"
                                 ]; 
 
-SC_occupyStatic	 		    = false;		    	    // true if you want to garrison AI in specific locations (not working yet)
+SC_occupyStatic	 		    = false;		    	// true if you want to garrison AI in specific locations
 
-SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
-SC_occupyVehiclesLocked		= true;					// true if AI vehicles to stay locked until all the linked AI are dead
+
 
 SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
