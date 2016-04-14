@@ -63,7 +63,7 @@ if(_aiActive > _maxAIcount) exitWith
             _okToSpawn = false; 
             if(_debug) then 
             { 
-                _logDetail = format ["[OCCUPATION Static]:: %1 already has %2 active AI patrolling",_spawnPosition,_aiNear];
+                _logDetail = format ["[OCCUPATION Static]:: %1 already has %2 active AI patrolling",_spawnPosition,_nearEastAI];
                 [_logDetail] call SC_fnc_log;
             };
         };
