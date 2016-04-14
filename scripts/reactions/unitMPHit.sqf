@@ -10,8 +10,10 @@ if (side _aggressor == RESISTANCE) then
 {
     // Make victim and his group aggressive to their attacker
     _group = group _unit;
+    _unit addRating -999999; 
     _group reveal [_aggressor, 2.5]; 
     _group move (position _aggressor); 
+    diag_log format["::testing:: unit %1 damaged by %2",_unit,_aggressor];
  
 };
 

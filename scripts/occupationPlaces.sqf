@@ -121,12 +121,21 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 
     
 		// Don't spawn additional AI if there are already AI in range
-		_aiNear = count(_pos nearEntities ["O_recon_F", 500]);
-		if(_aiNear > 0) then 
+
+        _nearEastAI = { side _x == EAST AND _x distance _pos < 500 } count allUnits;
+        _nearWestAI = { side _x == WEST AND _x distance _pos < 500 } count allUnits;
+
+        if(_nearEastAI > 0 AND _nearWestAI > 0) then 
         { 
-            _nearEastAI = { side _x == EAST AND _x distance _pos < 500 } count allUnits;
-            _nearWestAI = { side _x == WEST AND _x distance _pos < 500 } count allUnits;
-            
+            _okToSpawn = false; 
+            if(SC_extendedLogging) then 
+            { 
+                _logDetail = format ["[OCCUPATION:Places]:: %1 already has %2 active AI patrolling",_locationName,_aiNear];
+                [_logDetail] call SC_fnc_log;
+            }; 
+        }
+        else
+        {
             if(_nearEastAI == 0 AND _nearWestAI == 0) then 
             { 
                 _sideToSpawn = random 100; 
@@ -138,27 +147,20 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                 { 
                     _side = "bandit";            
                 };
-            };
-            if(_nearEastAI > 0 AND _nearWestAI == 0) then 
-            { 
-                _side = "survivor";
-            };   
-            if(_nearEastAI == 0 AND _nearWestAI > 0) then 
-            { 
-                _side = "bandit";
-            };  
-            if(_nearEastAI > 0 AND _nearWestAI > 0) then 
-            { 
-                _okToSpawn = false; 
-                if(SC_extendedLogging) then 
+            }
+            else
+            {
+                if(_nearWestAI == 0) then 
                 { 
-                    _logDetail = format ["[OCCUPATION:Places]:: %1 already has %2 active AI patrolling",_locationName,_aiNear];
-                    [_logDetail] call SC_fnc_log;
-                }; 
-            };                     
-
+                    _side = "survivor";
+                }
+                else 
+                { 
+                    _side = "bandit";
+                };
+            };            
         };
-		
+
 		if(_okToSpawn) then
 		{
 			if(!SC_occupyPlacesSurvivors) then { _side = "bandit"; };

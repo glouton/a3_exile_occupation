@@ -31,7 +31,8 @@ _publicBus = createVehicle [SC_occupyPublicBusClass, _spawnLocation, [], 0, "CAN
 SC_publicBusArray = SC_publicBusArray + [_publicBus];
 _publicBus setVariable ["SC_assignedDriver", busDriver,true];
 _publicBus setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];
-_publicBus addEventHandler ["getin", "_this call SC_fnc_getInBus;"];
+_publicBus addEventHandler ["getin", "_this call SC_fnc_getOnBus;"];
+_publicBus addEventHandler ["getout", "_this call SC_fnc_getOffBus;"];
 
 _group addVehicle _publicBus;	
 clearBackpackCargoGlobal _publicBus;
@@ -102,17 +103,16 @@ while {true} do
         busDriver enableAI "MOVE";
         if(!Alive busDriver) exitWith {};
     };
+    
+    if(SC_StopTheBus) then
+    {
+        uiSleep 0.5;
+        _publicBus setFuel 0;
+        busDriver disableAI "MOVE";        
+        uiSleep 5; 
+        SC_StopTheBus = false;   
+    };
+    uiSleep 5;   
 };		
 
 
-{
-    // Check for nearby missions
-    _missionPos = missionNamespace getVariable [format ["%1_pos",_x], []];
-    _missionDistance = _missionPos distance2D _pos;
-    if (_missionDistance<=500) then
-    {
-        // DMS Mission in range
-        _logDetail = format['[OCCUPATION:publicBus] Vehicle near DMS Mission @ %1 (%2 metres away)',_missionPos,(_missionPos distance2D _pos)];
-        [_logDetail] call SC_fnc_log;
-    };
-} forEach allMapMarkers;

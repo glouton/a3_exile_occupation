@@ -120,8 +120,6 @@ if (worldName == 'Namalsk') then
     SC_occupyPublicBusClass = "Exile_Car_LandRover_Urban"; // the ikarus bus gets stuck on Namalsk
 };
 
-
-
 // Don't alter anything below this point
 SC_liveVehicles 		= 0;
 SC_liveVehiclesArray    = [];
@@ -129,7 +127,8 @@ SC_liveHelis	 		= 0;
 SC_liveHelisArray       = [];
 SC_liveBoats	 		= 0;
 SC_liveBoatsArray       = [];
-SC_publicBusArray         = [];
+SC_publicBusArray       = [];
+SC_StopTheBus           = false;
 
 publicVariable "SC_liveVehicles";
 publicVariable "SC_liveVehiclesArray";
@@ -139,3 +138,4 @@ publicVariable "SC_liveBoats";
 publicVariable "SC_liveBoatsArray";
 publicVariable "SC_numberofLootCrates";
 publicVariable "SC_publicBusArray";
+publicVariable "SC_StopTheBus";
