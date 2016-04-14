@@ -57,7 +57,7 @@ if(_aiActive > _maxAIcount) exitWith
 	{			
 
 		// Don't spawn additional AI if there are already AI in range
-        _nearEastAI = { side _x == EAST AND _x distance _pos < 250 } count allUnits;
+        _nearEastAI = { side _x == EAST AND _x distance _spawnPosition < 250 } count allUnits;
 		if(_nearEastAI > 0) exitwith 
         { 
             _okToSpawn = false; 
