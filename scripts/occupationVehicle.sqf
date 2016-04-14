@@ -164,7 +164,8 @@ if(_vehiclesToSpawn >= 1) then
             _vehicleSeat = _x select 1;
             if(_vehicleRole == "Driver") then
             {
-                _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier;              
+                _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier; 
+                _unit disableAI "FSM";             
                 if(_side == "survivor") then
                 {
                     removeUniform _unit;
@@ -233,6 +234,11 @@ if(_vehiclesToSpawn >= 1) then
         _logDetail = format['[OCCUPATION:Vehicle] %3 vehicle %1 spawned @ %2',_VehicleClassToUse,_spawnLocation,_side]; 
         [_logDetail] call SC_fnc_log;
 	    sleep 15;
+        
+        {
+            _x enableAI "FSM";     
+        }forEach units _group;
+        
 		[_group, _spawnLocation, 2000] call bis_fnc_taskPatrol;
 		_group setBehaviour "SAFE";
 		_group setCombatMode "RED";

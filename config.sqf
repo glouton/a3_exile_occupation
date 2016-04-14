@@ -12,7 +12,7 @@
 
 // Shared Config for each occupation monitor
 
-SC_debug 				    = false;				// set to true to turn on debug features (not for live servers) 
+SC_debug 				    = true;				// set to true to turn on debug features (not for live servers) 
 SC_extendedLogging          = false;                // set to true for additional logging
 SC_infiSTAR_log			    = true;			        // true Use infiSTAR logging, false logs to server rpt
 SC_maxAIcount 			    = 100;					// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
@@ -70,7 +70,7 @@ SC_buildings                = [	"Land_TentHangar_V1_F","Land_Hangar_F",
                                 ]; 
    
 
-SC_occupyStatic	 		    = false;		    	// true if you want to garrison AI in specific locations
+SC_occupyStatic	 		    = true;		    	// true if you want to garrison AI in specific locations
 
 
 
