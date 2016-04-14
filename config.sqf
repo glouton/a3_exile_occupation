@@ -39,14 +39,36 @@ SC_SurvivorsChance          = 33;                   // chance in % to spawn surv
                                                     // Occupation Military (roaming AI near military buildings)
 SC_occupyMilitary 		    = true;			    // true if you want military buildings patrolled (specify which types of building below)
 
-SC_buildings                = [	"Land_Cargo_Patrol_V1_F","Land_i_Barracks_V1_F","Land_i_Barracks_V1_dam_F",	"Land_i_Barracks_V2_F",
-                                "Land_Cargo_House_V1_F","Land_Cargo_HQ_V1_F","Land_Cargo_HQ_V2_F","Land_Cargo_HQ_V3_F","Land_Cargo_Patrol_V2_F",
-                                "Land_Cargo_Patrol_V3_F","Land_Cargo_Tower_V1_F","Land_Cargo_Tower_V1_No1_F","Land_Cargo_Tower_V1_No2_F",
-                                "Land_Cargo_Tower_V1_No3_F","Land_Cargo_Tower_V1_No4_F","Land_Cargo_Tower_V1_No5_F","Land_Cargo_Tower_V1_No6_F",
-                                "Land_Cargo_Tower_V1_No7_F","Land_Cargo_Tower_V2_F","Land_Cargo_Tower_V3_F","Land_MilOffices_V1_F",
-                                "Land_Radar_F","Land_Radar_Small_F","Land_Dome_Big_F","Land_Dome_Small_F","Land_Army_hut3_long_int",
+SC_buildings                = [	"Land_TentHangar_V1_F","Land_Hangar_F",
+                                "Land_Airport_Tower_F","Land_Cargo_House_V1_F",
+                                "Land_Cargo_House_V3_F","Land_Cargo_HQ_V1_F",
+                                "Land_Cargo_HQ_V2_F","Land_Cargo_HQ_V3_F",
+                                "Land_u_Barracks_V2_F","Land_i_Barracks_V2_F",
+                                "Land_i_Barracks_V1_F","Land_Cargo_Patrol_V1_F",
+                                "Land_Cargo_Patrol_V2_F","Land_Cargo_Tower_V1_F",
+                                "Land_Cargo_Tower_V1_No1_F","Land_Cargo_Tower_V1_No2_F",
+                                "Land_Cargo_Tower_V1_No3_F","Land_Cargo_Tower_V1_No4_F",
+                                "Land_Cargo_Tower_V1_No5_F","Land_Cargo_Tower_V1_No6_F",
+                                "Land_Cargo_Tower_V1_No7_F","Land_Cargo_Tower_V2_F",
+                                "Land_Cargo_Tower_V3_F","Land_MilOffices_V1_F",
+                                "Land_Radar_F","Land_budova4_winter","land_hlaska",                            
+                                "Land_Vysilac_FM","land_st_vez","Land_ns_Jbad_Mil_Barracks",
+                                "Land_ns_Jbad_Mil_ControlTower","Land_ns_Jbad_Mil_House",
+                                "land_pozorovatelna","Land_vys_budova_p1",
+                                "Land_Vez","Land_Mil_Barracks_i",
+                                "Land_Mil_Barracks_L","Land_Mil_Barracks",
+                                "Land_Hlidac_budka","Land_Ss_hangar",
+                                "Land_Mil_ControlTower","Land_a_stationhouse",
+                                "Land_Farm_WTower","Land_Mil_Guardhouse",
+                                "Land_A_statue01","Land_A_Castle_Gate",
+                                "Land_A_Castle_Donjon","Land_A_Castle_Wall2_30",
+                                "Land_A_Castle_Stairs_A",
+                                "Land_i_Barracks_V1_dam_F","Land_Cargo_Patrol_V3_F",
+                                "Land_Radar_Small_F","Land_Dome_Big_F",
+                                "Land_Dome_Small_F","Land_Army_hut3_long_int",
                                 "Land_Army_hut_int","Land_Army_hut2_int"
                                 ]; 
+   
 
 SC_occupyStatic	 		    = false;		    	// true if you want to garrison AI in specific locations
 

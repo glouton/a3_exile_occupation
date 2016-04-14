@@ -8,10 +8,11 @@ _unit removeAllMPEventHandlers  "mphit";
 
 if (side _aggressor == RESISTANCE) then 
 {
-    // Make victim and his group aggressive to players
+    // Make victim and his group aggressive to their attacker
     _group = group _unit;
-    _group reveal [_aggressor, 2.5];
-    _group moveTo (position _aggressor);
+    _group reveal [_aggressor, 2.5]; 
+    _group move (position _aggressor); 
+ 
 };
 
 if(alive _unit) then 

@@ -53,11 +53,11 @@ if(_heliDamage > 0.2 && _damagedEssentials > 0 && !_crewEjected && _ejectChance 
             _logDetail = format ["[OCCUPATION:Sky]:: Air unit %2 ejecting passengers at %3 (time: %1)",time,_veh,_heliPosition]; 
             [_logDetail] call SC_fnc_log;	
         };
+        _cargo = assignedCargo _veh;
 		{				
-            _unit = _x;
-            _unit joinSilent _group2;
-			_unit action ["EJECT", _veh];
-		} forEach (assignedCargo  _veh);
+            _x joinSilent _group2;
+			_x action ["EJECT", _veh];
+		} forEach _cargo;
         
         _target = _this select 1;
         _group2 reveal [_target,1.5];

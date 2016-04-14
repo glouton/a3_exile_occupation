@@ -4,6 +4,7 @@ private["_wp","_wp2","_wp3"];
 _logDetail = format ["[OCCUPATION Military]:: Starting Monitor"];
 [_logDetail] call SC_fnc_log;
 
+_maxDistance 	    = 500;			            // Max radius to scan
 _maxAIcount 		= SC_maxAIcount;
 _minFPS 			= SC_minFPS;
 _useLaunchers 		= DMS_ai_use_launchers;
@@ -17,9 +18,6 @@ if(_currentPlayerCount > _scaleAI) then
 {
 	_maxAIcount = _maxAIcount - (_currentPlayerCount - _scaleAI) ;
 };
-
-// Select an area to scan as nearObjects on the entire map is slooooooooow
-_areaToScan = [ 0, 900, 1, 500, 500, 0, 0, 0, true, false ] call DMS_fnc_findSafePos;
 
 // Don't spawn additional AI if the server fps is below 8
 if(diag_fps < _minFPS) exitWith 
@@ -36,13 +34,15 @@ if(_aiActive > _maxAIcount) exitWith
     [_logDetail] call SC_fnc_log;
 };
 
+// Select an area to scan as nearObjects on the entire map is slooooooooow
+_areaToScan = [ 0, 900, 1, 500, 500, 0, 0, 0, true, false ] call DMS_fnc_findSafePos;
 
 {
 	_logDetail = format ["[OCCUPATION Military]:: scanning buildings around %2 started at %1",time,_areaToScan];
     [_logDetail] call SC_fnc_log;
 	
     _currentBuilding = _x;
-	_building = _areaToScan nearObjects [_currentBuilding, 750];
+	_building = _areaToScan nearObjects [_currentBuilding, _maxDistance];
 	
 	_logDetail = format ["[OCCUPATION Military]:: scan for %2 building finished at %1",time,_currentBuilding];
     [_logDetail] call SC_fnc_log;
@@ -63,9 +63,9 @@ if(_aiActive > _maxAIcount) exitWith
 		
 		while{_okToSpawn} do
 		{			
-			// Percentage chance to spawn (roll 60 or more to spawn AI)
+			// Percentage chance to spawn (roll 70 or more to spawn AI)
 			_spawnChance = round (random 100);
-			if(_spawnChance < 60) exitWith 
+			if(_spawnChance < 70) exitWith 
             { 
                 _okToSpawn = false; 
                 if(SC_extendedLogging) then 
@@ -128,7 +128,7 @@ if(_aiActive > _maxAIcount) exitWith
 				//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				// Get AI to patrol the area
 				//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				_aiCount = 2 + (round (random 3)); 
+				_aiCount = 2 + (round (random 1)); 
 				_groupRadius = 100;
 				_difficulty = "random";
 				_side = "bandit";
@@ -159,6 +159,11 @@ if(_aiActive > _maxAIcount) exitWith
                         _unit = _x;
                         [_unit] joinSilent grpNull;
                         [_unit] joinSilent _group;
+                        if(SC_debug) then
+                        {
+                            _tag = createVehicle ["Sign_Arrow_Blue_F", position _unit, [], 0, "CAN_COLLIDE"];
+                            _tag attachTo [_unit,[0,0,0.6],"Head"];  
+                        }; 
                     }foreach units _group;
 
 					[ _group,_pos,_difficulty,"COMBAT" ] call DMS_fnc_SetGroupBehavior;

@@ -72,16 +72,16 @@ _maxDistance = _middle;
 
 if(_vehiclesToSpawn >= 1) then
 {
-    // decide which side to spawn
-    _sideToSpawn = random 100; 
-    if(_sideToSpawn <= SC_SurvivorsChance) then  
-    { 
-        _side = "survivor";    
-    }
-    else
-    { 
-        _side = "bandit";            
-    };  
+    if(SC_occupyVehicleSurvivors) then
+    {
+        // decide which side to spawn
+        _sideToSpawn = random 100; 
+        if(_sideToSpawn <= SC_SurvivorsChance) then  
+        { 
+            _side = "survivor";    
+        };         
+    };
+ 
 
 	_useLaunchers = DMS_ai_use_launchers;
 	_locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCityCapital"], _maxDistance]);
@@ -232,7 +232,7 @@ if(_vehiclesToSpawn >= 1) then
 
         _logDetail = format['[OCCUPATION:Vehicle] %3 vehicle %1 spawned @ %2',_VehicleClassToUse,_spawnLocation,_side]; 
         [_logDetail] call SC_fnc_log;
-
+	    sleep 15;
 		[_group, _spawnLocation, 2000] call bis_fnc_taskPatrol;
 		_group setBehaviour "SAFE";
 		_group setCombatMode "RED";

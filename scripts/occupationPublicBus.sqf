@@ -3,7 +3,7 @@ if (!isServer) exitWith {};
 _logDetail = format ["[OCCUPATION:publicBus]:: Starting @ %1",time];
 [_logDetail] call SC_fnc_log;
 
-_position = [ 0, 50, 1, 500, 500, 200, 200, 200, true, false ] call DMS_fnc_findSafePos;
+_position = [ 0, 5000, 1, 500, 500, 200, 200, 200, true, false ] call DMS_fnc_findSafePos;
 
 // Get position of nearest roads
 _nearRoads = _position nearRoads 2000;
@@ -42,12 +42,15 @@ _publicBus setVariable ["ExileIsPersistent", false];
 _publicBus setVariable["vehPos",_spawnLocation,true];
 _publicBus setFuel 1;
 
-diag_log format['[OCCUPATION:publicBus] Vehicle spawned @ %1',_spawnLocation];
+_logDetail = format['[OCCUPATION:publicBus] Vehicle spawned @ %1',_spawnLocation];
+[_logDetail] call SC_fnc_log;
 
 _publicBus addEventHandler ["HandleDamage", { _amountOfDamage = 0; _amountOfDamage }];
 
 busDriver assignasdriver _publicBus;
+busDriver moveInDriver _publicBus;
 [busDriver] orderGetin true;
+_publicBus lockDriver true;
 	
 {
 	_markerName = _x;
@@ -89,31 +92,27 @@ while {true} do
     {
         uiSleep 0.5;
         _publicBus setFuel 0;
-        busDriver action ["salute", busDriver];		
         busDriver disableAI "MOVE";
         uiSleep 3;
     }
     else
     {	
-        _currentDriver = driver _publicBus;
-        if(_currentDriver != busDriver) then 
-        {   
-            _publicBus setFuel 0;
-            [_currentDriver] orderGetin false; 
-            _currentDriver action ["eject", _publicBus];
-        };
-        
-        if(isnull _currentDriver) then
-        {
-            sleep 0.1;
-            busDriver assignAsDriver _publicBus;
-            busDriver moveInDriver _publicBus;      
-            [busDriver] orderGetin true;
-            _publicBus lockDriver true;
-        };
         _publicBus setFuel 1;
         uiSleep 3;
         busDriver enableAI "MOVE";
         if(!Alive busDriver) exitWith {};
     };
 };		
+
+
+{
+    // Check for nearby missions
+    _missionPos = missionNamespace getVariable [format ["%1_pos",_x], []];
+    _missionDistance = _missionPos distance2D _pos;
+    if (_missionDistance<=500) then
+    {
+        // DMS Mission in range
+        _logDetail = format['[OCCUPATION:publicBus] Vehicle near DMS Mission @ %1 (%2 metres away)',_missionPos,(_missionPos distance2D _pos)];
+        [_logDetail] call SC_fnc_log;
+    };
+} forEach allMapMarkers;
