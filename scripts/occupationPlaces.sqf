@@ -17,12 +17,6 @@ _side               = "bandit";
 
 if(SC_occupyPlacesSurvivors) then 
 { 
-    // Make survivors friendly to players and enemies to bandit AI
-    RESISTANCE setFriend[WEST,1];
-    WEST setFriend[RESISTANCE,1];
-    WEST setFriend[EAST,0];
-    EAST setFriend[WEST,0];
-    
     if(!isNil "DMS_Enable_RankChange") then { DMS_Enable_RankChange = true;  };
 };
 
@@ -44,7 +38,7 @@ if(diag_fps < _minFPS) exitWith
     };
 };
 
-_aiActive = {alive _x && (side _x == EAST OR side _x == WEST)} count allUnits;
+_aiActive = {alive _x && (side _x == SC_BanditSide OR side _x == SC_SurvivorSide)} count allUnits;
 if(_aiActive > _maxAIcount) exitWith 
 { 
     if(SC_extendedLogging) then 
@@ -117,46 +111,43 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                 [_logDetail] call SC_fnc_log;
             }; 
         };
-	
-
     
 		// Don't spawn additional AI if there are already AI in range
+        _nearBanditAI = { side _x == SC_BanditSide AND _x distance _pos < 500 } count allUnits;
+        _nearSurvivorAI = { side _x == SC_SurvivorSide AND _x distance _pos < 500 } count allUnits;
 
-        _nearEastAI = { side _x == EAST AND _x distance _pos < 500 } count allUnits;
-        _nearWestAI = { side _x == WEST AND _x distance _pos < 500 } count allUnits;
-
-        if(_nearEastAI > 0 AND _nearWestAI > 0) then 
+        if(_nearBanditAI > 0 AND _nearSurvivorAI > 0) then 
         { 
             _okToSpawn = false; 
             if(SC_extendedLogging) then 
             { 
-                _logDetail = format ["[OCCUPATION:Places]:: %1 already has %2 active AI patrolling",_locationName,_aiNear];
+                _logDetail = format ["[OCCUPATION:Places]:: %1 already has active AI patrolling",_locationName];
                 [_logDetail] call SC_fnc_log;
             }; 
         }
         else
         {
-            if(_nearEastAI == 0 AND _nearWestAI == 0) then 
+            if(_nearBanditAI == 0 AND _nearSurvivorAI == 0) then 
             { 
                 _sideToSpawn = random 100; 
                 if(_sideToSpawn <= SC_SurvivorsChance) then  
                 { 
-                    _side = "survivor";    
+                    _side = "survivor";   
                 }
                 else
                 { 
-                    _side = "bandit";            
+                    _side = "bandit";           
                 };
             }
             else
             {
-                if(_nearWestAI == 0) then 
+                if(_nearSurvivorAI == 0) then 
                 { 
                     _side = "survivor";
                 }
                 else 
                 { 
-                    _side = "bandit";
+                    _side = "bandit"; 
                 };
             };            
         };
@@ -183,11 +174,11 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			_initialGroup = [_spawnPosition, _aiCount, "randomEasy", "assault", _side] call DMS_fnc_SpawnAIGroup;
 			DMS_ai_use_launchers = _useLaunchers;
             
-            _group = createGroup EAST;
+            _group = createGroup SC_BanditSide;
             if(_side == "survivor") then 
             { 
                 deleteGroup _group;
-                _group = createGroup WEST;              
+                _group = createGroup SC_SurvivorSide;              
             };
             
             _group setVariable ["DMS_LockLocality",nil];
@@ -276,11 +267,11 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 				_initialGroup2 = [_spawnPosition, 5, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
 				DMS_ai_use_launchers = _useLaunchers;
 
-                _group2 = createGroup EAST;
+                _group2 = createGroup SC_BanditSide;
                 if(_side == "survivor") then 
                 {                   
                     deleteGroup _group2;
-                    _group2 = createGroup WEST;
+                    _group2 = createGroup SC_SurvivorSide;
                 };
                          
                 _group2 setVariable ["DMS_LockLocality",nil];
@@ -334,7 +325,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 				_marker setMarkerText "Occupied Area";	
 			};			
 			
-			if(_side == 'survivor') then 
+			if(_side == "survivor") then 
             {
                 _logDetail = format ["[OCCUPATION:Places]:: Spawning %2 survivor AI in at %3 to patrol %1",_locationName,_aiCount,_spawnPosition];                  
             }

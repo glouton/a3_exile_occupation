@@ -3,17 +3,11 @@ if (!isServer) exitWith {};
 _logDetail = format['[OCCUPATION:Vehicle] Started'];
 [_logDetail] call SC_fnc_log;
 
-// set the default side to "bandit"
+// set the default side for bandit AI
 _side               = "bandit"; 
 
 if(SC_occupyVehicleSurvivors) then 
-{ 
-    // Make survivors friendly to players and enemies to bandit AI
-    RESISTANCE setFriend[WEST,1];
-    WEST setFriend[RESISTANCE,1];
-    WEST setFriend[EAST,0];
-    EAST setFriend[WEST,0];
-    
+{   
     if(!isNil "DMS_Enable_RankChange") then { DMS_Enable_RankChange = true;  };
 };
 
@@ -33,7 +27,7 @@ if(diag_fps < SC_minFPS) exitWith
     [_logDetail] call SC_fnc_log; 
 };
 
-_aiActive = {alive _x && (side _x == EAST OR side _x == WEST)} count allUnits;
+_aiActive = {alive _x && (side _x == SC_BanditSide OR side _x == SC_SurvivorSide)} count allUnits;
 if(_aiActive > _maxAIcount) exitWith 
 { 
     _logDetail = format ["[OCCUPATION:Vehicle]:: %1 active AI, so not spawning AI this time",_aiActive]; 
@@ -78,11 +72,10 @@ if(_vehiclesToSpawn >= 1) then
         _sideToSpawn = random 100; 
         if(_sideToSpawn <= SC_SurvivorsChance) then  
         { 
-            _side = "survivor";    
+            _side = "survivor";   
         };         
     };
  
-
 	_useLaunchers = DMS_ai_use_launchers;
 	_locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCityCapital"], _maxDistance]);
 	_i = 0;
@@ -115,11 +108,11 @@ if(_vehiclesToSpawn >= 1) then
 		_nearestRoad = position (_nearRoads select 0);
 		_spawnLocation = [_nearestRoad select 0, _pos select 1, 0];
 
-        _group = createGroup EAST;
+        _group = createGroup SC_BanditSide;
         if(_side == "survivor") then 
         { 
             deleteGroup _group;
-            _group = createGroup WEST; 
+            _group = createGroup SC_SurvivorSide; 
         };        
         
         _group setVariable ["DMS_LockLocality",nil];

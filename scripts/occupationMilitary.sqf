@@ -26,7 +26,7 @@ if(diag_fps < _minFPS) exitWith
     [_logDetail] call SC_fnc_log;
 };
 
-_aiActive = {alive _x && (side _x == EAST OR side _x == WEST)} count allUnits;
+_aiActive = {alive _x && (side _x == SC_BanditSide OR side _x == SC_SurvivorSide)} count allUnits;
 
 if(_aiActive > _maxAIcount) exitWith 
 { 
@@ -131,7 +131,7 @@ _areaToScan = [ 0, 900, 1, 500, 500, 0, 0, 0, true, false ] call DMS_fnc_findSaf
 				_aiCount = 2 + (round (random 1)); 
 				_groupRadius = 100;
 				_difficulty = "random";
-				_side = "bandit";
+				_side = SC_BanditSide;
 				_spawnPosition = _pos;				
 										
 				// Get the AI to shut the fuck up :)
@@ -141,7 +141,7 @@ _areaToScan = [ 0, 900, 1, 500, 500, 0, 0, 0, true, false ] call DMS_fnc_findSaf
 				if(!SC_useWaypoints) then
 				{
 					DMS_ai_use_launchers = false;
-					_group = [_spawnPosition, _aiCount, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
+					_group = [_spawnPosition, _aiCount, _difficulty, "random", "bandit"] call DMS_fnc_SpawnAIGroup;
 					DMS_ai_use_launchers = true;
 
 					[_group, _pos, _groupRadius] call bis_fnc_taskPatrol;
@@ -152,7 +152,7 @@ _areaToScan = [ 0, 900, 1, 500, 500, 0, 0, 0, true, false ] call DMS_fnc_findSaf
 				{
 									
 					DMS_ai_use_launchers = false;
-					_group = [_spawnPosition, _aiCount, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
+					_group = [_spawnPosition, _aiCount, _difficulty, "random", "bandit"] call DMS_fnc_SpawnAIGroup;
 					DMS_ai_use_launchers = true;
 
                     {	

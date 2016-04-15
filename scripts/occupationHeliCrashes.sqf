@@ -16,14 +16,9 @@ for "_i" from 1 to SC_numberofHeliCrashes do
 	while{!_validspot} do 
 	{
 		sleep 0.2;
-		_position = [ 0, 50, 1, 500, 500, 200, 200, 200, true, false ] call DMS_fnc_findSafePos;
+		_position = [ 10, 50, 1, 750, 750, 200, 200, 200, true, false ] call DMS_fnc_findSafePos;
 		_validspot	= true;
 	
-		// Check for nearby spawn points and traders
-		_nearestMarker = [allMapMarkers, _position] call BIS_fnc_nearestPosition;
-		_posNearestMarker = getMarkerPos _nearestMarker;
-		if(_position distance _posNearestMarker < 750) then { _validspot = false; };
-
 		//Check if near another heli crash site
 		_nearOtherCrash = (nearestObjects [_position,["Land_UWreck_MV22_F"],750]) select 0;	
 		if (!isNil "_nearOtherCrash") then { _validspot = false; };
@@ -31,11 +26,7 @@ for "_i" from 1 to SC_numberofHeliCrashes do
 		//Check if near another loot crate site
 		_nearOtherCrate = (nearestObjects [_position,["CargoNet_01_box_F"],500]) select 0;	
 		if (!isNil "_nearOtherCrate") then { _validspot = false; };
-		
-		//Check if near player base
-        _nearBase = (nearestObjects [_position,["Exile_Construction_Flag_Static"],500]) select 0;
-        if (!isNil "_nearBase") then { _validspot = false;  };	
-		
+				
 	};	
 	
 	_logDetail = format['[OCCUPATION:HeliCrashes] Crash %1 : Location %2',_i,_position];

@@ -8,9 +8,15 @@ _unit removeAllMPEventHandlers  "mphit";
 
 if (side _aggressor == RESISTANCE) then 
 {
-    // Make victim and his group aggressive to their attacker
-    _group = group _unit;
-    _unit addRating -999999; 
+    // Make victim and his group aggressive to players
+    _initialGroup = group _unit;
+    _group =  createGroup WEST;
+    {
+        _unit = _x;           
+        //[_unit] joinSilent grpNull;
+        [_unit] joinSilent _group;      
+    }foreach units _initialGroup;
+    
     _group reveal [_aggressor, 2.5]; 
     _group move (position _aggressor); 
     diag_log format["::testing:: unit %1 damaged by %2",_unit,_aggressor];

@@ -5,5 +5,5 @@ _unit	= _this select 2;
 
 if(isPlayer _unit) then
 {
-    _unit removeAction _bustop;      
+    _bus removeAction SC_bustop;      
 };

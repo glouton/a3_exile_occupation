@@ -32,7 +32,7 @@ if(diag_fps < _minFPS) exitWith
     [_logDetail] call SC_fnc_log;    
 };
 
-_aiActive = {alive _x && (side _x == EAST OR side _x == WEST)} count allUnits;
+_aiActive = {alive _x && (side _x == SC_BanditSide OR side _x == SC_SurvivorSide)} count allUnits;
 if(_aiActive > _maxAIcount) exitWith 
 { 
     _logDetail = format ["[OCCUPATION Static]:: %1 active AI, so not spawning AI this time",_aiActive]; 
@@ -57,13 +57,13 @@ if(_aiActive > _maxAIcount) exitWith
 	{			
 
 		// Don't spawn additional AI if there are already AI in range
-        _nearEastAI = { side _x == EAST AND _x distance _spawnPosition < 250 } count allUnits;
-		if(_nearEastAI > 0) exitwith 
+        _nearBanditAI = { side _x == SC_BanditSide AND _x distance _spawnPosition < 250 } count allUnits;
+		if(_nearBanditAI > 0) exitwith 
         { 
             _okToSpawn = false; 
             if(_debug) then 
             { 
-                _logDetail = format ["[OCCUPATION Static]:: %1 already has %2 active AI patrolling",_spawnPosition,_nearEastAI];
+                _logDetail = format ["[OCCUPATION Static]:: %1 already has %2 active AI patrolling",_spawnPosition,_nearBanditAI];
                 [_logDetail] call SC_fnc_log;
             };
         };
@@ -94,7 +94,7 @@ if(_aiActive > _maxAIcount) exitWith
             _initialGroup setCombatMode "BLUE";
             _initialGroup setBehaviour "SAFE";
 
-            _group = createGroup EAST;           
+            _group = createGroup SC_BanditSide;           
             _group setVariable ["DMS_LockLocality",nil];
             _group setVariable ["DMS_SpawnedGroup",true];
             _group setVariable ["DMS_Group_Side", _side];

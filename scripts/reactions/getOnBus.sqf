@@ -5,6 +5,7 @@ _unit	= _this select 2;
 
 if(isPlayer _unit) then
 {
-    _bustop = _unit addAction ["Stop the bus", { SC_StopTheBus = true } ];      
+    hint "You got on the bus";
+    SC_bustop = _bus addAction ["Stop the bus", { SC_StopTheBus = true } ];    
 };
 

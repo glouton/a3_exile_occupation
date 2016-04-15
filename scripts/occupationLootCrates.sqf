@@ -14,7 +14,7 @@ for "_i" from 1 to SC_numberofLootCrates do
 	while{!_validspot} do 
 	{
 		sleep 0.2;
-		_position = [ 0, 50, 1, 500, 500, 200, 200, 200, true, false ] call DMS_fnc_findSafePos;
+		_position = [ 10, 50, 1, 750, 750, 200, 200, 200, true, false ] call DMS_fnc_findSafePos;
 		_validspot	= true;
 		
 		//Check if near another crate site

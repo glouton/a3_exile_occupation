@@ -2,7 +2,7 @@
 //
 //		Server Occupation script by second_coming
 //
-SC_occupationVersion = "v18 (14-04-2016)";
+SC_occupationVersion = "v19 (15-04-2016)";
 //
 //		http://www.exilemod.com/profile/60-second_coming/
 //
@@ -33,7 +33,7 @@ SC_occupationVersion = "v18 (14-04-2016)";
     // Select the log style depending on config settings
     SC_fnc_log			        = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationLog.sqf";
 
-    // EventHandlers for AI reactions
+    // EventHandlers for AI reactions & player interactions
     SC_fnc_repairVehicle 		= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\repairVehicle.sqf";
     SC_fnc_vehicleDestroyed     = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\vehicleDestroyed.sqf"; 
     SC_fnc_reactUnit 			= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\reactUnit.sqf";

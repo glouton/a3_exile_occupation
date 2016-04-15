@@ -1,18 +1,24 @@
 if (!isServer) exitWith {};
 
+_middle 		    = worldSize/2;			
+_spawnCenter 	    = [_middle,_middle,0];		// Centre point for the map
+_maxDistance 	    = _middle;			        // Max radius for the map
+
 _logDetail = format ["[OCCUPATION:publicBus]:: Starting @ %1",time];
 [_logDetail] call SC_fnc_log;
 
-_position = [ 0, 5000, 1, 500, 500, 200, 200, 200, true, false ] call DMS_fnc_findSafePos;
+_logDetail = format ["[OCCUPATION:publicBus]:: Spawning near map centre %1 @ %2",_spawnCenter,time];
+[_logDetail] call SC_fnc_log;
+
+_positionOfBus = [_spawnCenter,0,500,25,0,10,0] call BIS_fnc_findSafePos;
 
 // Get position of nearest roads
-_nearRoads = _position nearRoads 2000;
+_nearRoads = _positionOfBus nearRoads 2000;
 _nearestRoad = _nearRoads select 0;
 _nearestRoadPos = position (_nearRoads select 0);
 _spawnLocation = [_nearestRoadPos select 0, _nearestRoadPos select 1, 0];
 
 // Create the busDriver and ensure he doest react to gunfire or being shot at.
-
 _group = createGroup resistance;
 _group setCombatMode "BLUE";
 
@@ -33,6 +39,7 @@ _publicBus setVariable ["SC_assignedDriver", busDriver,true];
 _publicBus setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];
 _publicBus addEventHandler ["getin", "_this call SC_fnc_getOnBus;"];
 _publicBus addEventHandler ["getout", "_this call SC_fnc_getOffBus;"];
+
 
 _group addVehicle _publicBus;	
 clearBackpackCargoGlobal _publicBus;
@@ -94,11 +101,17 @@ while {true} do
         uiSleep 0.5;
         _publicBus setFuel 0;
         busDriver disableAI "MOVE";
+        _publicBus animateDoor ["Doors_1", 1];
+        _publicBus animateDoor ["Doors_2", 1];
+        _publicBus animateDoor ["Doors_3", 1];
         uiSleep 3;
     }
     else
     {	
         _publicBus setFuel 1;
+        _publicBus animateDoor ["Doors_1", 0];
+        _publicBus animateDoor ["Doors_2", 0];
+        _publicBus animateDoor ["Doors_3", 0];
         uiSleep 3;
         busDriver enableAI "MOVE";
         if(!Alive busDriver) exitWith {};

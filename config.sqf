@@ -12,7 +12,7 @@
 
 // Shared Config for each occupation monitor
 
-SC_debug 				    = true;				// set to true to turn on debug features (not for live servers) 
+SC_debug 				    = false;				    // set to true to turn on debug features (not for live servers) 
 SC_extendedLogging          = false;                // set to true for additional logging
 SC_infiSTAR_log			    = true;			        // true Use infiSTAR logging, false logs to server rpt
 SC_maxAIcount 			    = 100;					// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
@@ -25,19 +25,17 @@ SC_scaleAI 				    = 10; 					// any more than _scaleAI players on the server an
 SC_useWaypoints			    = true;					// When spawning AI create waypoints to make them enter buildings 
 												    // (can affect performance when the AI is spawned and the waypoints are calculated)
 
-                                                    // Occupation Places (towns, villages & cities roaming AI)
 SC_occupyPlaces 			= true;				    // true if you want villages,towns,cities patrolled by bandits
-SC_occupyPlacesSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyPlaces must be true to use this option)
 
 SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
 SC_occupyVehiclesLocked		= true;					// true if AI vehicles to stay locked until all the linked AI are dead
-SC_occupyVehicleSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyVehicle must be true to use this option)
+
 
 SC_SurvivorsChance          = 33;                   // chance in % to spawn survivors instead of bandits (for places and land vehicles)
+SC_occupyPlacesSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyPlaces must be true to use this option)
+SC_occupyVehicleSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyVehicle must be true to use this option)
 
-
-                                                    // Occupation Military (roaming AI near military buildings)
-SC_occupyMilitary 		    = true;			    // true if you want military buildings patrolled (specify which types of building below)
+SC_occupyMilitary 		    = true;			        // true if you want military buildings patrolled (specify which types of building below)
 
 SC_buildings                = [	"Land_TentHangar_V1_F","Land_Hangar_F",
                                 "Land_Airport_Tower_F","Land_Cargo_House_V1_F",
@@ -70,9 +68,7 @@ SC_buildings                = [	"Land_TentHangar_V1_F","Land_Hangar_F",
                                 ]; 
    
 
-SC_occupyStatic	 		    = true;		    	// true if you want to garrison AI in specific locations
-
-
+SC_occupyStatic	 		    = true;		    	    // true if you want to garrison AI in specific locations
 
 SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
@@ -121,6 +117,8 @@ if (worldName == 'Namalsk') then
 };
 
 // Don't alter anything below this point
+SC_SurvivorSide         = CIVILIAN;
+SC_BanditSide           = EAST;
 SC_liveVehicles 		= 0;
 SC_liveVehiclesArray    = [];
 SC_liveHelis	 		= 0;
@@ -139,3 +137,5 @@ publicVariable "SC_liveBoatsArray";
 publicVariable "SC_numberofLootCrates";
 publicVariable "SC_publicBusArray";
 publicVariable "SC_StopTheBus";
+publicVariable "SC_SurvivorSide";
+publicVariable "SC_BanditSide";
