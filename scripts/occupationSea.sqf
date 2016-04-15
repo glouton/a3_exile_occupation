@@ -19,7 +19,7 @@ if(diag_fps < SC_minFPS) exitWith
     [_logDetail] call SC_fnc_log; 
 };
 
-_aiActive = {alive _x && (side _x == EAST OR side _x == WEST)} count allUnits;
+_aiActive = {alive _x && (side _x == SC_BanditSide OR side _x == SC_SurvivorSide)} count allUnits;
 if(_aiActive > _maxAIcount) exitWith 
 { 
     _logDetail = format ["[OCCUPATION:Sea]:: %1 active AI, so not spawning AI this time",_aiActive]; 
@@ -44,7 +44,7 @@ for "_i" from 1 to _vehiclesToSpawn do
 {
 	private["_group"];
 	_spawnLocation = [ 250, 0, 1, 1000, 1000, 1000, 1000, 1000, true, true ] call DMS_fnc_findSafePos; 
-    _group = createGroup east;
+    _group = createGroup SC_BanditSide;
     _VehicleClassToUse = SC_BoatClassToUse call BIS_fnc_selectRandom;
     _vehicle = createVehicle [_VehicleClassToUse, _spawnLocation, [], 0, "NONE"];
     _vehicle setPosASL _spawnLocation;

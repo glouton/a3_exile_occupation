@@ -32,16 +32,16 @@ if(diag_fps < _minFPS) exitWith
     [_logDetail] call SC_fnc_log;    
 };
 
-_aiActive = {alive _x && (side _x == EAST OR side _x == WEST)} count allUnits;
+_aiActive = {alive _x && (side _x == SC_BanditSide OR side _x == SC_SurvivorSide)} count allUnits;
 if(_aiActive > _maxAIcount) exitWith 
 { 
     _logDetail = format ["[OCCUPATION Static]:: %1 active AI, so not spawning AI this time",_aiActive]; 
     [_logDetail] call SC_fnc_log;
 };
 
-for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
+
 {
-	_currentStatic = _statics select _i;
+	_currentStatic = _x;
 	_spawnPosition = _currentStatic select 0;
 	_aiCount = _currentStatic select 1;
 	_radius = _currentStatic select 2;
@@ -57,19 +57,19 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 	{			
 
 		// Don't spawn additional AI if there are already AI in range
-		_aiNear = count(_spawnPosition nearEntities ["O_recon_F", 250]);
-		if(_aiNear > 0) exitwith 
+        _nearBanditAI = { side _x == SC_BanditSide AND _x distance _spawnPosition < 250 } count allUnits;
+		if(_nearBanditAI > 0) exitwith 
         { 
             _okToSpawn = false; 
             if(_debug) then 
             { 
-                _logDetail = format ["[OCCUPATION Static]:: %1 already has %2 active AI patrolling",_spawnPosition,_aiNear];
+                _logDetail = format ["[OCCUPATION Static]:: %1 already has %2 active AI patrolling",_spawnPosition,_nearBanditAI];
                 [_logDetail] call SC_fnc_log;
             };
         };
 
 		// Don't spawn additional AI if there are players in range
-		if([_spawnPosition, 400] call ExileClient_util_world_isAlivePlayerInRange) exitwith 
+		if([_spawnPosition, 250] call ExileClient_util_world_isAlivePlayerInRange) exitwith 
         { 
             _okToSpawn = false; 
             if(_debug) then 
@@ -89,23 +89,32 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 			_side = "bandit";		
 						
 			DMS_ai_use_launchers = false;
-			_group = [_spawnPosition, _aiCount, _difficulty, "assault", _side] call DMS_fnc_SpawnAIGroup;
+			_initialGroup = [_spawnPosition, _aiCount, _difficulty, "assault", _side] call DMS_fnc_SpawnAIGroup;
+            DMS_ai_use_launchers = _useLaunchers;
+            _initialGroup setCombatMode "BLUE";
+            _initialGroup setBehaviour "SAFE";
+
+            _group = createGroup SC_BanditSide;           
+            _group setVariable ["DMS_LockLocality",nil];
+            _group setVariable ["DMS_SpawnedGroup",true];
+            _group setVariable ["DMS_Group_Side", _side];
             
             {	
-                _unit = _x;
+                _unit = _x;           
                 [_unit] joinSilent grpNull;
                 [_unit] joinSilent _group;
-            }foreach units _group;
-            
-			[ _group,_spawnPosition,_difficulty,"AWARE" ] call DMS_fnc_SetGroupBehavior;
-			DMS_ai_use_launchers = true;						
+                if(SC_debug) then
+                {
+                    _tag = createVehicle ["Sign_Arrow_F", position _unit, [], 0, "CAN_COLLIDE"];
+                    _tag attachTo [_unit,[0,0,0.6],"Head"];  
+                };                                   
+            }foreach units _initialGroup;            
+				
 						
 			// Get the AI to shut the fuck up :)
 			enableSentences false;
 			enableRadio false;
-			
-
-			
+						
 			if(!_staticSearch) then
 			{
 				[_group, _spawnPosition, _groupRadius] call bis_fnc_taskPatrol;
@@ -170,6 +179,7 @@ for [{_i = 0},{_i < (count _statics)},{_i =_i + 1}] do
 		};	
 	};
     
-};
+}forEach _statics;
+
 _logDetail = "[OCCUPATION Static]: Ended";
 [_logDetail] call SC_fnc_log;

@@ -19,7 +19,7 @@ if(diag_fps < SC_minFPS) exitWith
     [_logDetail] call SC_fnc_log; 
 };
 
-_aiActive = {alive _x && (side _x == EAST OR side _x == WEST)} count allUnits;
+_aiActive = {alive _x && (side _x == SC_BanditSide OR side _x == SC_SurvivorSide)} count allUnits;
 if(_aiActive > _maxAIcount) exitWith 
 { 
     _logDetail = format ["[OCCUPATION:Sky]:: %1 active AI, so not spawning AI this time",_aiActive]; 
@@ -68,7 +68,7 @@ for "_i" from 1 to _vehiclesToSpawn do
 	_height = 350 + (round (random 200));
 	_spawnLocation = [_safePos select 0, _safePos select 1, _height];
    
-    _group = createGroup east;
+    _group = createGroup SC_BanditSide;
     _VehicleClassToUse = SC_HeliClassToUse call BIS_fnc_selectRandom;
     _vehicle = createVehicle [_VehicleClassToUse, _spawnLocation, [], 0, "NONE"];
     _group addVehicle _vehicle;

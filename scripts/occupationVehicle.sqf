@@ -3,6 +3,13 @@ if (!isServer) exitWith {};
 _logDetail = format['[OCCUPATION:Vehicle] Started'];
 [_logDetail] call SC_fnc_log;
 
+// set the default side for bandit AI
+_side               = "bandit"; 
+
+if(SC_occupyVehicleSurvivors) then 
+{   
+    if(!isNil "DMS_Enable_RankChange") then { DMS_Enable_RankChange = true;  };
+};
 
 // more than _scaleAI players on the server and the max AI count drops per additional player
 _currentPlayerCount = count playableUnits;
@@ -20,7 +27,7 @@ if(diag_fps < SC_minFPS) exitWith
     [_logDetail] call SC_fnc_log; 
 };
 
-_aiActive = {alive _x && (side _x == EAST OR side _x == WEST)} count allUnits;
+_aiActive = {alive _x && (side _x == SC_BanditSide OR side _x == SC_SurvivorSide)} count allUnits;
 if(_aiActive > _maxAIcount) exitWith 
 { 
     _logDetail = format ["[OCCUPATION:Vehicle]:: %1 active AI, so not spawning AI this time",_aiActive]; 
@@ -59,6 +66,16 @@ _maxDistance = _middle;
 
 if(_vehiclesToSpawn >= 1) then
 {
+    if(SC_occupyVehicleSurvivors) then
+    {
+        // decide which side to spawn
+        _sideToSpawn = random 100; 
+        if(_sideToSpawn <= SC_SurvivorsChance) then  
+        { 
+            _side = "survivor";   
+        };         
+    };
+ 
 	_useLaunchers = DMS_ai_use_launchers;
 	_locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCityCapital"], _maxDistance]);
 	_i = 0;
@@ -85,14 +102,23 @@ if(_vehiclesToSpawn >= 1) then
 		_position = position _Location;	
 		_pos = [_position,10,250,5,0,20,0] call BIS_fnc_findSafePos;
 		
-		
 		// Get position of nearest roads
 		_nearRoads = _pos nearRoads 500;
 		_nearestRoad = _nearRoads select 0;
 		_nearestRoad = position (_nearRoads select 0);
 		_spawnLocation = [_nearestRoad select 0, _pos select 1, 0];
 
-		_group = createGroup east;
+        _group = createGroup SC_BanditSide;
+        if(_side == "survivor") then 
+        { 
+            deleteGroup _group;
+            _group = createGroup SC_SurvivorSide; 
+        };        
+        
+        _group setVariable ["DMS_LockLocality",nil];
+        _group setVariable ["DMS_SpawnedGroup",true];
+        _group setVariable ["DMS_Group_Side", _side];        
+        
 		_VehicleClassToUse = SC_VehicleClassToUse call BIS_fnc_selectRandom;
 		_vehicle = createVehicle [_VehicleClassToUse, _spawnLocation, [], 0, "NONE"];
         _group addVehicle _vehicle;	
@@ -105,6 +131,7 @@ if(_vehiclesToSpawn >= 1) then
         _vehicle setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];
 		_vehicle setFuel 1;
 		_vehicle engineOn true;
+        
         if(SC_occupyVehiclesLocked) then 
         {
             _vehicle lock 2;			
@@ -122,7 +149,6 @@ if(_vehiclesToSpawn >= 1) then
 		_vehicle limitSpeed 60;
 		_vehicle action ["LightOn", _vehicle];			
 		
-
         // Calculate the crew requried
         _vehicleRoles = (typeOf _vehicle) call bis_fnc_vehicleRoles;
         {
@@ -131,7 +157,13 @@ if(_vehiclesToSpawn >= 1) then
             _vehicleSeat = _x select 1;
             if(_vehicleRole == "Driver") then
             {
-                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;
+                _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier; 
+                _unit disableAI "FSM";             
+                if(_side == "survivor") then
+                {
+                    removeUniform _unit;
+                    _unit forceAddUniform "Exile_Uniform_BambiOverall"; 
+                };                                   
                 _unit disableAI "TARGET";
                 _unit disableAI "AUTOTARGET";
                 _unit disableAI "AUTOCOMBAT";
@@ -156,14 +188,26 @@ if(_vehiclesToSpawn >= 1) then
             };
             if(_vehicleRole == "Turret") then
             {
-                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;   
+                 _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier;                               
+                if(_side == "survivor") then
+                {
+                    _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
+                    removeUniform _unit;
+                    _unit forceAddUniform "Exile_Uniform_BambiOverall"; 
+                };                             
                 _unit moveInTurret [_vehicle, _vehicleSeat];
 			    _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
                 _unitPlaced = true;
             };
             if(_vehicleRole == "CARGO") then
             {
-                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;               
+                _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier;              
+                if(_side == "survivor") then
+                {
+                    _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
+                    removeUniform _unit;
+                    _unit forceAddUniform "Exile_Uniform_BambiOverall"; 
+                };                                                   
                 _unit assignAsCargo _vehicle; 
                 _unit moveInCargo _vehicle;
 			    _unit setVariable ["DMS_AssignedVeh",_vehicle];
@@ -171,23 +215,23 @@ if(_vehiclesToSpawn >= 1) then
             };    
             if(SC_extendedLogging && _unitPlaced) then 
             { 
-                _logDetail = format['[OCCUPATION:Vehicle] %1 added to vehicle %2',_vehicleRole,_vehicle]; 
+                _logDetail = format['[OCCUPATION:Vehicle] %1 %2 added to vehicle %3',_side,_vehicleRole,_vehicle]; 
                 [_logDetail] call SC_fnc_log;
             };                    
-        } forEach _vehicleRoles;
-			
+        } forEach _vehicleRoles;			
 
 		// Get the AI to shut the fuck up :)
 		enableSentences false;
 		enableRadio false;
 
-		if(SC_extendedLogging) then 
-		{ 
-			_logDetail = format['[OCCUPATION:Vehicle] %1 spawned @ %2',_VehicleClassToUse,_spawnLocation]; 
-			[_logDetail] call SC_fnc_log;
-		};
-
-	
+        _logDetail = format['[OCCUPATION:Vehicle] %3 vehicle %1 spawned @ %2',_VehicleClassToUse,_spawnLocation,_side]; 
+        [_logDetail] call SC_fnc_log;
+	    sleep 15;
+        
+        {
+            _x enableAI "FSM";     
+        }forEach units _group;
+        
 		[_group, _spawnLocation, 2000] call bis_fnc_taskPatrol;
 		_group setBehaviour "SAFE";
 		_group setCombatMode "RED";
@@ -198,10 +242,10 @@ if(_vehiclesToSpawn >= 1) then
 		clearItemCargoGlobal _vehicle;
 
 		_vehicle addMagazineCargoGlobal ["HandGrenade", (random 2)];
-		_vehicle addItemCargoGlobal  ["ItemGPS", (random 1)];
-		_vehicle addItemCargoGlobal  ["Exile_Item_InstaDoc", (random 1)];
-		_vehicle addItemCargoGlobal ["Exile_Item_PlasticBottleFreshWater", 2 + (random 2)];
-		_vehicle addItemCargoGlobal ["Exile_Item_EMRE", 2 + (random 2)];
+		_vehicle addItemCargoGlobal     ["ItemGPS", (random 1)];
+		_vehicle addItemCargoGlobal     ["Exile_Item_InstaDoc", (random 1)];
+		_vehicle addItemCargoGlobal     ["Exile_Item_PlasticBottleFreshWater", 2 + (random 2)];
+		_vehicle addItemCargoGlobal     ["Exile_Item_EMRE", 2 + (random 2)];
 		
 		// Add weapons with ammo to the vehicle
 		_possibleWeapons = 
@@ -226,8 +270,5 @@ if(_vehiclesToSpawn >= 1) then
 	};
 };
 
-if(SC_extendedLogging) then 
-{ 
-	_logDetail = format['[OCCUPATION:Vehicle] End check %1 currently active (max %2) @ %3',SC_liveVehicles,SC_maxNumberofVehicles,time]; 
-	[_logDetail] call SC_fnc_log;
-};
+_logDetail = format['[OCCUPATION:Vehicle] End check %1 currently active (max %2) @ %3',SC_liveVehicles,SC_maxNumberofVehicles,time]; 
+[_logDetail] call SC_fnc_log;
