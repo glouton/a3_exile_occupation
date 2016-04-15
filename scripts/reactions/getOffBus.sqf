@@ -3,7 +3,9 @@
 _bus	= _this select 0;
 _unit	= _this select 2;
 
-if(isPlayer _unit) then
-{
-    _bus removeAction SC_bustop;      
-};
+_bus setFuel 0;
+_busDriver = driver _bus;
+_busDriver disableAI "MOVE";
+_bus animateDoor ["Doors_1", 1];
+_bus animateDoor ["Doors_2", 1];
+_bus animateDoor ["Doors_3", 1];
