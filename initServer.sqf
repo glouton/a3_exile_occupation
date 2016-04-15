@@ -2,7 +2,7 @@
 //
 //		Server Occupation script by second_coming
 //
-SC_occupationVersion = "v19 (15-04-2016)";
+SC_occupationVersion = "v20 (15-04-2016)";
 //
 //		http://www.exilemod.com/profile/60-second_coming/
 //
@@ -44,6 +44,7 @@ SC_occupationVersion = "v19 (15-04-2016)";
     SC_fnc_refuel               = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\refuel.sqf";
     SC_fnc_comeUnstuck          = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\comeUnstuck.sqf";
     SC_fnc_unitMPHit            = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\unitMPHit.sqf";
+    SC_fnc_unitMPKilled         = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\unitMPKilled.sqf";
     SC_fnc_getOnBus			    = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\getOnBus.sqf";
     SC_fnc_getOffBus			= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\getOffBus.sqf";
 

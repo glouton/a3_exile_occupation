@@ -45,19 +45,30 @@ for "_i" from 1 to SC_numberofLootCrates do
         _AICount = 1 + (round (random (SC_LootCrateGuards-1)));    
     };
 		
-	_spawnPosition = [_position select 0, _position select 1, 0];
-	_group = [_spawnPosition, _AICount, "random", "random", "bandit"] call DMS_fnc_SpawnAIGroup;
 	
-	// Get the AI to shut the fuck up :)
-	enableSentences false;
-	enableRadio false;
+	
+	if(_AICount > 0) then
+	{
+		_spawnPosition = [_position select 0, _position select 1, 0];
+		_group = [_spawnPosition, _AICount, "random", "random", "bandit"] call DMS_fnc_SpawnAIGroup;
+		
+		// Get the AI to shut the fuck up :)
+		enableSentences false;
+		enableRadio false;
 
-	[_group, _spawnPosition, 100] call bis_fnc_taskPatrol;
-	_group setBehaviour "AWARE";
-	_group setCombatMode "RED";
+		[_group, _spawnPosition, 100] call bis_fnc_taskPatrol;
+		_group setBehaviour "AWARE";
+		_group setCombatMode "RED";
 
-	_logDetail = format ["[OCCUPATION:LootCrates]::  Creating crate %3 at drop zone %1 with %2 guards",_position,_AICount,_i];
-	[_logDetail] call SC_fnc_log;
+		_logDetail = format ["[OCCUPATION:LootCrates]::  Creating crate %3 at drop zone %1 with %2 guards",_position,_AICount,_i];
+		[_logDetail] call SC_fnc_log;		
+	}
+	else
+	{
+		_logDetail = format ["[OCCUPATION:LootCrates]::  Creating crate %2 at drop zone %1 with no guards",_position,_i];
+		[_logDetail] call SC_fnc_log;	
+	};
+
     
     
 	_box = "CargoNet_01_box_F" createvehicle _position;
