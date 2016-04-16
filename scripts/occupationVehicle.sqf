@@ -158,6 +158,8 @@ if(_vehiclesToSpawn >= 1) then
             if(_vehicleRole == "Driver") then
             {
                 _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier; 
+                _unit removeAllMPEventHandlers  "mphit";
+                _unit removeAllMPEventHandlers  "mpkilled";
                 _unit disableAI "FSM";             
                 if(_side == "survivor") then
                 {
@@ -192,6 +194,7 @@ if(_vehiclesToSpawn >= 1) then
                 if(_side == "survivor") then
                 {
                     _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
+                    _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_unitMPKilled;"];
                     removeUniform _unit;
                     _unit forceAddUniform "Exile_Uniform_BambiOverall"; 
                 };                             
@@ -205,11 +208,12 @@ if(_vehiclesToSpawn >= 1) then
                 if(_side == "survivor") then
                 {
                     _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
+                    _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_unitMPKilled;"];
                     removeUniform _unit;
                     _unit forceAddUniform "Exile_Uniform_BambiOverall"; 
                 };                                                   
                 _unit assignAsCargo _vehicle; 
-                _unit moveInCargo _vehicle;
+                _unit moveInCargo [_vehicle, _vehicleSeat];
 			    _unit setVariable ["DMS_AssignedVeh",_vehicle];
                 _unitPlaced = true; 
             };    

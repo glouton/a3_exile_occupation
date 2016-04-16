@@ -4,7 +4,6 @@ _killer 	    = _this select 1;
 
 // remove all eventhandlers from the dead unit
 _unit removeAllMPEventHandlers  "mphit";
-_unit removeAllMPEventHandlers  "mpkilled";
 
 if(SC_debug) then
 {

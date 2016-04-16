@@ -8,9 +8,8 @@ if(SC_extendedLogging) then
 };
 
 _deadDriver	= _this select 0;
-_deadDriver removeAllMPEventHandlers  "mpkilled";
+//_deadDriver removeAllMPEventHandlers  "mpkilled";
 _vehicle = _deadDriver getVariable "SC_drivenVehicle";
-
 
 if(SC_debug) then
 {
@@ -48,6 +47,7 @@ if(count units _group > 0) then
     _driver setVariable ["SC_drivenVehicle", _vehicle,true];	 
     _vehicle setVariable ["SC_assignedDriver", _driver,true];        
     _vehicle addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];
+    _driver removeAllMPEventHandlers  "mpkilled";
     _driver addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
 
     if(SC_debug) then

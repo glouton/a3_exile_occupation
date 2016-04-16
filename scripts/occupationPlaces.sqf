@@ -192,6 +192,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                 if(_side == "survivor") then
                 {
                     _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
+                    _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_unitMPKilled;"];
                     removeUniform _unit;
                     _unit forceAddUniform "Exile_Uniform_BambiOverall";     
                     if(SC_debug) then
@@ -289,6 +290,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                     if(_side == "survivor") then
                     {
                         _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
+                        _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_unitMPKilled;"];
                         removeUniform _unit;
                         _unit forceAddUniform "Exile_Uniform_BambiOverall";     
                         if(SC_debug) then
@@ -321,16 +323,17 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 				_marker setMarkerType "mil_dot";
 				_marker setMarkerBrush "Solid";
 				_marker setMarkerAlpha 0.5;
-				_marker setMarkerColor "ColorOrange";
 				_marker setMarkerText "Occupied Area";	
 			};			
 			
 			if(_side == "survivor") then 
             {
+                _marker setMarkerColor "ColorGreen";
                 _logDetail = format ["[OCCUPATION:Places]:: Spawning %2 survivor AI in at %3 to patrol %1",_locationName,_aiCount,_spawnPosition];                  
             }
             else
             {
+                _marker setMarkerColor "ColorOrange";
                 _logDetail = format ["[OCCUPATION:Places]:: Spawning %2 bandit AI in at %3 to patrol %1",_locationName,_aiCount,_spawnPosition];    
             };
             [_logDetail] call SC_fnc_log;
