@@ -213,7 +213,7 @@ if(_vehiclesToSpawn >= 1) then
                     _unit forceAddUniform "Exile_Uniform_BambiOverall"; 
                 };                                                   
                 _unit assignAsCargo _vehicle; 
-                _unit moveInCargo [_vehicle, _vehicleSeat];
+                _unit moveInCargo _vehicle;
 			    _unit setVariable ["DMS_AssignedVeh",_vehicle];
                 _unitPlaced = true; 
             };    

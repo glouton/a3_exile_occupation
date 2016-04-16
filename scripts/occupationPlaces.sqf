@@ -324,18 +324,18 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 				_marker setMarkerBrush "Solid";
 				_marker setMarkerAlpha 0.5;
 				_marker setMarkerText "Occupied Area";	
+                
+                if(_side == "survivor") then 
+                {
+                    _marker setMarkerColor "ColorGreen";
+                    _logDetail = format ["[OCCUPATION:Places]:: Spawning %2 survivor AI in at %3 to patrol %1",_locationName,_aiCount,_spawnPosition];                  
+                }
+                else
+                {
+                    _marker setMarkerColor "ColorOrange";
+                    _logDetail = format ["[OCCUPATION:Places]:: Spawning %2 bandit AI in at %3 to patrol %1",_locationName,_aiCount,_spawnPosition];    
+                };
 			};			
-			
-			if(_side == "survivor") then 
-            {
-                _marker setMarkerColor "ColorGreen";
-                _logDetail = format ["[OCCUPATION:Places]:: Spawning %2 survivor AI in at %3 to patrol %1",_locationName,_aiCount,_spawnPosition];                  
-            }
-            else
-            {
-                _marker setMarkerColor "ColorOrange";
-                _logDetail = format ["[OCCUPATION:Places]:: Spawning %2 bandit AI in at %3 to patrol %1",_locationName,_aiCount,_spawnPosition];    
-            };
             [_logDetail] call SC_fnc_log;
 			_okToSpawn = false;		
 		};
