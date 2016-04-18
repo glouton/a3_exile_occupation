@@ -144,7 +144,7 @@ SC_maximumCrewAmount        = 2;                    // Maximum amount of AI allo
 SC_maxNumberofVehicles 	    = 4;	
 
 // Array of ground vehicles which can be used by AI patrols				
-SC_VehicleClassToUse 		= [	"Exile_Car_LandRover_Green","Exile_Bike_QuadBike_Black","Exile_Car_Octavius_White"];
+SC_VehicleClassToUse 		= [	"Exile_Car_LandRover_Green","Exile_Bike_QuadBike_Black","Exile_Car_UAZ_Open_Green"];
 
 // Settings for roaming airborne AI (non armed helis will just fly around)
 SC_maxNumberofHelis		    = 1;
