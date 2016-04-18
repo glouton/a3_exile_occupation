@@ -71,6 +71,8 @@ for "_i" from 1 to _vehiclesToSpawn do
 	sleep 0.2;
     _group addVehicle _vehicle;	
       
+    _amountOfCrew = 0;
+    _unitPlaced = false;
         
     // Calculate the crew requried
     _vehicleRoles = (typeOf _vehicle) call bis_fnc_vehicleRoles;
@@ -80,7 +82,8 @@ for "_i" from 1 to _vehiclesToSpawn do
         _vehicleSeat = _x select 1;
         if(_vehicleRole == "Driver") then
         {
-            _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;   
+            _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier; 
+            _amountOfCrew = _amountOfCrew + 1;  
             _unit assignAsDriver _vehicle;
             _unit moveInDriver _vehicle;
             _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
@@ -88,19 +91,22 @@ for "_i" from 1 to _vehiclesToSpawn do
         };
         if(_vehicleRole == "Turret") then
         {
-            _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;   
+            _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;
+            _amountOfCrew = _amountOfCrew + 1;   
             _unit moveInTurret [_vehicle, _vehicleSeat];
             _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
             _unitPlaced = true;
         };
-        if(_vehicleRole == "CARGO") then
+        if(_vehicleRole == "CARGO" && _amountOfCrew <= SC_maximumCrewAmount) then
         {
-            _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;   
+            _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier; 
+            _amountOfCrew = _amountOfCrew + 1;  
             _unit assignAsCargo _vehicle; 
             _unit moveInCargo _vehicle;
             _unit setVariable ["DMS_AssignedVeh",_vehicle];
             _unitPlaced = true; 
         };  
+
         if(SC_extendedLogging && _unitPlaced) then 
         { 
             _logDetail = format['[OCCUPATION:Sky] %1 added to %2',_vehicleRole,_vehicle]; 

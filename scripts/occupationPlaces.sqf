@@ -127,7 +127,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
         }
         else
         {
-            if(_nearBanditAI == 0 AND _nearSurvivorAI == 0) then 
+            if(_nearSurvivorAI == 0) then 
             { 
                 _sideToSpawn = random 100; 
                 if(_sideToSpawn <= SC_SurvivorsChance) then  
@@ -141,14 +141,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
             }
             else
             {
-                if(_nearSurvivorAI == 0) then 
-                { 
-                    _side = "survivor";
-                }
-                else 
-                { 
-                    _side = "bandit"; 
-                };
+                _side = "bandit"; 
             };            
         };
 
@@ -192,8 +185,10 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                 if(_side == "survivor") then
                 {
                     _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
+                    _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_unitMPKilled;"];
                     removeUniform _unit;
-                    _unit forceAddUniform "Exile_Uniform_BambiOverall";     
+                    _survivorUniform = SC_SurvivorUniforms call BIS_fnc_selectRandom;
+                    _unit forceAddUniform _survivorUniform;     
                     if(SC_debug) then
                     {
                         _tag = createVehicle ["Sign_Arrow_Green_F", position _unit, [], 0, "CAN_COLLIDE"];
@@ -289,8 +284,10 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                     if(_side == "survivor") then
                     {
                         _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
+                        _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_unitMPKilled;"];
                         removeUniform _unit;
-                        _unit forceAddUniform "Exile_Uniform_BambiOverall";     
+                        _survivorUniform = SC_SurvivorUniforms call BIS_fnc_selectRandom;
+                        _unit forceAddUniform _survivorUniform;       
                         if(SC_debug) then
                         {
                             _tag = createVehicle ["Sign_Arrow_Green_F", position _unit, [], 0, "CAN_COLLIDE"];
@@ -312,28 +309,54 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 				_group2 setCombatMode "RED";
 			};
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            _markerName = "Occupation Area";
+            _markerColour = "ColorOrange";
 			
 			if(SC_mapMarkers) then 
 			{
-				_marker = createMarker [format ["%1", _spawnPosition],_pos];
+				deleteMarker format ["%1", _spawnPosition];   
+                _nearBanditAI = { side _x == SC_BanditSide AND _x distance _pos < 500 } count allUnits;
+                _nearSurvivorAI = { side _x == SC_SurvivorSide AND _x distance _pos < 500 } count allUnits;  
+                
+                if(_nearBanditAI > 0 && _nearSurvivorAI > 0) then
+                {
+                    _markerName = "Survivors and Bandits"; 
+                    _markerColour = "ColorOrange";   
+                };  
+                if(_nearBanditAI == 0 && _nearSurvivorAI > 0) then
+                {
+                    _markerName = "Survivors"; 
+                    _markerColour = "ColorGreen";   
+                }; 
+                if(_nearBanditAI > 0 && _nearSurvivorAI == 0) then
+                {
+                    _markerName = "Bandits"; 
+                    _markerColour = "ColorRed";   
+                };                                          
+                
+                _marker = createMarker [format ["%1", _spawnPosition],_pos];
 				_marker setMarkerShape "Icon";
 				_marker setMarkerSize [3,3];
 				_marker setMarkerType "mil_dot";
 				_marker setMarkerBrush "Solid";
+                _marker setMarkerText _markerName;
+                _marker setMarkerColor _markerColour;
 				_marker setMarkerAlpha 0.5;
-				_marker setMarkerColor "ColorOrange";
-				_marker setMarkerText "Occupied Area";	
-			};			
-			
-			if(_side == "survivor") then 
-            {
-                _logDetail = format ["[OCCUPATION:Places]:: Spawning %2 survivor AI in at %3 to patrol %1",_locationName,_aiCount,_spawnPosition];                  
-            }
-            else
-            {
-                _logDetail = format ["[OCCUPATION:Places]:: Spawning %2 bandit AI in at %3 to patrol %1",_locationName,_aiCount,_spawnPosition];    
-            };
-            [_logDetail] call SC_fnc_log;
+					
+                
+                if(_side == "survivor") then 
+                {
+                    _logDetail = format ["[OCCUPATION:Places]:: Spawning %2 survivor AI in at %3 to patrol %1",_locationName,_aiCount,_spawnPosition];                  
+                }
+                else
+                {
+                    _logDetail = format ["[OCCUPATION:Places]:: Spawning %2 bandit AI in at %3 to patrol %1",_locationName,_aiCount,_spawnPosition];    
+                };
+                [_logDetail] call SC_fnc_log;
+                _logDetail = format ["[OCCUPATION:Places]:: %1 Bandits:%2  Survivors:%3 Marker Colour:%4 Marker Name:%5",_locationName,_nearBanditAI,_nearSurvivorAI,_markerColour,_markerName];
+                [_logDetail] call SC_fnc_log;
+            };			
 			_okToSpawn = false;		
 		};
 	

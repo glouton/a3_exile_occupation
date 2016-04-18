@@ -80,22 +80,34 @@ for "_i" from 1 to SC_numberofLootCrates do
 	_box setVariable ["permaLoot",true]; 	// Crate stays until next server restart
 	_box allowDamage false; 				// Stop crates taking damage
 
-	_box addItemCargoGlobal ["Exile_Melee_Axe", 1];
-	_box addItemCargoGlobal ["Exile_Item_GloriousKnakworst", 1 + (random 2)];
-	_box addItemCargoGlobal ["Exile_Item_PlasticBottleFreshWater", 1 + (random 2)];
-	_box addItemCargoGlobal ["Exile_Item_Beer", 5 + (random 1)];
-	_box addItemCargoGlobal ["Exile_Item_Laptop", (random 1)];
-	_box addItemCargoGlobal ["Exile_Item_BaseCameraKit", (random 2)];
-	_box addItemCargoGlobal ["Exile_Item_InstaDoc", 1 + (random 1)];
-	_box addItemCargoGlobal ["Exile_Item_Matches", 1];
-	_box addItemCargoGlobal ["Exile_Item_CookingPot", 1];
-	_box addItemCargoGlobal ["Exile_Item_CodeLock", (random 1)];
-	_box addItemCargoGlobal ["Exile_Item_MetalPole", 1];
-	_box addItemCargoGlobal ["Exile_Item_LightBulb", 1];
-	_box addItemCargoGlobal ["Exile_Item_FuelCanisterEmpty", 1];
-	_box addItemCargoGlobal ["Exile_Item_WoodPlank", 1 + (random 8)];
-	_box addItemCargoGlobal ["Exile_Item_woodFloorKit", 1 + (random 2)];
-	_box addItemCargoGlobal ["Exile_Item_WoodWindowKit", 1 + (random 1)];
-	_box addItemCargoGlobal ["Exile_Item_WoodDoorwayKit", 1 + (random 1)];
-	_box addItemCargoGlobal ["Exile_Item_WoodFloorPortKit", 1 + (random 2)];
+	{
+		_item = _x select 0;
+		_amount = _x select 1;
+		_randomAmount = _x select 2;
+		_amount = _amount + (random _randomAmount);
+		_itemType = _x call BIS_fnc_itemType;
+		
+		
+		if((_itemType select 0) == "Weapon") then
+		{
+			_box addWeaponCargoGlobal [_item, _amount];	
+		};
+		if((_itemType select 0) == "Magazine") then
+		{
+			_box addMagazineCargoGlobal [_item, _amount];	
+		};
+		if((_itemType select 0) == "Item") then
+		{
+			_box addItemCargoGlobal [_item, _amount];	
+		};
+		if((_itemType select 0) == "Equipment") then
+		{
+			_box addItemCargoGlobal [_item, _amount];	
+		};	
+		if((_itemType select 0) == "Backpack") then
+		{
+			_box addBackpackCargoGlobal [_item, _amount];	
+		};			
+	}forEach SC_LootCrateItems;	
+	
 };

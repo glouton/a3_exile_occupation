@@ -149,6 +149,9 @@ if(_vehiclesToSpawn >= 1) then
 		_vehicle limitSpeed 60;
 		_vehicle action ["LightOn", _vehicle];			
 		
+        _amountOfCrew = 0;
+        _unitPlaced = false;
+        
         // Calculate the crew requried
         _vehicleRoles = (typeOf _vehicle) call bis_fnc_vehicleRoles;
         {
@@ -158,11 +161,16 @@ if(_vehiclesToSpawn >= 1) then
             if(_vehicleRole == "Driver") then
             {
                 _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier; 
+                _amountOfCrew = _amountOfCrew + 1;
+                _unit removeAllMPEventHandlers  "mphit";
+                _unit removeAllMPEventHandlers  "mpkilled";
                 _unit disableAI "FSM";             
                 if(_side == "survivor") then
                 {
                     removeUniform _unit;
-                    _unit forceAddUniform "Exile_Uniform_BambiOverall"; 
+                    sleep 0.1;
+                    _survivorUniform = SC_SurvivorUniforms call BIS_fnc_selectRandom;
+                    _unit forceAddUniform _survivorUniform;    
                 };                                   
                 _unit disableAI "TARGET";
                 _unit disableAI "AUTOTARGET";
@@ -186,27 +194,35 @@ if(_vehiclesToSpawn >= 1) then
                 _vehicle addMPEventHandler ["mpkilled", "_this call SC_fnc_vehicleDestroyed;"];
                 _vehicle addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];
             };
-            if(_vehicleRole == "Turret") then
+            if(_vehicleRole == "Turret" && _amountOfCrew <= SC_maximumCrewAmount) then
             {
-                 _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier;                               
+                 _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier;   
+                 _amountOfCrew = _amountOfCrew + 1;                            
                 if(_side == "survivor") then
                 {
                     _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
+                    _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_unitMPKilled;"];
                     removeUniform _unit;
-                    _unit forceAddUniform "Exile_Uniform_BambiOverall"; 
+                    sleep 0.1;
+                    _survivorUniform = SC_SurvivorUniforms call BIS_fnc_selectRandom;
+                    _unit forceAddUniform _survivorUniform;   
                 };                             
                 _unit moveInTurret [_vehicle, _vehicleSeat];
 			    _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
                 _unitPlaced = true;
             };
-            if(_vehicleRole == "CARGO") then
+            if(_vehicleRole == "CARGO" && _amountOfCrew <= SC_maximumCrewAmount) then
             {
-                _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier;              
+                _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier;   
+                _amountOfCrew = _amountOfCrew + 1;           
                 if(_side == "survivor") then
                 {
                     _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
+                    _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_unitMPKilled;"];
                     removeUniform _unit;
-                    _unit forceAddUniform "Exile_Uniform_BambiOverall"; 
+                    sleep 0.1;
+                    _survivorUniform = SC_SurvivorUniforms call BIS_fnc_selectRandom;
+                    _unit forceAddUniform _survivorUniform;   
                 };                                                   
                 _unit assignAsCargo _vehicle; 
                 _unit moveInCargo _vehicle;
