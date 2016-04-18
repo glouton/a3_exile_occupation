@@ -12,33 +12,37 @@
 
 // Shared Config for each occupation monitor
 
-SC_debug 				    = false;				// set to true to turn on debug features (not for live servers) 
-SC_extendedLogging          = true;                	// set to true for additional logging
+
+SC_debug 				    = false;			    // set to true to turn on debug features (not for live servers) 
+SC_extendedLogging          = false;                // set to true for additional logging
 SC_infiSTAR_log			    = true;			        // true Use infiSTAR logging, false logs to server rpt
 SC_maxAIcount 			    = 100;					// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
-
-SC_mapMarkers			    = true;			    	// Place map markers at the occupied areas (occupyPlaces and occupyMilitary only) true/false
+SC_mapMarkers			    = false;			    // Place map markers at the occupied areas (occupyPlaces and occupyMilitary only) true/false
 SC_minFPS 				    = 5;					// any lower than minFPS on the server and additional AI won't spawn
-
 SC_scaleAI 				    = 10; 					// any more than _scaleAI players on the server and _maxAIcount is reduced for each extra player
 
-SC_useWaypoints			    = true;					// When spawning AI create waypoints to make them enter buildings 
-												    // (can affect performance when the AI is spawned and the waypoints are calculated)
+SC_useWaypoints			    = true;					// When spawning AI create waypoints to make them enter buildings (can affect performance when the AI is spawned and the waypoints are calculated)
 
 SC_occupyPlaces 			= true;				    // true if you want villages,towns,cities patrolled by bandits
 
 SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
 SC_occupyVehiclesLocked		= true;					// true if AI vehicles to stay locked until all the linked AI are dead
 
-SC_SurvivorsFriendly        = true;                 	// true if you want survivors to be friendly to players (until they are attacked by players)
-                                                    // false if you want survivors to be aggressive to players
+
                                                     
 SC_SurvivorsChance          = 33;                   // chance in % to spawn survivors instead of bandits (for places and land vehicles)
 SC_occupyPlacesSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyPlaces must be true to use this option)
 SC_occupyVehicleSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyVehicle must be true to use this option)
+SC_SurvivorsFriendly        = true;                 // true if you want survivors to be friendly to players (until they are attacked by players)
+                                                    // false if you want survivors to be aggressive to players
 
-SC_occupyMilitary 		    = false;			    // true if you want military buildings patrolled (specify which types of building below)
+// Array of uniforms for survivor AI to use                                                    
+SC_SurvivorUniforms         = ["Exile_Uniform_BambiOverall"]; 
 
+
+SC_occupyMilitary 		    = false;			    // true if you want military buildings patrolled
+
+// Array of buildings to add military patrols to
 SC_buildings                = [	"Land_TentHangar_V1_F","Land_Hangar_F",
                                 "Land_Airport_Tower_F","Land_Cargo_House_V1_F",
                                 "Land_Cargo_House_V3_F","Land_Cargo_HQ_V1_F",
@@ -84,29 +88,79 @@ SC_LootCrateGuards          = 4;                    // number of AI to spawn at 
 SC_LootCrateGuardsRandomize = true;                 // Use a random number of guards up to a maximum = SC_numberofGuards (so between 1 and SC_numberofGuards)
 SC_occupyLootCratesMarkers	= true;					// true if you want to have markers on the loot crate spawns
 
+// Array of possible common items to go in loot crates ["classname",fixed amount,random amount]
+// ["Exile_Item_Matches",1,2] this example would add between 1 and 3 Exile_Item_Matches to the crate (1 + 0 to 2 more)
+// to add a fixed amount make the second number 0
+SC_LootCrateItems     = [
+                                    ["Exile_Melee_Axe",1,0],
+                                    ["Exile_Item_GloriousKnakworst",1,2],
+                                    ["Exile_Item_PlasticBottleFreshWater",1,2],
+                                    ["Exile_Item_Beer",5,1],
+                                    ["Exile_Item_BaseCameraKit",0,2],
+                                    ["Exile_Item_InstaDoc",1,1],
+                                    ["Exile_Item_Matches",1,0],
+                                    ["Exile_Item_CookingPot",1,0],                      
+                                    ["Exile_Item_MetalPole",1,0],
+                                    ["Exile_Item_LightBulb",1,0],
+                                    ["Exile_Item_FuelCanisterEmpty",1,0],
+                                    ["Exile_Item_WoodPlank",1,8],
+                                    ["Exile_Item_woodFloorKit",1,2],
+                                    ["Exile_Item_WoodWindowKit",1,1],
+                                    ["Exile_Item_WoodDoorwayKit",1,1],
+                                    ["Exile_Item_WoodFloorPortKit",1,2],   
+                                    ["Exile_Item_Laptop",0,1],
+                                    ["Exile_Item_CodeLock",0,1]                                 
+                            ];
+
 
 SC_occupyHeliCrashes		= true;					// true if you want to have Dayz style helicrashes
 SC_numberofHeliCrashes      = 5;                    // if SC_occupyHeliCrashes = true spawn this many loot crates (overrided below for Namalsk)
 
+// Array of possible common items to go in heli crash crates ["classname",fixed amount,random amount] NOT INCLUDING WEAPONS
+// ["HandGrenade",0,2] this example would add between 0 and 2 HandGrenade to the crate (fixed 0 plus 0-2 random)
+// to add a fixed amount make the second number 0
+SC_HeliCrashItems           = [
+                                    ["HandGrenade",0,2],
+                                    ["APERSBoundingMine_Range_Mag",0,2],
+                                    ["B_Parachute",1,1],
+                                    ["H_CrewHelmetHeli_B",1,1],
+                                    ["ItemGPS",0,1],
+                                    ["Exile_Item_InstaDoc",0,1],
+                                    ["Exile_Item_PlasticBottleFreshWater",2,2],
+                                    ["Exile_Item_EMRE",2,2]                                 
+                            ];
+// Array of possible weapons to place in the crate                            
+SC_HeliCrashWeapons         = ["srifle_DMR_02_camo_F","srifle_DMR_03_woodland_F","srifle_DMR_04_F","srifle_DMR_05_hex_F"];
+SC_HeliCrashWeaponsAmount   = [1,3]; // [fixed amount to add, random amount to add]
+SC_HeliCrashMagazinesAmount = [2,2]; // [fixed amount to add, random amount to add]
+
 SC_statics                  = [	[[1178,2524,0],8,250,true]	];      //[[pos],ai count,radius,search buildings]
 
 
+SC_maximumCrewAmount        = 2;                    // Maximum amount of AI allowed in a vehicle 
+                                                    // (essential crew like drivers and gunners will always spawn regardless of this setting)
 
 // Settings for roaming ground vehicle AI
-SC_maxNumberofVehicles 	    = 4;						
+SC_maxNumberofVehicles 	    = 4;	
+
+// Array of ground vehicles which can be used by AI patrols				
 SC_VehicleClassToUse 		= [	"Exile_Car_LandRover_Green","Exile_Bike_QuadBike_Black","Exile_Car_Octavius_White"];
 
 // Settings for roaming airborne AI (non armed helis will just fly around)
 SC_maxNumberofHelis		    = 1;
+
+// Array of aircraft which can be used by AI patrols
 SC_HeliClassToUse 		    = [	"Exile_Chopper_Huey_Armed_Green"];
 
 // Settings for roaming seaborne AI (non armed boats will just sail around)
 SC_maxNumberofBoats		    = 1;
+
+// Array of boats which can be used by AI patrols
 SC_BoatClassToUse 		    = [	"B_Boat_Armed_01_minigun_F","I_Boat_Armed_01_minigun_F","O_Boat_Transport_01_F","Exile_Boat_MotorBoat_Police" ];
 		
-// AI Custom Loadouts        				
 
- // namalsk specific settings 
+
+// namalsk specific settings (if you want to override settings for specific maps if you run multiple servers)
 if (worldName == 'Namalsk') then 
 { 
 	SC_maxAIcount 			= 80; 
@@ -118,15 +172,31 @@ if (worldName == 'Namalsk') then
     SC_occupyPublicBusClass = "Exile_Car_LandRover_Urban"; // the ikarus bus gets stuck on Namalsk
 };
 
+if (SC_debug) then
+{
+    SC_extendedLogging          = true;
+    SC_mapMarkers			    = true;
+    SC_occupyPlaces 			= true;
+    SC_occupyVehicle			= true;
+    SC_occupyMilitary 		    = true;
+    SC_occupyStatic	 		    = true;
+    SC_occupySky				= true;
+    SC_occupySea				= true;
+    SC_occupyPublicBus			= true;
+    SC_occupyLootCrates		    = true;
+    SC_occupyHeliCrashes		= true;	   
+};
+
 // Don't alter anything below this point, unless you want your server to explode :)
 if(!SC_SurvivorsFriendly) then 
 { 
 	CIVILIAN setFriend[RESISTANCE,0]; 
-	CIVILIAN setFriend[EAST,0]; 
-	CIVILIAN setFriend[WEST,0]; 
-	EAST setFriend[CIVILIAN,0]; 
-	WEST setFriend[CIVILIAN,0]; 
 };
+CIVILIAN setFriend[EAST,0]; 
+CIVILIAN setFriend[WEST,0]; 
+EAST setFriend[CIVILIAN,0]; 
+WEST setFriend[CIVILIAN,0]; 
+    
 SC_SurvivorSide         	= CIVILIAN;
 SC_BanditSide           	= EAST;
 SC_liveVehicles 			= 0;
@@ -136,7 +206,6 @@ SC_liveHelisArray       	= [];
 SC_liveBoats	 			= 0;
 SC_liveBoatsArray       	= [];
 SC_publicBusArray       	= [];
-SC_StopTheBus           	= false;
 
 publicVariable "SC_liveVehicles";
 publicVariable "SC_liveVehiclesArray";
@@ -146,6 +215,5 @@ publicVariable "SC_liveBoats";
 publicVariable "SC_liveBoatsArray";
 publicVariable "SC_numberofLootCrates";
 publicVariable "SC_publicBusArray";
-publicVariable "SC_StopTheBus";
 publicVariable "SC_SurvivorSide";
 publicVariable "SC_BanditSide";

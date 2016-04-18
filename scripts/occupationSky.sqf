@@ -90,39 +90,47 @@ for "_i" from 1 to _vehiclesToSpawn do
     _vehicle setVariable ["ExileIsLocked", 0, true];
     _vehicle action ["LightOn", _vehicle];
     	
-      
+    _amountOfCrew = 0; 
+	_unitPlaced = false; 
         
     // Calculate the crew requried
     _vehicleRoles = (typeOf _vehicle) call bis_fnc_vehicleRoles;
     {
-        _vehicleRole = _x select 0;
+        _unitPlaced = false;
+		_vehicleRole = _x select 0;
         _vehicleSeat = _x select 1;
         if(_vehicleRole == "Driver") then
         {
-            _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;   
+            _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier; 
+			_amountOfCrew = _amountOfCrew + 1;  
             _unit assignAsDriver _vehicle;
             _unit moveInDriver _vehicle;
             //_vehicle lockDriver true;
             _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
             removeBackpackGlobal _unit;
             _unit addBackpackGlobal "B_Parachute";
+			_unitPlaced = true;
         };
         if(_vehicleRole == "Turret") then
         {
-            _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;   
+            _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;  
+			_amountOfCrew = _amountOfCrew + 1; 
             _unit moveInTurret [_vehicle, _vehicleSeat];
             _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
             removeBackpackGlobal _unit;
             _unit addBackpackGlobal "B_Parachute";
+			_unitPlaced = true;
         };
-        if(_vehicleRole == "CARGO") then
+        if(_vehicleRole == "CARGO" && _amountOfCrew <= SC_maximumCrewAmount) then
         {
             _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;   
+			_amountOfCrew = _amountOfCrew + 1;
             _unit assignAsCargo _vehicle; 
             _unit moveInCargo _vehicle;
             _unit setVariable ["DMS_AssignedVeh",_vehicle];
             removeBackpackGlobal _unit;
             _unit addBackpackGlobal "B_Parachute";
+			_unitPlaced = true;
         };  
         if(SC_extendedLogging) then 
         { 
@@ -137,13 +145,11 @@ for "_i" from 1 to _vehiclesToSpawn do
         [_unit] joinSilent _group;
     }foreach units _group;
 
-	if(SC_infiSTAR_log) then 
+	if(SC_extendedLogging && _unitPlaced) then 
 	{ 
 		_logDetail = format['[OCCUPATION:Sky] %1 spawned @ %2',_VehicleClassToUse,_spawnLocation];	
 		[_logDetail] call SC_fnc_log;
 	};
-
-
 	
 	clearMagazineCargoGlobal _vehicle;
 	clearWeaponCargoGlobal _vehicle;

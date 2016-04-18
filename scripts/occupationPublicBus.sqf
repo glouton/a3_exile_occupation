@@ -116,15 +116,6 @@ while {true} do
         busDriver enableAI "MOVE";
         if(!Alive busDriver) exitWith {};
     };
-    
-    if(SC_StopTheBus) then
-    {
-        uiSleep 0.5;
-        _publicBus setFuel 0;
-        busDriver disableAI "MOVE";        
-        uiSleep 5; 
-        SC_StopTheBus = false;   
-    };
     uiSleep 5;   
 };		
 

@@ -2,7 +2,7 @@
 //
 //		Server Occupation script by second_coming
 //
-SC_occupationVersion = "v22 (16-04-2016)";
+SC_occupationVersion = "v23 (18-04-2016)";
 //
 //		http://www.exilemod.com/profile/60-second_coming/
 //

@@ -47,26 +47,48 @@ for "_i" from 1 to SC_numberofHeliCrashes do
 	_box enableRopeAttach false;
 	_box setVariable ["permaLoot",true];
 	_box allowDamage false;
-	_box addMagazineCargoGlobal ["HandGrenade", (random 2)];
-	_box addMagazineCargoGlobal ["APERSBoundingMine_Range_Mag", (random 2)];
-	_box addBackpackCargoGlobal   ["B_Parachute", 1 + (random 1)];
-	_box addItemCargoGlobal  ["H_CrewHelmetHeli_B", 1 + (random 1)];
-	_box addItemCargoGlobal  ["U_B_HeliPilotCoveralls", 1 + (random 1)];
-	_box addItemCargoGlobal  ["ItemGPS", (random 1)];
-	_box addItemCargoGlobal  ["Exile_Item_InstaDoc", (random 1)];
-	_box addItemCargoGlobal ["Exile_Item_PlasticBottleFreshWater", 2 + (random 2)];
-	_box addItemCargoGlobal ["Exile_Item_EMRE", 2 + (random 2)];
+
+	{
+		_item = _x select 0;
+		_amount = _x select 1;
+		_randomAmount = _x select 2;
+		_amount = _amount + (random _randomAmount);
+		_itemType = _x call BIS_fnc_itemType;
+		
+		
+		if((_itemType select 0) == "Weapon") then
+		{
+			_box addWeaponCargoGlobal [_item, _amount];	
+		};
+		if((_itemType select 0) == "Magazine") then
+		{
+			_box addMagazineCargoGlobal [_item, _amount];	
+		};
+		if((_itemType select 0) == "Item") then
+		{
+			_box addItemCargoGlobal [_item, _amount];	
+		};
+		if((_itemType select 0) == "Equipment") then
+		{
+			_box addItemCargoGlobal [_item, _amount];	
+		};	
+		if((_itemType select 0) == "Backpack") then
+		{
+			_box addBackpackCargoGlobal [_item, _amount];	
+		};					
+	}forEach SC_HeliCrashItems;	
     
 	// Add weapons with ammo to the Box
-	_possibleWeapons = ["srifle_DMR_02_camo_F","srifle_DMR_03_woodland_F","srifle_DMR_04_F","srifle_DMR_05_hex_F"];
-	_amountOfWeapons = 1 + (random 3);
-	
+	_possibleWeapons = SC_HeliCrashWeapons;
+	_amountOfWeapons = (SC_HeliCrashWeaponsAmount select 0) + round random (SC_HeliCrashWeaponsAmount select 1);
+
     for "_i" from 1 to _amountOfWeapons do
     {
         _weaponToAdd = _possibleWeapons call BIS_fnc_selectRandom;
         _box addWeaponCargoGlobal [_weaponToAdd,1];
        
         _magazinesToAdd = getArray (configFile >> "CfgWeapons" >> _weaponToAdd >> "magazines");
+		_magazineAmount = (SC_HeliCrashMagazinesAmount select 0) + round random (SC_HeliCrashMagazinesAmount select 1);					
         _box addMagazineCargoGlobal [(_magazinesToAdd select 0),round random 5];
     };
 	
