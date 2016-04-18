@@ -36,6 +36,7 @@ busDriver setCaptive true;
 _publicBus = createVehicle [SC_occupyPublicBusClass, _spawnLocation, [], 0, "CAN_COLLIDE"];
 SC_publicBusArray = SC_publicBusArray + [_publicBus];
 _publicBus setVariable ["SC_assignedDriver", busDriver,true];
+_publicBus setVariable ["SC_publicBus", true,true];
 _publicBus setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];
 _publicBus addEventHandler ["getin", "_this call SC_fnc_getOnBus;"];
 _publicBus addEventHandler ["getout", "_this call SC_fnc_getOffBus;"];
