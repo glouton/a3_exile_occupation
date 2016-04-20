@@ -4,6 +4,8 @@ _middle 		    = worldSize/2;
 _spawnCenter 	    = [_middle,_middle,0];		// Centre point for the map
 _maxDistance 	    = _middle;			        // Max radius for the map
 
+if(!isNil "SC_occupyPublicBusStartPos") then { _spawnCenter = SC_occupyPublicBusStartPos };
+
 _logDetail = format ["[OCCUPATION:publicBus]:: Starting @ %1",time];
 [_logDetail] call SC_fnc_log;
 

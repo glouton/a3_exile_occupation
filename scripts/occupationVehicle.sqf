@@ -165,25 +165,12 @@ if(_vehiclesToSpawn >= 1) then
                 _unit removeAllMPEventHandlers  "mphit";
                 _unit removeAllMPEventHandlers  "mpkilled";
                 _unit disableAI "FSM";             
-                if(_side == "survivor") then
-                {
-                    removeUniform _unit;
-                    sleep 0.1;
-                    _survivorUniform = SC_SurvivorUniforms call BIS_fnc_selectRandom;
-                    _unit forceAddUniform _survivorUniform;    
-                };                                   
+                [_side,_unit] call SC_fnc_changeGear;                               
                 _unit disableAI "TARGET";
                 _unit disableAI "AUTOTARGET";
                 _unit disableAI "AUTOCOMBAT";
                 _unit disableAI "COVER";  
-                _unit disableAI "SUPPRESSION";   
-                sleep 0.1;	
-                if(SC_debug) then
-                {
-                    _tag = createVehicle ["Sign_Arrow_Green_F", position _unit, [], 0, "CAN_COLLIDE"];
-                    _tag attachTo [_unit,[0,0,0.6],"Head"];  
-                };
-                sleep 0.1;                   
+                _unit disableAI "SUPPRESSION";                   
                 _unit assignAsDriver _vehicle;
                 _unit moveInDriver _vehicle;                
                 _unit setVariable ["DMS_AssignedVeh",_vehicle];
@@ -191,6 +178,7 @@ if(_vehiclesToSpawn >= 1) then
                 _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
                 _vehicle setVariable ["SC_assignedDriver", _unit,true];	
                 _vehicle addEventHandler ["getin", "_this call SC_fnc_getIn;"];
+                _vehicle addEventHandler ["getout", "_this call SC_fnc_getOut;"];
                 _vehicle addMPEventHandler ["mpkilled", "_this call SC_fnc_vehicleDestroyed;"];
                 _vehicle addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];
             };
@@ -198,15 +186,7 @@ if(_vehiclesToSpawn >= 1) then
             {
                  _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier;   
                  _amountOfCrew = _amountOfCrew + 1;                            
-                if(_side == "survivor") then
-                {
-                    _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
-                    _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_unitMPKilled;"];
-                    removeUniform _unit;
-                    sleep 0.1;
-                    _survivorUniform = SC_SurvivorUniforms call BIS_fnc_selectRandom;
-                    _unit forceAddUniform _survivorUniform;   
-                };                             
+                [_side,_unit] call SC_fnc_changeGear;                            
                 _unit moveInTurret [_vehicle, _vehicleSeat];
 			    _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
                 _unitPlaced = true;
@@ -215,15 +195,7 @@ if(_vehiclesToSpawn >= 1) then
             {
                 _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier;   
                 _amountOfCrew = _amountOfCrew + 1;           
-                if(_side == "survivor") then
-                {
-                    _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
-                    _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_unitMPKilled;"];
-                    removeUniform _unit;
-                    sleep 0.1;
-                    _survivorUniform = SC_SurvivorUniforms call BIS_fnc_selectRandom;
-                    _unit forceAddUniform _survivorUniform;   
-                };                                                   
+                [_side,_unit] call SC_fnc_changeGear;                                               
                 _unit assignAsCargo _vehicle; 
                 _unit moveInCargo _vehicle;
 			    _unit setVariable ["DMS_AssignedVeh",_vehicle];

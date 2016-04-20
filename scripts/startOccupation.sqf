@@ -9,6 +9,18 @@ if(SC_debug) then { SC_refreshTime = 60; }else{ SC_refreshTime = 300; };
 
 // Add selected occupation scripts to Exile Threading System
 
+if (SC_fastNights) then
+{
+	fnc_checkMultiplier = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationFastNights.sqf";
+	[60, fnc_checkMultiplier, [], true] call ExileServer_system_thread_addTask;
+};
+
+if(SC_occupyTraders) then
+{
+	uiSleep 15; // delay the start
+    call compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationTraders.sqf";
+};
+
 if(SC_occupyPublicBus) then
 {
 	[] execVM  "\x\addons\a3_exile_occupation\scripts\occupationPublicBus.sqf";

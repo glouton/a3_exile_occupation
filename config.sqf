@@ -21,14 +21,26 @@ SC_mapMarkers			    = false;			    // Place map markers at the occupied areas (o
 SC_minFPS 				    = 5;					// any lower than minFPS on the server and additional AI won't spawn
 SC_scaleAI 				    = 10; 					// any more than _scaleAI players on the server and _maxAIcount is reduced for each extra player
 
+SC_fastNights               = false;                // true if you want night time to go faster than daytime
+SC_fastNightsStarts         = 18;                   // Start fast nights at this hour (24 hour clock) eg. 18 for 6pm
+SC_fastNightsMultiplierNight= 16;                   // the time multiplier to use at night (12 = 12x speed)
+SC_fastNightsEnds           = 6;                    // Start fast nights at this hour (24 hour clock) eg. 6 for 6am
+SC_fastNightsMultiplierDay  = 4;                    // the time multiplier to use during daylight hours (4 = 4x speed)
+
 SC_useWaypoints			    = true;					// When spawning AI create waypoints to make them enter buildings (can affect performance when the AI is spawned and the waypoints are calculated)
 
 SC_occupyPlaces 			= true;				    // true if you want villages,towns,cities patrolled by bandits
+SC_minDistanceToSpawnZones  = 500;                  // Distance in metres (British spelling, sue me :p ) Only used by occupy Places
+SC_minDistanceToTraders     = 500;                  // Distance in metres (British spelling, sue me :p ) Only used by occupy Places
 
 SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
 SC_occupyVehiclesLocked		= true;					// true if AI vehicles to stay locked until all the linked AI are dead
 
-
+SC_occupyTraders            = false;                //  (WORK IN PROGRESS, NOT WORKING YET) true if you want to create trader camps at positions specified in SC_occupyTraderDetails
+SC_occupyTraderDetails      = [
+                                ["Test Trader1",[23718,16223,0],true],
+                                ["Test Trader2",[10666,10262,0],true]
+                              ];  //["Name",[x,y,z],true] trader name, location, safezone true/false
                                                     
 SC_SurvivorsChance          = 33;                   // chance in % to spawn survivors instead of bandits (for places and land vehicles)
 SC_occupyPlacesSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyPlaces must be true to use this option)
@@ -38,7 +50,15 @@ SC_SurvivorsFriendly        = true;                 // true if you want survivor
 
 // Array of uniforms for survivor AI to use                                                    
 SC_SurvivorUniforms         = ["Exile_Uniform_BambiOverall"]; 
+SC_SurvivorVests            = []; 
+SC_SurvivorHeadgear         = []; 
 
+// Array of uniforms for bandit AI to use                                                    
+SC_BanditUniforms           = [ "U_IG_Guerilla1_1","U_IG_Guerilla2_1","U_IG_Guerilla2_2","U_IG_Guerilla2_3","U_IG_Guerilla3_1",
+                                "U_BG_Guerilla2_1","U_IG_Guerilla3_2","U_BG_Guerrilla_6_1","U_BG_Guerilla1_1","U_BG_Guerilla2_2",
+                                "U_BG_Guerilla2_3","U_BG_Guerilla3_1"]; 
+SC_BanditVests              = [	"V_BandollierB_blk","V_BandollierB_cbr","V_BandollierB_khk","V_BandollierB_oli"]; 
+SC_BanditHeadgear           = [ "H_Shemag_khk","H_Shemag_olive","H_Shemag_olive_hs","H_Shemag_tan","H_ShemagOpen_khk","H_ShemagOpen_tan"];
 
 SC_occupyMilitary 		    = false;			    // true if you want military buildings patrolled
 
@@ -74,13 +94,16 @@ SC_buildings                = [	"Land_TentHangar_V1_F","Land_Hangar_F",
                                 ]; 
    
 
-SC_occupyStatic	 		    = false;		    	// true if you want to garrison AI in specific locations
+SC_occupyStatic	 		    = false;		    	// true if you want to add AI in specific locations
+SC_staticBandits            = [	[[23350,18709,0],12,400,true]	];      //[[pos],ai count,radius,search buildings]
+SC_staticSurvivors          = [	[[23286,18524,0],6,400,true]	];      //[[pos],ai count,radius,search buildings]
 
 SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
 
 SC_occupyPublicBus			= true;					// true if you want a roaming bus service
 SC_occupyPublicBusClass 	= "Exile_Car_Ikarus_Party"; 	// class name for the vehicle to use as the public bus
+SC_occupyPublicBusStartPos  = [];                   // if empty defaults to map centre
 
 SC_occupyLootCrates		    = true;					// true if you want to have random loot crates with guards
 SC_numberofLootCrates       = 6;                    // if SC_occupyLootCrates = true spawn this many loot crates (overrided below for Namalsk)
@@ -133,9 +156,6 @@ SC_HeliCrashItems           = [
 SC_HeliCrashWeapons         = ["srifle_DMR_02_camo_F","srifle_DMR_03_woodland_F","srifle_DMR_04_F","srifle_DMR_05_hex_F"];
 SC_HeliCrashWeaponsAmount   = [1,3]; // [fixed amount to add, random amount to add]
 SC_HeliCrashMagazinesAmount = [2,2]; // [fixed amount to add, random amount to add]
-
-SC_statics                  = [	[[1178,2524,0],8,250,true]	];      //[[pos],ai count,radius,search buildings]
-
 
 SC_maximumCrewAmount        = 2;                    // Maximum amount of AI allowed in a vehicle 
                                                     // (essential crew like drivers and gunners will always spawn regardless of this setting)

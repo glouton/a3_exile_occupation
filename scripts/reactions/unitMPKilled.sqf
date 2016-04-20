@@ -7,5 +7,5 @@ _unit removeAllMPEventHandlers  "mphit";
 
 if(SC_debug) then
 {
-    { detach _x; deleteVehicle _x; } forEach attachedObjects _unit;
+    { deleteVehicle _x; } forEach attachedObjects _unit;
 };

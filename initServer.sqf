@@ -2,7 +2,7 @@
 //
 //		Server Occupation script by second_coming
 //
-SC_occupationVersion = "v24 (18-04-2016)";
+SC_occupationVersion = "v25 (20-04-2016)";
 //
 //		http://www.exilemod.com/profile/60-second_coming/
 //
@@ -41,12 +41,16 @@ SC_occupationVersion = "v24 (18-04-2016)";
     SC_fnc_airHit 			        = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\airHit.sqf";
     SC_fnc_boatHit 			        = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\boatHit.sqf";
     SC_fnc_getIn			    	= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\getIn.sqf";
+    SC_fnc_getOut			    	= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\getOut.sqf";
     SC_fnc_refuel               	= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\refuel.sqf";
     SC_fnc_comeUnstuck          	= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\comeUnstuck.sqf";
     SC_fnc_unitMPHit            	= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\unitMPHit.sqf";
     SC_fnc_unitMPKilled        	    = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\unitMPKilled.sqf";
     SC_fnc_getOnBus			        = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\getOnBus.sqf";
     SC_fnc_getOffBus				= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\getOffBus.sqf";
+    
+    SC_fnc_changeGear				= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_changeGear.sqf";
+    SC_fnc_spawnstatics				= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_spawnStatics.sqf";
 
     _logDetail = "=============================================================================================================";
     [_logDetail] call SC_fnc_log;
