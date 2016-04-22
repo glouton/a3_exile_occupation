@@ -1,18 +1,22 @@
 if (!isServer) exitWith {};
 
-_middle 		    = worldSize/2;			
-_spawnCenter 	    = [_middle,_middle,0];		// Centre point for the map
-_maxDistance 	    = _middle;			        // Max radius for the map
-
-if(!isNil "SC_occupyPublicBusStartPos") then { _spawnCenter = SC_occupyPublicBusStartPos };
-
 _logDetail = format ["[OCCUPATION:publicBus]:: Starting @ %1",time];
 [_logDetail] call SC_fnc_log;
 
-_logDetail = format ["[OCCUPATION:publicBus]:: Spawning near map centre %1 @ %2",_spawnCenter,time];
+if( count SC_occupyPublicBusStartPos == 0) then 
+{
+    //if(worldName == 'Namalsk') then { _spawnCenter = [6400,6400,0]; } else
+    //{
+        _middle 		    = worldSize/2;			
+        _spawnCenter 	    = [_middle,_middle,0];         
+    //};
+    SC_occupyPublicBusStartPos = _spawnCenter;
+};
+
+_logDetail = format ["[OCCUPATION:publicBus]:: Spawning near map centre %1 @ %2",SC_occupyPublicBusStartPos,time];
 [_logDetail] call SC_fnc_log;
 
-_positionOfBus = [_spawnCenter,0,500,25,0,10,0] call BIS_fnc_findSafePos;
+_positionOfBus = [SC_occupyPublicBusStartPos,0,500,25,0,10,0] call BIS_fnc_findSafePos;
 
 // Get position of nearest roads
 _nearRoads = _positionOfBus nearRoads 2000;

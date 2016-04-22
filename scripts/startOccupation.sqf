@@ -4,6 +4,7 @@ if (!isServer) exitWith {};
 _logDetail = format ["[OCCUPATION]:: Occupation %2 Initialised at %1",time,SC_occupationVersion];
 [_logDetail] call SC_fnc_log;
 
+[] call ExileClient_system_map_initialize;
 
 if(SC_debug) then { SC_refreshTime = 60; }else{ SC_refreshTime = 300; };
 
@@ -19,11 +20,6 @@ if(SC_occupyTraders) then
 {
 	uiSleep 15; // delay the start
     call compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationTraders.sqf";
-};
-
-if(SC_occupyPublicBus) then
-{
-	[] execVM  "\x\addons\a3_exile_occupation\scripts\occupationPublicBus.sqf";
 };
 
 if(SC_occupyLootCrates) then
@@ -85,6 +81,10 @@ if(SC_occupyMilitary) then
 	[SC_refreshTime, fnc_occupationMilitary, [], true] call ExileServer_system_thread_addTask;
 };
 
+if(SC_occupyPublicBus) then
+{
+	[] execVM  "\x\addons\a3_exile_occupation\scripts\occupationPublicBus.sqf";
+};
 
 uiSleep 15; // delay the start
 fnc_occupationMonitor = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationMonitor.sqf";

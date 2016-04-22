@@ -2,7 +2,7 @@
 //
 //		Server Occupation script by second_coming
 //
-SC_occupationVersion = "v25 (20-04-2016)";
+SC_occupationVersion = "v26 (22-04-2016)";
 //
 //		http://www.exilemod.com/profile/60-second_coming/
 //
@@ -24,11 +24,14 @@ SC_occupationVersion = "v25 (20-04-2016)";
 {
     diag_log format ["[OCCUPATION]:: Occupation %2 Giving the server time to start before starting [OCCUPATION] (%1)",time,SC_occupationVersion];
     waitUntil { !(isNil "DMS_MinMax_Y_Coords") };
-    sleep 1;
+  
+    sleep 10;
     diag_log format ["[OCCUPATION MOD]:: Occupation %2 Loading Config at %1",time,SC_occupationVersion];
 
     // Get the config for Occupation
     call compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\config.sqf";
+    
+    if(!SC_CompiledOkay) exitWith { diag_log format ["[OCCUPATION]:: Occupation failed to read config.sqf, check for typos (time: %1)",time]; };
 
     // Select the log style depending on config settings
     SC_fnc_log			            = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationLog.sqf";

@@ -66,6 +66,8 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
             _group setVariable ["DMS_SpawnedGroup",true];
             _group setVariable ["DMS_Group_Side", _side];
             
+            SC_liveStaticGroups = SC_liveStaticGroups + [_group,_spawnPosition];
+            
             {	
                 _unit = _x;           
                 [_unit] joinSilent grpNull;

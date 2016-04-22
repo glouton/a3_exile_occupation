@@ -21,10 +21,10 @@ SC_mapMarkers			    = false;			    // Place map markers at the occupied areas (o
 SC_minFPS 				    = 5;					// any lower than minFPS on the server and additional AI won't spawn
 SC_scaleAI 				    = 10; 					// any more than _scaleAI players on the server and _maxAIcount is reduced for each extra player
 
-SC_fastNights               = false;                // true if you want night time to go faster than daytime
+SC_fastNights               = true;                 // true if you want night time to go faster than daytime
 SC_fastNightsStarts         = 18;                   // Start fast nights at this hour (24 hour clock) eg. 18 for 6pm
 SC_fastNightsMultiplierNight= 16;                   // the time multiplier to use at night (12 = 12x speed)
-SC_fastNightsEnds           = 6;                    // Start fast nights at this hour (24 hour clock) eg. 6 for 6am
+SC_fastNightsEnds           = 6;                    // End fast nights at this hour (24 hour clock) eg. 6 for 6am
 SC_fastNightsMultiplierDay  = 4;                    // the time multiplier to use during daylight hours (4 = 4x speed)
 
 SC_useWaypoints			    = true;					// When spawning AI create waypoints to make them enter buildings (can affect performance when the AI is spawned and the waypoints are calculated)
@@ -42,9 +42,9 @@ SC_occupyTraderDetails      = [
                                 ["Test Trader2",[10666,10262,0],true]
                               ];  //["Name",[x,y,z],true] trader name, location, safezone true/false
                                                     
-SC_SurvivorsChance          = 33;                   // chance in % to spawn survivors instead of bandits (for places and land vehicles)
+SC_SurvivorsChance          = 20;                   // chance in % to spawn survivors instead of bandits (for places and land vehicles)
 SC_occupyPlacesSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyPlaces must be true to use this option)
-SC_occupyVehicleSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyVehicle must be true to use this option)
+SC_occupyVehicleSurvivors	= false;                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyVehicle must be true to use this option)
 SC_SurvivorsFriendly        = true;                 // true if you want survivors to be friendly to players (until they are attacked by players)
                                                     // false if you want survivors to be aggressive to players
 
@@ -216,7 +216,7 @@ CIVILIAN setFriend[EAST,0];
 CIVILIAN setFriend[WEST,0]; 
 EAST setFriend[CIVILIAN,0]; 
 WEST setFriend[CIVILIAN,0]; 
-    
+   
 SC_SurvivorSide         	= CIVILIAN;
 SC_BanditSide           	= EAST;
 SC_liveVehicles 			= 0;
@@ -225,6 +225,7 @@ SC_liveHelis	 			= 0;
 SC_liveHelisArray       	= [];
 SC_liveBoats	 			= 0;
 SC_liveBoatsArray       	= [];
+SC_liveStaticGroups         = [];
 SC_publicBusArray       	= [];
 
 publicVariable "SC_liveVehicles";
@@ -233,7 +234,10 @@ publicVariable "SC_liveHelis";
 publicVariable "SC_liveHelisArray";
 publicVariable "SC_liveBoats";
 publicVariable "SC_liveBoatsArray";
+publicVariable "SC_liveStaticGroups";
 publicVariable "SC_numberofLootCrates";
 publicVariable "SC_publicBusArray";
 publicVariable "SC_SurvivorSide";
 publicVariable "SC_BanditSide";
+
+SC_CompiledOkay = true;
