@@ -241,3 +241,4 @@ publicVariable "SC_SurvivorSide";
 publicVariable "SC_BanditSide";
 
 SC_CompiledOkay = true;
+
