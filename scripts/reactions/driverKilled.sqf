@@ -52,7 +52,7 @@ if(count units _group > 0) then
 
     if(SC_debug) then
     {
-        _tag = createVehicle ["Sign_Arrow_Green_F", position _driver, [], 0, "CAN_COLLIDE"];
+        _tag = createVehicle ["Sign_Arrow_Yellow_F", position _driver, [], 0, "CAN_COLLIDE"];
         _tag attachTo [_driver,[0,0,0.6],"Head"];  
     };
 

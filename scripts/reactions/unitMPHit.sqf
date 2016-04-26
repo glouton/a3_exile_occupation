@@ -14,17 +14,10 @@ if (side _aggressor == RESISTANCE) then
     {
         _unit = _x;           
         //[_unit] joinSilent grpNull;
-        [_unit] joinSilent _group;      
+        [_unit] joinSilent _group;  
+        _unit removeAllMPEventHandlers  "mphit";    
     }foreach units _initialGroup;
     
     _group reveal [_aggressor, 2.5]; 
     _group move (position _aggressor); 
-    diag_log format["::testing:: unit %1 damaged by %2",_unit,_aggressor];
- 
-};
-
-if(alive _unit) then 
-{ 
-    // reapply the eventhandler
-    _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
 };

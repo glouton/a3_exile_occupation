@@ -89,18 +89,37 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
         };
 		
 		// Don't spawn AI near traders and spawn zones
-		_nearestMarker = [allMapMarkers, _pos] call BIS_fnc_nearestPosition; // Nearest Marker to the Location		
-		_posNearestMarker = getMarkerPos _nearestMarker;
-		if(_pos distance _posNearestMarker < 500) exitwith 
-        { 
-            _okToSpawn = false; 
-            if(SC_extendedLogging) then 
-            { 
-                _logDetail = format ["[OCCUPATION:Places]:: %1 is too close to a %2",_locationName,_nearestMarker];
-                [_logDetail] call SC_fnc_log;
-            }; 
-        };
-	
+        {
+            switch (getMarkerType _x) do 
+            {
+                case "ExileSpawnZone":
+                {
+                    if(_pos distance (getMarkerPos _x) < SC_minDistanceToSpawnZones) exitWith
+                    {
+                        _okToSpawn = false; 
+                        if(SC_extendedLogging) then 
+                        { 
+                            _logDetail = format ["[OCCUPATION:Places]:: %1 is too close to a Spawn Zone",_locationName];
+                            [_logDetail] call SC_fnc_log;
+                        };                         
+                    };
+                };
+                case "ExileTraderZone": 
+                {
+                    if(_pos distance (getMarkerPos _x) < SC_minDistanceToTraders) exitWith
+                    {
+                        _okToSpawn = false; 
+                        if(SC_extendedLogging) then 
+                        { 
+                            _logDetail = format ["[OCCUPATION:Places]:: %1 is too close to a Trader Zone",_locationName];
+                            [_logDetail] call SC_fnc_log;
+                        };                         
+                    };
+                };
+            };
+        }
+        forEach allMapMarkers;
+        
 		// Don't spawn additional AI if there are players in range
 		if([_pos, 250] call ExileClient_util_world_isAlivePlayerInRange) exitwith 
         { 
@@ -181,28 +200,8 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
             {	
                 _unit = _x;           
                 [_unit] joinSilent grpNull;
-                [_unit] joinSilent _group;
-                if(_side == "survivor") then
-                {
-                    _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
-                    _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_unitMPKilled;"];
-                    removeUniform _unit;
-                    _survivorUniform = SC_SurvivorUniforms call BIS_fnc_selectRandom;
-                    _unit forceAddUniform _survivorUniform;     
-                    if(SC_debug) then
-                    {
-                        _tag = createVehicle ["Sign_Arrow_Green_F", position _unit, [], 0, "CAN_COLLIDE"];
-                        _tag attachTo [_unit,[0,0,0.6],"Head"];  
-                    };          
-                }
-                else
-                {
-                    if(SC_debug) then
-                    {
-                        _tag = createVehicle ["Sign_Arrow_F", position _unit, [], 0, "CAN_COLLIDE"];
-                        _tag attachTo [_unit,[0,0,0.6],"Head"];  
-                    };                      
-                };
+                [_unit] joinSilent _group;        
+                [_side,_unit] call SC_fnc_changeGear;
             }foreach units _initialGroup;
 						
 			// Get the AI to shut the fuck up :)
@@ -281,27 +280,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                     _unit = _x;
                     [_unit] joinSilent grpNull;
                     [_unit] joinSilent _group2;
-                    if(_side == "survivor") then
-                    {
-                        _unit addMPEventHandler ["mphit", "_this call SC_fnc_unitMPHit;"];
-                        _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_unitMPKilled;"];
-                        removeUniform _unit;
-                        _survivorUniform = SC_SurvivorUniforms call BIS_fnc_selectRandom;
-                        _unit forceAddUniform _survivorUniform;       
-                        if(SC_debug) then
-                        {
-                            _tag = createVehicle ["Sign_Arrow_Green_F", position _unit, [], 0, "CAN_COLLIDE"];
-                            _tag attachTo [_unit,[0,0,0.6],"Head"];  
-                        };
-                    }
-                    else
-                    {
-                        if(SC_debug) then
-                        {
-                            _tag = createVehicle ["Sign_Arrow_F", position _unit, [], 0, "CAN_COLLIDE"];
-                            _tag attachTo [_unit,[0,0,0.6],"Head"];  
-                        };                                                       
-                    };
+                    [_side,_unit] call SC_fnc_changeGear;
                 }foreach units _initialGroup2;
                 
 				[_group2, _pos, _groupRadius] call bis_fnc_taskPatrol;

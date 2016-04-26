@@ -13,6 +13,13 @@ if(isPlayer _unit) then
 		_logDetail = format ["[OCCUPATION:claimVehicle]:: Unit %3 has claimed vehicle %2 at %1",time,_vehicle,_unit]; 
 		[_logDetail] call SC_fnc_log;
 	};
+}
+else
+{
+	if(SC_debug) then
+	{
+		{ deleteVehicle _x; } forEach attachedObjects _unit;
+	};	
 };
 
 
