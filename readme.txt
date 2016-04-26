@@ -1,11 +1,11 @@
-An AI spawner and monitor to be used in conjunction with DMS and will not work without it: http://www.exilemod.com/topic/61-dms-defents-mission-system/
+V27 (26-04-2016) Development Update
 
-Download the pbo version here: https://www.dropbox.com/s/dxy44l4mfu6ys53/a3_exile_occupation.pbo?dl=0
+Added the option fully control the gear assigned to bandit and survivor units
 
-To install place the pbo into the @ExileServer/addons folder
+Added the option for helicopters as public transport, the heli travels between traders and lands for about 60 seconds. Setting SC_occupyTransportClass to a helicopter classname will switch it over to using a helicopter, if you want to continue using the land vehicle set SC_occupyTransportClass to a land vehicle.
 
-For more info: http://www.exilemod.com/topic/12517-release-exile-occupation-roaming-ai
+Added the option to set the maximum crew (crew count will be a random number between the max and min). The applies for all AI vehicles.
 
-I do not give permission for anyone to sell or charge for the installation of any part of this set of scripts.
+Added a separate SC_VehicleClassToUseRare list of vehicles which spawn 10% of the time in place of the standard SC_VehicleClassToUse list.
 
-second_coming 2016
+V26 is now the master release on github
