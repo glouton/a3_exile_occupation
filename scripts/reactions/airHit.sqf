@@ -77,7 +77,7 @@ if(_heliDamage > 0.2 && _damagedEssentials > 0 && !_crewEjected && _ejectChance 
         _group2 setCombatMode "RED";	
 	};
 	_heli setVariable ["SC_crewEjected", true,true];
-	_heli addMPEventHandler ["mphit", "_this call SC_fnc_airHit;"];	
+		
 };
 	
 
@@ -115,3 +115,5 @@ if(_heliDamage > 0.7 && _damagedEssentials > 0) then
     _group2 setBehaviour "COMBAT";
     _group2 setCombatMode "RED";
 };
+
+_heli addMPEventHandler ["mphit", "_this call SC_fnc_airHit;"];

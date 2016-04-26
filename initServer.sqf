@@ -2,7 +2,7 @@
 //
 //		Server Occupation script by second_coming
 //
-SC_occupationVersion = "v26 (22-04-2016)";
+SC_occupationVersion = "v27 (26-04-2016)";
 //
 //		http://www.exilemod.com/profile/60-second_coming/
 //
@@ -31,7 +31,7 @@ SC_occupationVersion = "v26 (22-04-2016)";
     // Get the config for Occupation
     call compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\config.sqf";
     
-    if(!SC_CompiledOkay) exitWith { diag_log format ["[OCCUPATION]:: Occupation failed to read config.sqf, check for typos (time: %1)",time]; };
+    if(isNil "SC_CompiledOkay") exitWith { diag_log format ["[OCCUPATION]:: Occupation failed to read config.sqf, check for typos (time: %1)",time]; };
 
     // Select the log style depending on config settings
     SC_fnc_log			            = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationLog.sqf";
@@ -52,8 +52,9 @@ SC_occupationVersion = "v26 (22-04-2016)";
     SC_fnc_getOnBus			        = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\getOnBus.sqf";
     SC_fnc_getOffBus				= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\reactions\getOffBus.sqf";
     
-    SC_fnc_changeGear				= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_changeGear.sqf";
+    SC_fnc_addMarker				= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_addMarker.sqf";
     SC_fnc_spawnstatics				= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_spawnStatics.sqf";
+    SC_fnc_selectGear               = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_selectGear.sqf";
 
     _logDetail = "=============================================================================================================";
     [_logDetail] call SC_fnc_log;

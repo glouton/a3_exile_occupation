@@ -119,7 +119,16 @@ if(_vehiclesToSpawn >= 1) then
         _group setVariable ["DMS_SpawnedGroup",true];
         _group setVariable ["DMS_Group_Side", _side];        
         
-		_VehicleClassToUse = SC_VehicleClassToUse call BIS_fnc_selectRandom;
+        _VehicleClassToUse = SC_VehicleClassToUse call BIS_fnc_selectRandom;
+        
+		// Percentage chance to spawn a rare vehicle
+		_rareChance = round (random 100);
+		if(_rareChance >= 90) then 
+        {
+            _VehicleClassToUse = SC_VehicleClassToUseRare call BIS_fnc_selectRandom;    
+        };
+		
+        
 		_vehicle = createVehicle [_VehicleClassToUse, _spawnLocation, [], 0, "NONE"];
         _group addVehicle _vehicle;	
       
@@ -149,10 +158,18 @@ if(_vehiclesToSpawn >= 1) then
 		_vehicle limitSpeed 60;
 		_vehicle action ["LightOn", _vehicle];			
 		
+       
+
+        
+   
+        // Calculate the number of seats in the vehicle and fill the required amount
+        _crewRequired = SC_minimumCrewAmount;
+        if(SC_maximumCrewAmount > SC_minimumCrewAmount) then 
+        { 
+            _crewRequired = floor(random[SC_minimumCrewAmount,SC_maximumCrewAmount-SC_minimumCrewAmount,SC_maximumCrewAmount]); 
+        };       
         _amountOfCrew = 0;
         _unitPlaced = false;
-        
-        // Calculate the crew requried
         _vehicleRoles = (typeOf _vehicle) call bis_fnc_vehicleRoles;
         {
             _unitPlaced = false;
@@ -160,12 +177,13 @@ if(_vehiclesToSpawn >= 1) then
             _vehicleSeat = _x select 1;
             if(_vehicleRole == "Driver") then
             {
-                _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier; 
+                _loadOut = [_side] call SC_fnc_selectGear;
+                _unit = [_group,_spawnLocation,"custom","random",_side,"Vehicle",_loadOut] call DMS_fnc_SpawnAISoldier; 
                 _amountOfCrew = _amountOfCrew + 1;
-                _unit removeAllMPEventHandlers  "mphit";
-                _unit removeAllMPEventHandlers  "mpkilled";
                 _unit disableAI "FSM";             
-                [_side,_unit] call SC_fnc_changeGear;                               
+                [_side,_unit] call SC_fnc_addMarker;  
+                _unit removeAllMPEventHandlers  "mphit";
+                _unit removeAllMPEventHandlers  "mpkilled";                                            
                 _unit disableAI "TARGET";
                 _unit disableAI "AUTOTARGET";
                 _unit disableAI "AUTOCOMBAT";
@@ -182,30 +200,35 @@ if(_vehiclesToSpawn >= 1) then
                 _vehicle addMPEventHandler ["mpkilled", "_this call SC_fnc_vehicleDestroyed;"];
                 _vehicle addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];
             };
-            if(_vehicleRole == "Turret" && _amountOfCrew <= SC_maximumCrewAmount) then
+            if(_vehicleRole == "Turret" && _amountOfCrew < _crewRequired) then
             {
-                 _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier;   
+                 _loadOut = [_side] call SC_fnc_selectGear;
+                 _unit = [_group,_spawnLocation,"custom","random",_side,"Vehicle",_loadOut] call DMS_fnc_SpawnAISoldier;   
                  _amountOfCrew = _amountOfCrew + 1;                            
-                [_side,_unit] call SC_fnc_changeGear;                            
+                [_side,_unit] call SC_fnc_addMarker;                            
                 _unit moveInTurret [_vehicle, _vehicleSeat];
-			    _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
+			    _unit setVariable ["DMS_AssignedVeh",_vehicle];
+                _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_unitMPKilled;"]; 
                 _unitPlaced = true;
             };
-            if(_vehicleRole == "CARGO" && _amountOfCrew <= SC_maximumCrewAmount) then
+            if(_vehicleRole == "CARGO" && _amountOfCrew < _crewRequired) then
             {
-                _unit = [_group,_spawnLocation,"assault","random",_side,"Vehicle"] call DMS_fnc_SpawnAISoldier;   
+                _loadOut = [_side] call SC_fnc_selectGear;
+                _unit = [_group,_spawnLocation,"custom","random",_side,"Vehicle",_loadOut] call DMS_fnc_SpawnAISoldier;   
                 _amountOfCrew = _amountOfCrew + 1;           
-                [_side,_unit] call SC_fnc_changeGear;                                               
+                [_side,_unit] call SC_fnc_addMarker;                                               
                 _unit assignAsCargo _vehicle; 
                 _unit moveInCargo _vehicle;
 			    _unit setVariable ["DMS_AssignedVeh",_vehicle];
+                _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_unitMPKilled;"]; 
                 _unitPlaced = true; 
             };    
             if(SC_extendedLogging && _unitPlaced) then 
             { 
                 _logDetail = format['[OCCUPATION:Vehicle] %1 %2 added to vehicle %3',_side,_vehicleRole,_vehicle]; 
                 [_logDetail] call SC_fnc_log;
-            };                    
+            };  
+            if(_amountOfCrew == _crewRequired) exitWith{};                
         } forEach _vehicleRoles;			
 
 		// Get the AI to shut the fuck up :)

@@ -15,7 +15,7 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 	_radius = _currentStatic select 2;
 	_staticSearch = _currentStatic select 3;
 	
-	_logDetail = format ["[OCCUPATION Static]:: Checking static spawn @ %1 for existing %2 AI",_spawnPosition,_side];
+	_logDetail = format ["[OCCUPATION Static]:: Checking static spawn @ %1 for existing %2 AI",_spawnPosition,_currentSide];
     [_logDetail] call SC_fnc_log;
 	
 	_okToSpawn = true;
@@ -55,9 +55,16 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 			_groupRadius = _radius;
 			_difficulty = "random";
 						
-			DMS_ai_use_launchers = false;
-			_initialGroup = [_spawnPosition, _aiCount, _difficulty, "assault", _side] call DMS_fnc_SpawnAIGroup;
-            DMS_ai_use_launchers = _useLaunchers;
+			_initialGroup = createGroup _currentSide;
+						
+			DMS_ai_use_launchers = false;           
+            for "_i" from 1 to _aiCount do
+            {		
+                _loadOut = [_side] call SC_fnc_selectGear;
+                _unit = [_initialGroup,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier; 
+            };            
+			DMS_ai_use_launchers = _useLaunchers; 								
+			
             _initialGroup setCombatMode "BLUE";
             _initialGroup setBehaviour "SAFE";
 
@@ -72,7 +79,7 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
                 _unit = _x;           
                 [_unit] joinSilent grpNull;
                 [_unit] joinSilent _group;
-                [_side,_unit] call SC_fnc_changeGear;                                 
+                [_side,_unit] call SC_fnc_addMarker;                                 
             }foreach units _initialGroup;            
 				
 						

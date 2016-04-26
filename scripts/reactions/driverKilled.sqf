@@ -66,11 +66,6 @@ if(count units _group > 0) then
         [_logDetail] call SC_fnc_log;
     };
 
-    if(damage _vehicle > 0) then 
-    {
-        [_vehicle] call SC_fnc_repairVehicle;
-        
-    };  
 }
 else
 {

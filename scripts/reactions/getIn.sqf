@@ -20,6 +20,13 @@ else
 	{
 		{ deleteVehicle _x; } forEach attachedObjects _unit;
 	};	
+	
+	
+    if(damage _vehicle > 0) then 
+    {
+        [_vehicle] call SC_fnc_repairVehicle;
+        
+    };  
 };
 
 

@@ -71,10 +71,14 @@ for "_i" from 1 to _vehiclesToSpawn do
 	sleep 0.2;
     _group addVehicle _vehicle;	
       
+    // Calculate the number of seats in the vehicle and fill the required amount
+    _crewRequired = SC_minimumCrewAmount;
+    if(SC_maximumCrewAmount > SC_minimumCrewAmount) then 
+    { 
+        _crewRequired = floor(random[SC_minimumCrewAmount,SC_maximumCrewAmount-SC_minimumCrewAmount,SC_maximumCrewAmount]); 
+    };       
     _amountOfCrew = 0;
     _unitPlaced = false;
-        
-    // Calculate the crew requried
     _vehicleRoles = (typeOf _vehicle) call bis_fnc_vehicleRoles;
     {
         _unitPlaced = false;
@@ -97,7 +101,7 @@ for "_i" from 1 to _vehiclesToSpawn do
             _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
             _unitPlaced = true;
         };
-        if(_vehicleRole == "CARGO" && _amountOfCrew <= SC_maximumCrewAmount) then
+        if(_vehicleRole == "CARGO" && _amountOfCrew < _crewRequired) then
         {
             _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier; 
             _amountOfCrew = _amountOfCrew + 1;  

@@ -48,17 +48,35 @@ SC_occupyVehicleSurvivors	= false;                // true if you want a chance t
 SC_SurvivorsFriendly        = true;                 // true if you want survivors to be friendly to players (until they are attacked by players)
                                                     // false if you want survivors to be aggressive to players
 
-// Array of uniforms for survivor AI to use                                                    
+// Possible equipment for survivor AI to spawn with 
+// spawning survivors without vests or backpacks will result in them having no ammunition                                                   
 SC_SurvivorUniforms         = ["Exile_Uniform_BambiOverall"]; 
-SC_SurvivorVests            = []; 
+SC_SurvivorVests            = ["V_BandollierB_blk","V_BandollierB_cbr","V_BandollierB_khk","V_BandollierB_oli"];  
 SC_SurvivorHeadgear         = []; 
+SC_SurvivorWeapon           = ["arifle_MXC_F","arifle_TRG20_F"];
+SC_SurvivorWeaponAttachments= [];
+SC_SurvivorMagazines        = ["Exile_Item_Vishpirin","Exile_Item_Bandage"];
+SC_SurvivorPistol           = ["hgun_Rook40_F"];
+SC_SurvivorPistolAttachments= [];
+SC_SurvivorAssignedItems    = ["ItemMap","ItemCompass","ItemRadio","ItemWatch","Exile_Item_XM8"]; // all these items will be added
+SC_SurvivorLauncher         = [];
+SC_SurvivorBackpack         = [];
 
-// Array of uniforms for bandit AI to use                                                    
-SC_BanditUniforms           = [ "U_IG_Guerilla1_1","U_IG_Guerilla2_1","U_IG_Guerilla2_2","U_IG_Guerilla2_3","U_IG_Guerilla3_1",
-                                "U_BG_Guerilla2_1","U_IG_Guerilla3_2","U_BG_Guerrilla_6_1","U_BG_Guerilla1_1","U_BG_Guerilla2_2",
-                                "U_BG_Guerilla2_3","U_BG_Guerilla3_1"]; 
-SC_BanditVests              = [	"V_BandollierB_blk","V_BandollierB_cbr","V_BandollierB_khk","V_BandollierB_oli"]; 
-SC_BanditHeadgear           = [ "H_Shemag_khk","H_Shemag_olive","H_Shemag_olive_hs","H_Shemag_tan","H_ShemagOpen_khk","H_ShemagOpen_tan"];
+// Possible equipment for bandit AI to spawn with 
+// spawning bandits without vests or backpacks will result in them having no ammunition                                                    
+SC_BanditUniforms           = ["U_IG_Guerilla1_1","U_IG_Guerilla2_1","U_IG_Guerilla2_2","U_IG_Guerilla2_3","U_IG_Guerilla3_1","U_BG_Guerilla2_1","U_IG_Guerilla3_2","U_BG_Guerrilla_6_1","U_BG_Guerilla1_1","U_BG_Guerilla2_2","U_BG_Guerilla2_3","U_BG_Guerilla3_1"]; 
+SC_BanditVests              = ["V_BandollierB_blk","V_BandollierB_cbr","V_BandollierB_khk","V_BandollierB_oli"]; 
+SC_BanditHeadgear           = ["H_Shemag_khk","H_Shemag_olive","H_Shemag_olive_hs","H_Shemag_tan","H_ShemagOpen_khk","H_ShemagOpen_tan"];
+SC_BanditWeapon             = ["LMG_Zafir_F","arifle_Katiba_C_F","arifle_Katiba_F","arifle_Katiba_GL_F","arifle_MXC_Black_F","arifle_MXC_F","arifle_TRG20_F","arifle_TRG21_F","arifle_TRG21_GL_F"];
+SC_BanditWeaponAttachments  = ["optic_MRCO","optic_ACO_grn"];
+SC_BanditMagazines          = ["Exile_Item_InstaDoc","Exile_Item_Vishpirin","Exile_Item_Bandage","Exile_Item_DuctTape","Exile_Item_PlasticBottleFreshWater","Exile_Item_Energydrink","Exile_Item_EMRE","Exile_Item_Cheathas","Exile_Item_Noodles","Exile_Item_BBQSandwich","Exile_Item_Catfood"];
+SC_BanditPistol             = ["hgun_ACPC2_F","hgun_P07_F","hgun_Pistol_heavy_01_F","hgun_Pistol_heavy_02_F","hgun_Rook40_F"];
+SC_BanditPistolAttachments  = ["optic_MRD","muzzle_snds_acp"];
+SC_BanditAssignedItems      = ["ItemMap","ItemCompass","ItemRadio","ItemWatch"]; // all these items will be added
+SC_BanditLauncher           = [];
+SC_BanditBackpack           = ["B_HuntingBackpack","B_Kitbag_cbr","B_Kitbag_mcamo","B_Kitbag_sgg","B_OutdoorPack_blk","B_OutdoorPack_blu","B_OutdoorPack_tan","B_TacticalPack_blk","B_TacticalPack_mcamo","B_TacticalPack_ocamo","B_TacticalPack_oli","B_TacticalPack_rgr"];
+
+
 
 SC_occupyMilitary 		    = false;			    // true if you want military buildings patrolled
 
@@ -101,9 +119,10 @@ SC_staticSurvivors          = [	[[23286,18524,0],6,400,true]	];      //[[pos],ai
 SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
 
-SC_occupyPublicBus			= true;					// true if you want a roaming bus service
-SC_occupyPublicBusClass 	= "Exile_Car_Ikarus_Party"; 	// class name for the vehicle to use as the public bus
-SC_occupyPublicBusStartPos  = [];                   // if empty defaults to map centre
+SC_occupyTransport 	        = true;					// true if you want pubic transport (travels between traders)
+SC_occupyTransportClass 	= "Exile_Chopper_Mohawk_FIA";
+SC_occupyTransportStartPos  = [];                   // if empty defaults to map centre
+
 
 SC_occupyLootCrates		    = true;					// true if you want to have random loot crates with guards
 SC_numberofLootCrates       = 6;                    // if SC_occupyLootCrates = true spawn this many loot crates (overrided below for Namalsk)
@@ -142,7 +161,7 @@ SC_numberofHeliCrashes      = 5;                    // if SC_occupyHeliCrashes =
 // Array of possible common items to go in heli crash crates ["classname",fixed amount,random amount] NOT INCLUDING WEAPONS
 // ["HandGrenade",0,2] this example would add between 0 and 2 HandGrenade to the crate (fixed 0 plus 0-2 random)
 // to add a fixed amount make the second number 0
-SC_HeliCrashItems           = [
+SC_HeliCrashItems           =   [
                                     ["HandGrenade",0,2],
                                     ["APERSBoundingMine_Range_Mag",0,2],
                                     ["B_Parachute",1,1],
@@ -151,32 +170,56 @@ SC_HeliCrashItems           = [
                                     ["Exile_Item_InstaDoc",0,1],
                                     ["Exile_Item_PlasticBottleFreshWater",2,2],
                                     ["Exile_Item_EMRE",2,2]                                 
-                            ];
+                                ];
 // Array of possible weapons to place in the crate                            
-SC_HeliCrashWeapons         = ["srifle_DMR_02_camo_F","srifle_DMR_03_woodland_F","srifle_DMR_04_F","srifle_DMR_05_hex_F"];
+SC_HeliCrashWeapons         =   [
+                                    "srifle_DMR_02_camo_F",
+                                    "srifle_DMR_03_woodland_F",
+                                    "srifle_DMR_04_F",
+                                    "srifle_DMR_05_hex_F"
+                                ];
+                                
 SC_HeliCrashWeaponsAmount   = [1,3]; // [fixed amount to add, random amount to add]
 SC_HeliCrashMagazinesAmount = [2,2]; // [fixed amount to add, random amount to add]
 
-SC_maximumCrewAmount        = 2;                    // Maximum amount of AI allowed in a vehicle 
-                                                    // (essential crew like drivers and gunners will always spawn regardless of this setting)
+SC_minimumCrewAmount        = 2;     // Maximum amount of AI allowed in a vehicle (applies to ground, air and sea vehicles)
+SC_maximumCrewAmount        = 4;     // Maximum amount of AI allowed in a vehicle (applies to ground, air and sea vehicles) 
+                                     // (essential crew like drivers and gunners will always spawn regardless of these settings)
 
 // Settings for roaming ground vehicle AI
 SC_maxNumberofVehicles 	    = 4;	
 
 // Array of ground vehicles which can be used by AI patrols				
-SC_VehicleClassToUse 		= [	"Exile_Car_LandRover_Green","Exile_Bike_QuadBike_Black","Exile_Car_UAZ_Open_Green"];
+SC_VehicleClassToUse 		=   [	
+                                    "Exile_Car_LandRover_Green",
+                                    "Exile_Bike_QuadBike_Black",
+                                    "Exile_Car_UAZ_Open_Green" 
+                                ];
+SC_VehicleClassToUseRare	=   [	
+                                    "Exile_Car_Hunter",
+                                    "Exile_Car_HEMMT",
+                                    "Exile_Car_Zamak",
+                                    "Exile_Car_Offroad_Armed_Guerilla12",
+                                    "Exile_Car_Offroad_Armed_Guerilla03",
+                                    "Exile_Car_Tempest" 
+                                ];
 
 // Settings for roaming airborne AI (non armed helis will just fly around)
 SC_maxNumberofHelis		    = 1;
 
 // Array of aircraft which can be used by AI patrols
-SC_HeliClassToUse 		    = [	"Exile_Chopper_Huey_Armed_Green"];
+SC_HeliClassToUse 		    =   [ "Exile_Chopper_Huey_Armed_Green" ];
 
 // Settings for roaming seaborne AI (non armed boats will just sail around)
 SC_maxNumberofBoats		    = 1;
 
 // Array of boats which can be used by AI patrols
-SC_BoatClassToUse 		    = [	"B_Boat_Armed_01_minigun_F","I_Boat_Armed_01_minigun_F","O_Boat_Transport_01_F","Exile_Boat_MotorBoat_Police" ];
+SC_BoatClassToUse 		    =   [	
+                                    "B_Boat_Armed_01_minigun_F",
+                                    "I_Boat_Armed_01_minigun_F",
+                                    "O_Boat_Transport_01_F",
+                                    "Exile_Boat_MotorBoat_Police" 
+                                ];
 		
 
 
@@ -189,7 +232,7 @@ if (worldName == 'Namalsk') then
     SC_numberofLootCrates 	= 3;
     SC_numberofHeliCrashes  = 2;
     SC_maxNumberofBoats		= 1;
-    SC_occupyPublicBusClass = "Exile_Car_LandRover_Urban"; // the ikarus bus gets stuck on Namalsk
+    SC_occupyTransportClass = "Exile_Car_LandRover_Urban"; // the ikarus bus gets stuck on Namalsk
 };
 
 if (SC_debug) then
@@ -199,10 +242,10 @@ if (SC_debug) then
     SC_occupyPlaces 			= true;
     SC_occupyVehicle			= true;
     SC_occupyMilitary 		    = true;
-    SC_occupyStatic	 		    = true;
+    SC_occupyStatic	 		    = false;
     SC_occupySky				= true;
     SC_occupySea				= true;
-    SC_occupyPublicBus			= true;
+    SC_occupyTransport			= true;
     SC_occupyLootCrates		    = true;
     SC_occupyHeliCrashes		= true;	   
 };
@@ -226,7 +269,7 @@ SC_liveHelisArray       	= [];
 SC_liveBoats	 			= 0;
 SC_liveBoatsArray       	= [];
 SC_liveStaticGroups         = [];
-SC_publicBusArray       	= [];
+SC_transportArray       	= [];
 
 publicVariable "SC_liveVehicles";
 publicVariable "SC_liveVehiclesArray";
@@ -236,9 +279,8 @@ publicVariable "SC_liveBoats";
 publicVariable "SC_liveBoatsArray";
 publicVariable "SC_liveStaticGroups";
 publicVariable "SC_numberofLootCrates";
-publicVariable "SC_publicBusArray";
+publicVariable "SC_transportArray";
 publicVariable "SC_SurvivorSide";
 publicVariable "SC_BanditSide";
 
 SC_CompiledOkay = true;
-
