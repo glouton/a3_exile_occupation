@@ -4,7 +4,7 @@ _side	= _this select 0;
 _unit	= _this select 1;
 
 _unit removeAllMPEventHandlers  "mphit";
-_unit removeAllMPEventHandlers  "mpkilled";
+
 
 switch (_side) do 
 {

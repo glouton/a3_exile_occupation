@@ -1,0 +1,12 @@
+// Get the variables from the event handler
+_unit 			= _this select 0;
+
+_staticUID = _unit getVariable "SC_staticUID";
+_spawnPosition = _unit getVariable "SC_staticSpawnPos";
+
+_group = group _unit;
+
+if((count (units _group)) == 0) then
+{
+    SC_liveStaticGroups = SC_liveStaticGroups - [_staticUID,_spawnPosition];      
+};

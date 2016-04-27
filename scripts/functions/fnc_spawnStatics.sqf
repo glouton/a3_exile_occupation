@@ -5,6 +5,7 @@ _currentSide            = SC_BanditSide;
 _debug 				    = SC_debug;
 _useLaunchers 		    = DMS_ai_use_launchers;
 _scaleAI				= SC_scaleAI;
+_staticUID				= 1;
 
 if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 
@@ -24,18 +25,21 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 	while{_okToSpawn} do
 	{			
 
-		// Don't spawn additional AI if there are already AI in for that side in range
-        _nearAI = { side _x == _currentSide AND _x distance _spawnPosition < 250 } count allUnits;
-		if(_nearAI > 0) exitwith 
-        { 
+
+		// Don't spawn if a previous round of AI are already in place
+		_newStatic = [_staticUID,_spawnPosition];
+		
+		if(_staticUID in SC_liveStaticGroups) exitwith
+		{
             _okToSpawn = false; 
             if(_debug) then 
             { 
                 _logDetail = format ["[OCCUPATION Static]:: %1 already has %2 active AI patrolling",_spawnPosition,_nearAI];
                 [_logDetail] call SC_fnc_log;
-            };
-        };
-
+            };			
+		};
+		
+		
 		// Don't spawn additional AI if there are players in range
 		if([_spawnPosition, 250] call ExileClient_util_world_isAlivePlayerInRange) exitwith 
         { 
@@ -62,6 +66,9 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
             {		
                 _loadOut = [_side] call SC_fnc_selectGear;
                 _unit = [_initialGroup,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier; 
+				_unit setVariable ["SC_staticUID",_staticUID];
+				_unit setVariable ["SC_staticSpawnPos",_spawnPosition];
+				_unit addMPEventHandler ["mpkilled", "_this call SC_fnc_staticUnitMPKilled;"];
             };            
 			DMS_ai_use_launchers = _useLaunchers; 								
 			
@@ -73,7 +80,7 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
             _group setVariable ["DMS_SpawnedGroup",true];
             _group setVariable ["DMS_Group_Side", _side];
             
-            SC_liveStaticGroups = SC_liveStaticGroups + [_group,_spawnPosition];
+            SC_liveStaticGroups = SC_liveStaticGroups + [_staticUID,_spawnPosition];
             
             {	
                 _unit = _x;           
@@ -150,5 +157,5 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 			_okToSpawn = false;			
 		};	
 	};
-    
+    _staticUID = _staticUID + 1;
 }forEach _statics;

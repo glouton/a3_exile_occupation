@@ -21,6 +21,8 @@ SC_mapMarkers			    = false;			    // Place map markers at the occupied areas (o
 SC_minFPS 				    = 5;					// any lower than minFPS on the server and additional AI won't spawn
 SC_scaleAI 				    = 10; 					// any more than _scaleAI players on the server and _maxAIcount is reduced for each extra player
 
+SC_removeUserMapMarkers     = true;                 // true to delete map markers place by players every 10 seconds
+
 SC_fastNights               = true;                 // true if you want night time to go faster than daytime
 SC_fastNightsStarts         = 18;                   // Start fast nights at this hour (24 hour clock) eg. 18 for 6pm
 SC_fastNightsMultiplierNight= 16;                   // the time multiplier to use at night (12 = 12x speed)
@@ -34,13 +36,13 @@ SC_minDistanceToSpawnZones  = 500;                  // Distance in metres (Briti
 SC_minDistanceToTraders     = 500;                  // Distance in metres (British spelling, sue me :p ) Only used by occupy Places
 
 SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
-SC_occupyVehiclesLocked		= true;					// true if AI vehicles to stay locked until all the linked AI are dead
+SC_occupyVehiclesLocked		= false;				// true if AI vehicles to stay locked until all the linked AI are dead
 
 SC_occupyTraders            = false;                //  (WORK IN PROGRESS, NOT WORKING YET) true if you want to create trader camps at positions specified in SC_occupyTraderDetails
 SC_occupyTraderDetails      = [
-                                ["Test Trader1",[23718,16223,0],true],
-                                ["Test Trader2",[10666,10262,0],true]
-                              ];  //["Name",[x,y,z],true] trader name, location, safezone true/false
+                                ["Test Trader1",[23718,16223,0],"trader1.sqf",true],
+                                ["Test Trader2",[10666,10262,0],"trader1.sqf",true]
+                              ];  //["Name",[x,y,z],"filename",true] trader name, location, safezone true/false
                                                     
 SC_SurvivorsChance          = 20;                   // chance in % to spawn survivors instead of bandits (for places and land vehicles)
 SC_occupyPlacesSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyPlaces must be true to use this option)
@@ -68,10 +70,10 @@ SC_BanditUniforms           = ["U_IG_Guerilla1_1","U_IG_Guerilla2_1","U_IG_Gueri
 SC_BanditVests              = ["V_BandollierB_blk","V_BandollierB_cbr","V_BandollierB_khk","V_BandollierB_oli"]; 
 SC_BanditHeadgear           = ["H_Shemag_khk","H_Shemag_olive","H_Shemag_olive_hs","H_Shemag_tan","H_ShemagOpen_khk","H_ShemagOpen_tan"];
 SC_BanditWeapon             = ["LMG_Zafir_F","arifle_Katiba_C_F","arifle_Katiba_F","arifle_Katiba_GL_F","arifle_MXC_Black_F","arifle_MXC_F","arifle_TRG20_F","arifle_TRG21_F","arifle_TRG21_GL_F"];
-SC_BanditWeaponAttachments  = ["optic_MRCO","optic_ACO_grn"];
+SC_BanditWeaponAttachments  = [];
 SC_BanditMagazines          = ["Exile_Item_InstaDoc","Exile_Item_Vishpirin","Exile_Item_Bandage","Exile_Item_DuctTape","Exile_Item_PlasticBottleFreshWater","Exile_Item_Energydrink","Exile_Item_EMRE","Exile_Item_Cheathas","Exile_Item_Noodles","Exile_Item_BBQSandwich","Exile_Item_Catfood"];
 SC_BanditPistol             = ["hgun_ACPC2_F","hgun_P07_F","hgun_Pistol_heavy_01_F","hgun_Pistol_heavy_02_F","hgun_Rook40_F"];
-SC_BanditPistolAttachments  = ["optic_MRD","muzzle_snds_acp"];
+SC_BanditPistolAttachments  = [];
 SC_BanditAssignedItems      = ["ItemMap","ItemCompass","ItemRadio","ItemWatch"]; // all these items will be added
 SC_BanditLauncher           = [];
 SC_BanditBackpack           = ["B_HuntingBackpack","B_Kitbag_cbr","B_Kitbag_mcamo","B_Kitbag_sgg","B_OutdoorPack_blk","B_OutdoorPack_blu","B_OutdoorPack_tan","B_TacticalPack_blk","B_TacticalPack_mcamo","B_TacticalPack_ocamo","B_TacticalPack_oli","B_TacticalPack_rgr"];
@@ -282,5 +284,9 @@ publicVariable "SC_numberofLootCrates";
 publicVariable "SC_transportArray";
 publicVariable "SC_SurvivorSide";
 publicVariable "SC_BanditSide";
+
+// Override a few DMS settings
+//DMS_Show_Kill_Poptabs_Notification	= false;
+//DMS_Show_Kill_Respect_Notification	= false;
 
 SC_CompiledOkay = true;
