@@ -2,7 +2,6 @@
 
 _logDetail = _this select 0;
 
-infiSTARinstalled = true;
 if(isNil "INFISTARVERSION") then { SC_infiSTAR_log = false; };
 
 if(SC_infiSTAR_log) then
@@ -13,5 +12,3 @@ else
 {
     diag_log _logDetail;
 };
-
-infiSTAR
