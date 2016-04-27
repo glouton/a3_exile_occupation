@@ -16,6 +16,11 @@ if (SC_fastNights) then
 	[60, fnc_checkMultiplier, [], true] call ExileServer_system_thread_addTask;
 };
 
+if() then
+{
+	
+};
+
 if(SC_occupyTraders) then
 {
 	uiSleep 15; // delay the start

@@ -3,6 +3,7 @@ _unit 			= _this select 0;
 
 _staticUID = _unit getVariable "SC_staticUID";
 _spawnPosition = _unit getVariable "SC_staticSpawnPos";
+_unit removeAllMPEventHandlers  "mphit";
 
 _group = group _unit;
 
