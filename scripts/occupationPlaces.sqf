@@ -182,9 +182,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			_spawnPos = [_pos,10,100,5,0,20,0] call BIS_fnc_findSafePos;		
 			_spawnPosition = [_spawnPos select 0, _spawnPos select 1,0];
 			
-			DMS_ai_use_launchers = false;
-			_initialGroup = [_spawnPosition, _aiCount, "randomEasy", "assault", _side] call DMS_fnc_SpawnAIGroup;
-			DMS_ai_use_launchers = _useLaunchers;
+
             
             _group = createGroup SC_BanditSide;
             if(_side == "survivor") then 
@@ -192,6 +190,15 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                 deleteGroup _group;
                 _group = createGroup SC_SurvivorSide;              
             };
+            
+			DMS_ai_use_launchers = false;           
+            for "_i" from 1 to _aiCount do
+            {		
+                _loadOut = [_side] call SC_fnc_selectGear;
+                _unit = [_group,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier; 
+            };            
+			DMS_ai_use_launchers = _useLaunchers;            
+            
             
             _group setVariable ["DMS_LockLocality",nil];
             _group setVariable ["DMS_SpawnedGroup",true];
@@ -201,8 +208,8 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                 _unit = _x;           
                 [_unit] joinSilent grpNull;
                 [_unit] joinSilent _group;        
-                [_side,_unit] call SC_fnc_changeGear;
-            }foreach units _initialGroup;
+                [_side,_unit] call SC_fnc_addMarker;
+            }foreach units _group;
 						
 			// Get the AI to shut the fuck up :)
 			enableSentences false;
@@ -257,16 +264,21 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 
 			if(_locationType isEqualTo "NameCityCapital") then
 			{
-				DMS_ai_use_launchers = false;
-				_initialGroup2 = [_spawnPosition, 5, _difficulty, "random", _side] call DMS_fnc_SpawnAIGroup;
-				DMS_ai_use_launchers = _useLaunchers;
-
                 _group2 = createGroup SC_BanditSide;
                 if(_side == "survivor") then 
                 {                   
                     deleteGroup _group2;
                     _group2 = createGroup SC_SurvivorSide;
                 };
+                
+                
+                DMS_ai_use_launchers = false;           
+                for "_i" from 1 to 5 do
+                {		
+                    _loadOut = ["bandit"] call SC_fnc_selectGear;
+                    _unit = [_group2,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier; 
+                };            
+                DMS_ai_use_launchers = _useLaunchers;                 
                          
                 _group2 setVariable ["DMS_LockLocality",nil];
                 _group2 setVariable ["DMS_SpawnedGroup",true];
@@ -280,8 +292,8 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                     _unit = _x;
                     [_unit] joinSilent grpNull;
                     [_unit] joinSilent _group2;
-                    [_side,_unit] call SC_fnc_changeGear;
-                }foreach units _initialGroup2;
+                    [_side,_unit] call SC_fnc_addMarker;
+                }foreach units _group2;
                 
 				[_group2, _pos, _groupRadius] call bis_fnc_taskPatrol;
 				_group2 setBehaviour "AWARE";

@@ -6,6 +6,7 @@ _logDetail = format['[OCCUPATION:Sky] Started'];
 // more than _scaleAI players on the server and the max AI count drops per additional player
 _currentPlayerCount = count playableUnits;
 _maxAIcount 		= SC_maxAIcount;
+_side				= "bandit";
 
 if(_currentPlayerCount > SC_scaleAI) then 
 {
@@ -90,10 +91,14 @@ for "_i" from 1 to _vehiclesToSpawn do
     _vehicle setVariable ["ExileIsLocked", 0, true];
     _vehicle action ["LightOn", _vehicle];
     	
-    _amountOfCrew = 0; 
-	_unitPlaced = false; 
-        
-    // Calculate the crew requried
+	// Calculate the number of seats in the vehicle and fill the required amount
+	_crewRequired = SC_minimumCrewAmount;
+	if(SC_maximumCrewAmount > SC_minimumCrewAmount) then 
+	{ 
+		_crewRequired = floor(random[SC_minimumCrewAmount,SC_maximumCrewAmount-SC_minimumCrewAmount,SC_maximumCrewAmount]); 
+	};       
+	_amountOfCrew = 0;
+	_unitPlaced = false;
     _vehicleRoles = (typeOf _vehicle) call bis_fnc_vehicleRoles;
     {
         _unitPlaced = false;
@@ -101,7 +106,8 @@ for "_i" from 1 to _vehiclesToSpawn do
         _vehicleSeat = _x select 1;
         if(_vehicleRole == "Driver") then
         {
-            _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier; 
+            _loadOut = ["bandit"] call SC_fnc_selectGear;
+			_unit = [_group,_spawnLocation,"custom","random","bandit","Vehicle",_loadOut] call DMS_fnc_SpawnAISoldier; 
 			_amountOfCrew = _amountOfCrew + 1;  
             _unit assignAsDriver _vehicle;
             _unit moveInDriver _vehicle;
@@ -113,7 +119,8 @@ for "_i" from 1 to _vehiclesToSpawn do
         };
         if(_vehicleRole == "Turret") then
         {
-            _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;  
+            _loadOut = ["bandit"] call SC_fnc_selectGear;
+			_unit = [_group,_spawnLocation,"custom","random","bandit","Vehicle",_loadOut] call DMS_fnc_SpawnAISoldier;  
 			_amountOfCrew = _amountOfCrew + 1; 
             _unit moveInTurret [_vehicle, _vehicleSeat];
             _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
@@ -121,9 +128,10 @@ for "_i" from 1 to _vehiclesToSpawn do
             _unit addBackpackGlobal "B_Parachute";
 			_unitPlaced = true;
         };
-        if(_vehicleRole == "CARGO" && _amountOfCrew <= SC_maximumCrewAmount) then
+        if(_vehicleRole == "CARGO" && _amountOfCrew < _crewRequired) then
         {
-            _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;   
+            _loadOut = ["bandit"] call SC_fnc_selectGear;
+			_unit = [_group,_spawnLocation,"custom","random","bandit","Vehicle",_loadOut] call DMS_fnc_SpawnAISoldier;   
 			_amountOfCrew = _amountOfCrew + 1;
             _unit assignAsCargo _vehicle; 
             _unit moveInCargo _vehicle;

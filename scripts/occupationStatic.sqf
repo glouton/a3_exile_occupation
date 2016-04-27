@@ -20,7 +20,7 @@ if(_currentPlayerCount > _scaleAI) then
 };
 
 
-// Don't spawn additional AI if the server fps is below 8
+// Don't spawn additional AI if the server fps is below _minFPS
 if(diag_fps < _minFPS) exitWith 
 { 
     _logDetail = format ["[OCCUPATION Static]:: Held off spawning more AI as the server FPS is only %1",diag_fps]; 

@@ -16,6 +16,11 @@ if (SC_fastNights) then
 	[60, fnc_checkMultiplier, [], true] call ExileServer_system_thread_addTask;
 };
 
+if() then
+{
+	
+};
+
 if(SC_occupyTraders) then
 {
 	uiSleep 15; // delay the start
@@ -81,9 +86,9 @@ if(SC_occupyMilitary) then
 	[SC_refreshTime, fnc_occupationMilitary, [], true] call ExileServer_system_thread_addTask;
 };
 
-if(SC_occupyPublicBus) then
+if(SC_occupyTransport) then
 {
-	[] execVM  "\x\addons\a3_exile_occupation\scripts\occupationPublicBus.sqf";
+	[] execVM  "\x\addons\a3_exile_occupation\scripts\occupationTransport.sqf";
 };
 
 uiSleep 15; // delay the start

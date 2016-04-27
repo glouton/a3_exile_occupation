@@ -5,6 +5,7 @@ _currentSide            = SC_BanditSide;
 _debug 				    = SC_debug;
 _useLaunchers 		    = DMS_ai_use_launchers;
 _scaleAI				= SC_scaleAI;
+_staticUID				= 1;
 
 if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 
@@ -15,7 +16,7 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 	_radius = _currentStatic select 2;
 	_staticSearch = _currentStatic select 3;
 	
-	_logDetail = format ["[OCCUPATION Static]:: Checking static spawn @ %1 for existing %2 AI",_spawnPosition,_side];
+	_logDetail = format ["[OCCUPATION Static]:: Checking static spawn @ %1 for existing %2 AI",_spawnPosition,_currentSide];
     [_logDetail] call SC_fnc_log;
 	
 	_okToSpawn = true;
@@ -24,18 +25,21 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 	while{_okToSpawn} do
 	{			
 
-		// Don't spawn additional AI if there are already AI in for that side in range
-        _nearAI = { side _x == _currentSide AND _x distance _spawnPosition < 250 } count allUnits;
-		if(_nearAI > 0) exitwith 
-        { 
+
+		// Don't spawn if a previous round of AI are already in place
+		_newStatic = [_staticUID,_spawnPosition];
+		
+		if(_staticUID in SC_liveStaticGroups) exitwith
+		{
             _okToSpawn = false; 
             if(_debug) then 
             { 
                 _logDetail = format ["[OCCUPATION Static]:: %1 already has %2 active AI patrolling",_spawnPosition,_nearAI];
                 [_logDetail] call SC_fnc_log;
-            };
-        };
-
+            };			
+		};
+		
+		
 		// Don't spawn additional AI if there are players in range
 		if([_spawnPosition, 250] call ExileClient_util_world_isAlivePlayerInRange) exitwith 
         { 
@@ -55,9 +59,19 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 			_groupRadius = _radius;
 			_difficulty = "random";
 						
-			DMS_ai_use_launchers = false;
-			_initialGroup = [_spawnPosition, _aiCount, _difficulty, "assault", _side] call DMS_fnc_SpawnAIGroup;
-            DMS_ai_use_launchers = _useLaunchers;
+			_initialGroup = createGroup _currentSide;
+						
+			DMS_ai_use_launchers = false;           
+            for "_i" from 1 to _aiCount do
+            {		
+                _loadOut = [_side] call SC_fnc_selectGear;
+                _unit = [_initialGroup,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier; 
+				_unit setVariable ["SC_staticUID",_staticUID];
+				_unit setVariable ["SC_staticSpawnPos",_spawnPosition];
+				_unit addMPEventHandler ["mpkilled", "_this call SC_fnc_staticUnitMPKilled;"];
+            };            
+			DMS_ai_use_launchers = _useLaunchers; 								
+			
             _initialGroup setCombatMode "BLUE";
             _initialGroup setBehaviour "SAFE";
 
@@ -66,13 +80,13 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
             _group setVariable ["DMS_SpawnedGroup",true];
             _group setVariable ["DMS_Group_Side", _side];
             
-            SC_liveStaticGroups = SC_liveStaticGroups + [_group,_spawnPosition];
+            SC_liveStaticGroups = SC_liveStaticGroups + [_staticUID,_spawnPosition];
             
             {	
                 _unit = _x;           
                 [_unit] joinSilent grpNull;
                 [_unit] joinSilent _group;
-                [_side,_unit] call SC_fnc_changeGear;                                 
+                [_side,_unit] call SC_fnc_addMarker;                                 
             }foreach units _initialGroup;            
 				
 						
@@ -143,5 +157,5 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 			_okToSpawn = false;			
 		};	
 	};
-    
+    _staticUID = _staticUID + 1;
 }forEach _statics;

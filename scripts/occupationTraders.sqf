@@ -57,6 +57,10 @@ _logDetail = format['[OCCUPATION:Traders] starting @ %1',time];
     _group = createGroup resistance;
     _group setCombatMode "BLUE";
 
+    {
+        
+    }forEach tradersToAdd;
+    
     _traderPosition = _traderPos findEmptyPosition [0,25];
     "Exile_Trader_CommunityCustoms" createUnit [_traderPosition, _group, "trader = this;"];
     trader setVariable ["ExileTraderType", "Exile_Trader_CommunityCustoms",true];

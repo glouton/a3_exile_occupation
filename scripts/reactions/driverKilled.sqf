@@ -47,7 +47,7 @@ if(count units _group > 0) then
     _driver setVariable ["SC_drivenVehicle", _vehicle,true];	 
     _vehicle setVariable ["SC_assignedDriver", _driver,true];        
     _vehicle addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];
-    _driver removeAllMPEventHandlers  "mpkilled";
+    _driver removeAllMPEventHandlers  "mphit";
     _driver addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
 
     if(SC_debug) then
@@ -59,18 +59,12 @@ if(count units _group > 0) then
     _driver doMove (position _vehicle);   	
     _driver action ["movetodriver", _vehicle];
     
-
     if(SC_extendedLogging) then 
     {
         _logDetail = format ["[OCCUPATION:Vehicle]:: Replacement Driver found (%1) for vehicle %2",_driver,_vehicle]; 
         [_logDetail] call SC_fnc_log;
     };
 
-    if(damage _vehicle > 0) then 
-    {
-        [_vehicle] call SC_fnc_repairVehicle;
-        
-    };  
 }
 else
 {

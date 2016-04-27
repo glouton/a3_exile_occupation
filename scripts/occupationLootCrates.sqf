@@ -44,13 +44,18 @@ for "_i" from 1 to SC_numberofLootCrates do
     {
         _AICount = 1 + (round (random (SC_LootCrateGuards-1)));    
     };
-		
-	
-	
+
 	if(_AICount > 0) then
 	{
 		_spawnPosition = [_position select 0, _position select 1, 0];
-		_group = [_spawnPosition, _AICount, "random", "random", "bandit"] call DMS_fnc_SpawnAIGroup;
+		
+		_group = createGroup SC_BanditSide;
+	
+        for "_i" from 1 to _AICount do
+        {		
+			_loadOut = ["bandit"] call SC_fnc_selectGear;
+			_unit = [_group,_spawnPosition,"custom","random","bandit","soldier",_loadOut] call DMS_fnc_SpawnAISoldier; 
+		};
 		
 		// Get the AI to shut the fuck up :)
 		enableSentences false;
