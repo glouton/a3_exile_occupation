@@ -2,7 +2,10 @@
 
 _logDetail = _this select 0;
 
-if(SC_infiSTAR_log && !isNil "INFISTARVERSION") then
+infiSTARinstalled = true;
+if(isNil "INFISTARVERSION") then { SC_infiSTAR_log = false; };
+
+if(SC_infiSTAR_log) then
 {
     ['A3_EXILE_OCCUPATION',_logDetail] call FNC_A3_CUSTOMLOG;    
 }
@@ -10,3 +13,5 @@ else
 {
     diag_log _logDetail;
 };
+
+infiSTAR
