@@ -48,35 +48,35 @@ if(SC_occupyStatic) then
 
 if(SC_occupySky) then
 {
-	uiSleep 15; // delay the start
+	uiSleep 30; // delay the start
 	fnc_occupationSky = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationSky.sqf";
 	[SC_refreshTime, fnc_occupationSky, [], true] call ExileServer_system_thread_addTask;
 };
 
 if(SC_occupySea) then
 {
-	uiSleep 15; // delay the start
+	uiSleep 30; // delay the start
 	fnc_occupationSea = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationSea.sqf";
 	[SC_refreshTime, fnc_occupationSea, [], true] call ExileServer_system_thread_addTask;
 };
 
 if(SC_occupyVehicle) then
 {
-	uiSleep 15; // delay the start
+	uiSleep 30; // delay the start
 	fnc_occupationVehicle = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationVehicle.sqf";
 	[SC_refreshTime, fnc_occupationVehicle, [], true] call ExileServer_system_thread_addTask;
 };
 
 if(SC_occupyPlaces) then
 {
-	uiSleep 15; // delay the start
+	uiSleep 30; // delay the start
 	fnc_occupationPlaces = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationPlaces.sqf";
 	[SC_refreshTime, fnc_occupationPlaces, [], true] call ExileServer_system_thread_addTask;
 };
 
 if(SC_occupyMilitary) then
 {
-	uiSleep 15; // delay the start
+	uiSleep 30; // delay the start
 	fnc_occupationMilitary = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationMilitary.sqf";
 	[SC_refreshTime, fnc_occupationMilitary, [], true] call ExileServer_system_thread_addTask;
 };
@@ -86,7 +86,7 @@ if(SC_occupyTransport) then
 	[] execVM  "\x\addons\a3_exile_occupation\scripts\occupationTransport.sqf";
 };
 
-uiSleep 15; // delay the start
+uiSleep 30; // delay the start
 fnc_occupationMonitor = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationMonitor.sqf";
 [SC_refreshTime, fnc_occupationMonitor, [], true] call ExileServer_system_thread_addTask;
 
