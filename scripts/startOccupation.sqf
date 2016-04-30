@@ -10,6 +10,14 @@ if(SC_debug) then { SC_refreshTime = 60; }else{ SC_refreshTime = 300; };
 
 // Add selected occupation scripts to Exile Threading System
 
+if(SC_processReporter) then
+{
+	fnc_processReporter = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\processReporter.sqf";
+
+	diag_log format ["[processReporter]:: Initialised at %1",time];
+	[60, fnc_processReporter, [], true] call ExileServer_system_thread_addTask;	
+};
+
 if (SC_fastNights) then
 {
 	fnc_checkMultiplier = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationFastNights.sqf";
