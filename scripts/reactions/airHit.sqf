@@ -59,7 +59,8 @@ if(_heliDamage > 0.2 && !_crewEjected && _ejectChance > 100) then
 
 if(_heliDamage > 0.7) then
 {
-	if(SC_extendedLogging) then 
+	_heli = _this select 0;
+    if(SC_extendedLogging) then 
 	{ 
 		_logDetail = format ["[OCCUPATION:Sky]:: Air unit %2 damaged and force landing at %3 (time: %1)",time,_this select 0,_this select 1,_heliPosition];
 		[_logDetail] call SC_fnc_log;

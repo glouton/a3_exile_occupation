@@ -1,11 +1,11 @@
 // Triggered if a player gets in a captured AI vehicle
 // Marks the vehicle as claimed by a player and frees up a slot to spawn another AI controlled vehicle
 
-_unit	= _this select 0;
+_vehicle 	= _this select 0;
+_unit		= _this select 2;
 
 if(isPlayer _unit) then
 {
-	_vehicle = vehicle _unit;
     [_vehicle]  call SC_fnc_vehicleDestroyed;
 
 	if(SC_extendedLogging) then 

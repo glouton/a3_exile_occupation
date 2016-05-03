@@ -1,6 +1,9 @@
 // SC_liveVehicles = count of vehicle
 // SC_liveVehiclesArray = array of active vehicles
-if(!isNil "_this") then
+
+_vehicle = _this select 0;
+
+if(!isNil "_vehicle") then
 {
     _vehicle = _this select 0;
     _vehicle removeAllMPEventHandlers  "mphit";
