@@ -21,6 +21,7 @@ if(SC_processReporter) then
 if (SC_fastNights) then
 {
 	fnc_checkMultiplier = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationFastNights.sqf";
+	diag_log format ["[OCCUPATION:FastNights]:: Initialised at %1",time];
 	[60, fnc_checkMultiplier, [], true] call ExileServer_system_thread_addTask;
 };
 

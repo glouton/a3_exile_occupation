@@ -13,8 +13,8 @@
 // Shared Config for each occupation monitor
 
 
-SC_debug 				    = false;			    // set to true to turn on debug features (not for live servers) 
-SC_extendedLogging          = false;                // set to true for additional logging
+SC_debug 				    = true;			        // set to true to turn on debug features (not for live servers) 
+SC_extendedLogging          = true;                 // set to true for additional logging
 SC_processReporter          = true;                 // true if you want to log server threads every 60 seconds (useful to spot problems on the server)
 SC_infiSTAR_log			    = true;			        // true Use infiSTAR logging, false logs to server rpt
 SC_maxAIcount 			    = 100;					// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
@@ -208,7 +208,7 @@ SC_VehicleClassToUseRare	=   [
                                 ];
 
 // Settings for roaming airborne AI (non armed helis will just fly around)
-SC_maxNumberofHelis		    = 1;
+SC_maxNumberofHelis		    = 7;
 
 // Array of aircraft which can be used by AI patrols
 SC_HeliClassToUse 		    =   [ "Exile_Chopper_Huey_Armed_Green" ];

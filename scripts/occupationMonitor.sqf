@@ -2,35 +2,52 @@ _logDetail = format ["[OCCUPATION:Unstick]:: Initialised at %1",time];
 [_logDetail] call SC_fnc_log;
 
 {
-    _logDetail = format ["[OCCUPATION:Unstick]:: Air: %1 is active",_x];
-    [_logDetail] call SC_fnc_log; 
-    _x setFuel 1;
-    sleep 5;
-    _originalSpawnLocation = _x getVariable "SC_vehicleSpawnLocation";
-	_pos = position _x;	
-	_nearestMarker = [allMapMarkers, _pos] call BIS_fnc_nearestPosition; // Nearest Marker to the Location		
-	_posNearestMarker = getMarkerPos _nearestMarker;
-	if(_pos distance _posNearestMarker < 750) then 
+    if(!isNull _x) then
     {
-        _GroupLeader = leader (group _x); 
-        _GroupLeader doMove _originalSpawnLocation;
-    };    
+        _logDetail = format ["[OCCUPATION:Unstick]:: Air: %1 is active",_x];
+        [_logDetail] call SC_fnc_log; 
+        _x setFuel 1; 
+        [_x] call SC_fnc_comeUnstuck;
+        sleep 5;         
+    }
+    else
+    {
+        SC_liveHelis = SC_liveHelis - 1;
+        SC_liveHelisArray = SC_liveHelisArray - [_x];          
+    };
+ 
 }forEach SC_liveHelisArray;
 
 {
-    _logDetail = format ["[OCCUPATION:Unstick]:: Land: %1 is active",_x];
-    [_logDetail] call SC_fnc_log; 
-    _x setFuel 1; 
-    [_x] call SC_fnc_comeUnstuck;
-    sleep 5;       
+    if(!isNull _x) then
+    {
+        _logDetail = format ["[OCCUPATION:Unstick]:: Land: %1 is active",_x];
+        [_logDetail] call SC_fnc_log; 
+        _x setFuel 1; 
+        [_x] call SC_fnc_comeUnstuck;
+        sleep 5;     
+    }
+    else
+    {
+        SC_liveVehicles = SC_liveVehicles - 1;
+        SC_liveVehiclesArray = SC_liveVehiclesArray - [_x];         
+    };  
 }forEach SC_liveVehiclesArray;
 
 {
-    _logDetail = format ["[OCCUPATION:Unstick]:: Sea: %1 is active",_x];
-    [_logDetail] call SC_fnc_log; 
-    _x setFuel 1;      
-    [_x] call SC_fnc_comeUnstuck; 
-    sleep 5; 
+    if(!isNull _x) then
+    {
+        _logDetail = format ["[OCCUPATION:Unstick]:: Sea: %1 is active",_x];
+        [_logDetail] call SC_fnc_log; 
+        _x setFuel 1;      
+        [_x] call SC_fnc_comeUnstuck; 
+        sleep 5; 
+    }
+    else
+    {
+        SC_liveBoats = SC_liveBoats - 1;
+        SC_liveBoatsArray = SC_liveBoatsArray - [_x];        
+    }; 
 }forEach SC_liveBoatsArray;
 
 

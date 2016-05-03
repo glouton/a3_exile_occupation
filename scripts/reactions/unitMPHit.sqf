@@ -13,7 +13,7 @@ if (side _aggressor == RESISTANCE) then
     _group =  createGroup WEST;
     {
         _unit = _x;           
-        //[_unit] joinSilent grpNull;
+        [_unit] joinSilent grpNull;
         [_unit] joinSilent _group;  
         _unit removeAllMPEventHandlers  "mphit";    
     }foreach units _initialGroup;
