@@ -85,7 +85,7 @@ if(_heliDamage > 0.7) then
 	_wp setWaypointBehaviour "COMBAT";
 	_wp setWaypointCombatMode "RED";
 	_wp setWaypointCompletionRadius 10;
-	_wp setWaypointType ""TR UNLOAD"";    
+	_wp setWaypointType "TR UNLOAD";    
     
 	[_group2, _destination, 250] call bis_fnc_taskPatrol;
     _group2 setBehaviour "COMBAT";
