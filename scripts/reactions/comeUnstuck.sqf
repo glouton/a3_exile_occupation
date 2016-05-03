@@ -33,6 +33,11 @@ if(count(crew _vehicle) > 0)then
                 _vehicle setVectorUp [0,0,1];
                                     
                 _originalSpawnLocation = _vehicle getVariable "SC_vehicleSpawnLocation";
+                
+                if(isNil "_originalSpawnLocation") then
+                {
+                    _originalSpawnLocation = [_curPos, 50, 1000, 3, 2, 20, 0] call BIS_fnc_findSafePos;   
+                };
                 _group = group _vehicle;
                 _vehClass = typeOf _vehicle;
 
@@ -68,17 +73,14 @@ if(count(crew _vehicle) > 0)then
     _vehicle setVariable["vehPos",_newPos];
 };
 
-_group = group _vehicle;
-
 // Remove dead units from the group
+_group = group _vehicle;
 {
     if(!alive _x) then { [_x] join grpNull; };     
 }forEach units _group;
 
-if(count units _group > 0) then
+if(count units _group < 1) then
 {
-    _vehicle lock 0;			
-    _vehicle setVehicleLock "UNLOCKED";
-    _vehicle setVariable ["ExileIsLocked", 0, true];      
+    _vehicle call SC_fnc_vehicleDestroyed;   
 };
 

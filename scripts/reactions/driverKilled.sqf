@@ -50,12 +50,6 @@ if(count units _group > 0) then
     _driver removeAllMPEventHandlers  "mphit";
     _driver addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
 
-    if(SC_debug) then
-    {
-        _tag = createVehicle ["Sign_Arrow_Yellow_F", position _driver, [], 0, "CAN_COLLIDE"];
-        _tag attachTo [_driver,[0,0,0.6],"Head"];  
-    };
-
     _driver doMove (position _vehicle);   	
     _driver action ["movetodriver", _vehicle];
     
