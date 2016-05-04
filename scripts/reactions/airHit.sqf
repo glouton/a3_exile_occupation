@@ -16,7 +16,31 @@ if(SC_extendedLogging) then
 };
 _ejectChance = round (random 100) + (_heliDamage * 100);
 
-if(_heliDamage > 0.2 && !_crewEjected && _ejectChance > 100) then
+
+_essentials = [ "HitAvionics","HitEngine1","HitEngine2","HitEngine","HitHRotor","HitVRotor","HitTransmission",
+                "HitHydraulics","HitGear","HitHStabilizerL1","HitHStabilizerR1","HitVStabilizer1","HitFuel"];
+
+_damagedEssentials = 0;
+{
+	if ((_heli getHitPointDamage _x) > 0) then
+	{	
+		if(_x == "HitFuel" && _heliDamage < 1) then
+        {
+            _heli setHitPointDamage ["HitFuel", 0]; 
+            _heli setFuel 1;      
+        };
+        _damage = _heli getHitPointDamage _x;
+        if(SC_extendedLogging) then 
+        {
+            _logDetail = format ["[OCCUPATION:Sky]:: Heli %1 checking part %2 (damage: %4) @ %3",_heli, _x, time,_damage]; 
+            [_logDetail] call SC_fnc_log;
+        };        
+		if(_damage > 0) then { _damagedEssentials = _damagedEssentials + 1; };
+	};
+} forEach _essentials;
+
+
+if(_heliDamage > 0.2 && _damagedEssentials > 0 && !_crewEjected && _ejectChance > 100) then
 {
 	_target = _this select 1;
 	[_heli, _target] spawn 
@@ -57,10 +81,9 @@ if(_heliDamage > 0.2 && !_crewEjected && _ejectChance > 100) then
 };
 	
 
-if(_heliDamage > 0.7) then
+if(_heliDamage > 0.7 && _damagedEssentials > 0) then
 {
-	_heli = _this select 0;
-    if(SC_extendedLogging) then 
+	if(SC_extendedLogging) then 
 	{ 
 		_logDetail = format ["[OCCUPATION:Sky]:: Air unit %2 damaged and force landing at %3 (time: %1)",time,_this select 0,_this select 1,_heliPosition];
 		[_logDetail] call SC_fnc_log;
@@ -86,14 +109,11 @@ if(_heliDamage > 0.7) then
 	_wp setWaypointBehaviour "COMBAT";
 	_wp setWaypointCombatMode "RED";
 	_wp setWaypointCompletionRadius 10;
-	_wp setWaypointType "TR UNLOAD";    
+	_wp setWaypointType "GETOUT";    
     
 	[_group2, _destination, 250] call bis_fnc_taskPatrol;
     _group2 setBehaviour "COMBAT";
     _group2 setCombatMode "RED";
 };
 
-if(_heliDamage <= 0.7) then
-{
-    _heli addMPEventHandler ["mphit", "_this call SC_fnc_airHit;"];
-};
+_heli addMPEventHandler ["mphit", "_this call SC_fnc_airHit;"];

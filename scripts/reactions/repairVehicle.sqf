@@ -64,29 +64,28 @@ if(_damagedWheels > 0 OR _engineDamage OR _fueltankDamage) then
 		_driver playMoveNow "Acts_carFixingWheel";
 		sleep 8;      
 		_driver switchMove "";
-		if(!alive _driver) exitWith{};
-        _driver playMoveNow "Acts_carFixingWheel";
-        sleep 2;
-        _vehicle setDamage 0;
-        _driver switchMove "";
-        _driver assignAsDriver _vehicle;
-        _driver moveInDriver _vehicle;
-        _driver action ["movetodriver", _vehicle];					
-    
+		if(alive _driver) then
+		{
+			_vehicle setDamage 0;
+			_driver playMoveNow "Acts_carFixingWheel";
+			sleep 2;
+            _driver switchMove "";
+            _driver assignAsDriver _vehicle;
+            _driver moveInDriver _vehicle;
+            _driver action ["movetodriver", _vehicle];					
+		};
         _wp = _group addWaypoint [position _vehicle, 0] ;
         _wp setWaypointFormation "Column";
         _wp setWaypointCompletionRadius 1;
         _wp setWaypointType "GETIN";		
         sleep 5;
-        _spawnLocation = _vehicle getVariable "SC_vehicleSpawnLocation";
-        if(!isNil "_spawnLocation") then
-        {
-            _driver action ["movetodriver", _vehicle];	
-            _vehicle forceSpeed -1;	
-            [_group, _spawnLocation, 2000] call bis_fnc_taskPatrol;
-            _group setBehaviour "SAFE";
-            _group setCombatMode "RED";            
-        };
+        _spawnLocation = _vehicle getVariable "SC_vehicleSpawnLocation";	
+         _driver action ["movetodriver", _vehicle];	
+        _vehicle forceSpeed -1;	
+        [_group, _spawnLocation, 2000] call bis_fnc_taskPatrol;
+        _group setBehaviour "SAFE";
+        _group setCombatMode "RED";
+	
 	};		
 }
 else
