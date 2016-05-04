@@ -24,7 +24,7 @@ switch (_side) do
             for "_i" from 1 to _amountOfMagazines do
             {
                 _newMagazine    = SC_SurvivorMagazines call BIS_fnc_selectRandom;
-                _quantity       = 1;
+                _quantity       = 1 + round random (2);
                 _magazines pushBack [_newMagazine,_quantity];    
             };             
         };    
@@ -63,7 +63,7 @@ _pistolAttachmentsChance = round (random 100);
 if(_pistolAttachmentsChance < 50) then { _pistolAttachments = [""]; };
 
 _backpackChance = round (random 100);
-if(_backpackChance < 20) then { _backpack = ""; };
+if(_backpackChance < 40) then { _backpack = ""; };
 
 _launcherChance = round (random 100);
 if(_launcherChance < 40 OR isNil "_launcher") then { _launcher = ""; };
