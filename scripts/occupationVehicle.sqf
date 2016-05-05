@@ -131,7 +131,7 @@ if(_vehiclesToSpawn >= 1) then
         
 		_vehicle = createVehicle [_VehicleClassToUse, _spawnLocation, [], 0, "NONE"];
         
-        if(_vehicle) then
+        if(!isNull _vehicle) then
         {
             _group addVehicle _vehicle;	
         
