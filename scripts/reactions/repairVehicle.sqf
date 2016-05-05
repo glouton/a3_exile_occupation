@@ -6,12 +6,15 @@ _vehicle removeAllMPEventHandlers  "mphit";
 
 _vehicleDamage 		= damage _vehicle;
 _damagedWheels 		= 0;
-_damageLimit 		= 0.2;
+_damageLimit 		= 1;
 _engineDamage 		= false;
 _fueltankDamage 	= false;
 _assignedDriver 	= _vehicle getVariable "SC_assignedDriver";
 
-if(isNull assignedDriver _vehicle) exitWith { [_assignedDriver] call SC_fnc_driverKilled; };
+if(!alive _assignedDriver) exitWith 
+{ 
+    [_assignedDriver] call SC_fnc_driverKilled; 
+};
 
 _wheels = ["HitLFWheel","HitLF2Wheel","HitRFWheel","HitRF2Wheel","HitLBWheel","HitLMWheel","HitRBWheel","HitRMWheel"]; 
 _damagedWheels = 0;
@@ -24,7 +27,7 @@ _damagedWheels = 0;
             _logDetail = format ["[OCCUPATION:repairVehicle]:: Vehicle %1 checking wheel %2 (damage: %4) @ %3",_vehicle, _x, time,_damage]; 
             [_logDetail] call SC_fnc_log;
         };        
-		if(_damage > 0) then { _damagedWheels = _damagedWheels + 1; };
+		if(_damage == 1) then { _damagedWheels = _damagedWheels + 1; };
 	};
 } forEach _wheels;
 
@@ -50,19 +53,22 @@ if(_damagedWheels > 0 OR _engineDamage OR _fueltankDamage) then
         _vehicle forceSpeed 0;    
         _group = group _vehicle;
         _driver = _this select 1;
+        _driver disableAI "MOVE";  
         _driver disableAI "TARGET";
         _driver disableAI "AUTOTARGET";
         _driver disableAI "AUTOCOMBAT";
         _driver disableAI "COVER";  
-        _driver disableAI "SUPPRESSION";              
-        sleep 1;
+        _driver disableAI "SUPPRESSION";    
+        _driver disableAI "FSM";    
+        sleep 0.3;
         _driver action ["getOut", _vehicle];
         _driver doMove (position _vehicle);    	        
 		_driverDir = _driver getDir _vehicle;
+        _driver setDir _driverDir;
         _driver setUnitPos "MIDDLE";  	
 		sleep 0.5;
 		_driver playMoveNow "Acts_carFixingWheel";
-		sleep 8;      
+		sleep 4;      
 		_driver switchMove "";
 		if(alive _driver) then
 		{

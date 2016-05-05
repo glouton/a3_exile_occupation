@@ -36,6 +36,7 @@ SC_minDistanceToSpawnZones  = 500;                  // Distance in metres (Briti
 SC_minDistanceToTraders     = 500;                  // Distance in metres (British spelling, sue me :p ) Only used by occupy Places
 
 SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
+SC_occupyVehicleIgnoreCount	= true;					// true if you want spawn vehicles regardless of overall AI count
 SC_occupyVehiclesLocked		= false;				// true if AI vehicles to stay locked until all the linked AI are dead
 
 SC_occupyTraders            = false;                //  (WORK IN PROGRESS, NOT WORKING YET) true if you want to create trader camps at positions specified in SC_occupyTraderDetails
@@ -223,7 +224,11 @@ SC_BoatClassToUse 		    =   [
                                     "Exile_Boat_MotorBoat_Police" 
                                 ];
 		
-
+// Arrays of names used to generate names for AI
+SC_SurvivorFirstNames   = ["John","Dave","Steve","Rob","Richard","Bob","Andrew","Nick","Adrian","Mark","Adam","Will","Graham"]; 
+SC_SurvivorLastNames    = ["Smith","Jones","Davids","Johnson","Jobs","Andrews","White","Brown","Taylor","Walker","Williams","Clarke","Jackson","Woods"]; 
+SC_BanditFirstNames     = ["Alex","Nikita","George","Daniel","Adam","Alexander","Sasha","Sergey","Dmitry","Anton","Jakub","Vlad","Maxim","Oleg","Denis","Wojtek"]; 
+SC_BanditLastNames      = ["Dimitrov","Petrov","Horvat","Novak","Dvorak","Vesely","Horak","Hansen","Larsen","Tamm","Ivanov","Pavlov","Virtanen"]; 
 
 // namalsk specific settings (if you want to override settings for specific maps if you run multiple servers)
 if (worldName == 'Namalsk') then 

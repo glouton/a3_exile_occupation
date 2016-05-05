@@ -55,6 +55,8 @@ for "_i" from 1 to SC_numberofLootCrates do
         {		
 			_loadOut = ["bandit"] call SC_fnc_selectGear;
 			_unit = [_group,_spawnPosition,"custom","random","bandit","soldier",_loadOut] call DMS_fnc_SpawnAISoldier; 
+			_unitName = ["bandit"] call SC_fnc_selectName;
+			_unit setName _unitName;
 		};
 		
 		// Get the AI to shut the fuck up :)
