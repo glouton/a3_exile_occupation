@@ -70,7 +70,23 @@ for "_i" from 1 to _vehiclesToSpawn do
 	_spawnLocation = [_safePos select 0, _safePos select 1, _height];
    
     _group = createGroup SC_BanditSide;
-    _VehicleClassToUse = SC_HeliClassToUse call BIS_fnc_selectRandom;
+  
+	_VehicleClass = SC_HeliClassToUse call BIS_fnc_selectRandom;
+	_VehicleClassToUse = _VehicleClass select 0;  
+  
+	heliOkToSpawn = false;
+	while{!heliOkToSpawn} do
+	{
+		_VehicleClass = SC_HeliClassToUse call BIS_fnc_selectRandom;
+		_VehicleClassToUse = _VehicleClass select 0;
+		_VehicleClassAllowedCount = _VehicleClass select 1;
+		_vehicleCount = 0;
+		{
+			if(_VehicleClassToUse == typeOf _x) then { _vehicleCount = _vehicleCount + 1; };    
+		}forEach SC_liveHelisArray;
+		if(_vehicleCount < _VehicleClassAllowedCount OR _VehicleClassAllowedCount == 0) then { heliOkToSpawn = true; };
+	};                            
+	
     _vehicle = createVehicle [_VehicleClassToUse, _spawnLocation, [], 0, "NONE"];
 	
 	if(!isNull _vehicle) then

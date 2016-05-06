@@ -192,36 +192,36 @@ SC_maximumCrewAmount        = 4;     // Maximum amount of AI allowed in a vehicl
 // Settings for roaming ground vehicle AI
 SC_maxNumberofVehicles 	    = 4;	
 
-// Array of ground vehicles which can be used by AI patrols				
+// Array of arrays of ground vehicles which can be used by AI patrols (the number next to next vehicle is the maximum amount of that class allowed, 0 for no limit)				
 SC_VehicleClassToUse 		=   [	
-                                    "Exile_Car_LandRover_Green",
-                                    "Exile_Bike_QuadBike_Black",
-                                    "Exile_Car_UAZ_Open_Green" 
+                                    ["Exile_Car_LandRover_Green",0],
+                                    ["Exile_Bike_QuadBike_Black",2],
+                                    ["Exile_Car_UAZ_Open_Green",2] 
                                 ];
 SC_VehicleClassToUseRare	=   [	
-                                    "Exile_Car_Hunter",
-                                    "Exile_Car_HEMMT",
-                                    "Exile_Car_Zamak",
-                                    "Exile_Car_Offroad_Armed_Guerilla12",
-                                    "Exile_Car_Offroad_Armed_Guerilla03",
-                                    "Exile_Car_Tempest" 
+                                    ["Exile_Car_Hunter",1],
+                                    ["Exile_Car_HEMMT",1],
+                                    ["Exile_Car_Zamak",1],
+                                    ["Exile_Car_Offroad_Armed_Guerilla12",1],
+                                    ["Exile_Car_Offroad_Armed_Guerilla03",1],
+                                    ["Exile_Car_Tempest",1] 
                                 ];
 
 // Settings for roaming airborne AI (non armed helis will just fly around)
 SC_maxNumberofHelis		    = 1;
 
-// Array of aircraft which can be used by AI patrols
-SC_HeliClassToUse 		    =   [ "Exile_Chopper_Huey_Armed_Green" ];
+// Array of aircraft which can be used by AI patrols (the number next to next vehicle is the maximum amount of that class allowed, 0 for no limit)
+SC_HeliClassToUse 		    =   [ ["Exile_Chopper_Huey_Armed_Green",0] ];
 
 // Settings for roaming seaborne AI (non armed boats will just sail around)
 SC_maxNumberofBoats		    = 1;
 
-// Array of boats which can be used by AI patrols
+// Array of boats which can be used by AI patrols (the number next to next vehicle is the maximum amount of that class allowed, 0 for no limit)
 SC_BoatClassToUse 		    =   [	
-                                    "B_Boat_Armed_01_minigun_F",
-                                    "I_Boat_Armed_01_minigun_F",
-                                    "O_Boat_Transport_01_F",
-                                    "Exile_Boat_MotorBoat_Police" 
+                                    ["B_Boat_Armed_01_minigun_F",1],
+                                    ["I_Boat_Armed_01_minigun_F",1],
+                                    ["O_Boat_Transport_01_F",0],
+                                    ["Exile_Boat_MotorBoat_Police",1] 
                                 ];
 		
 // Arrays of names used to generate names for AI
@@ -266,6 +266,8 @@ CIVILIAN setFriend[EAST,0];
 CIVILIAN setFriend[WEST,0]; 
 EAST setFriend[CIVILIAN,0]; 
 WEST setFriend[CIVILIAN,0]; 
+EAST setFriend[WEST,0]; 
+WEST setFriend[EAST,0]; 
    
 SC_SurvivorSide         	= CIVILIAN;
 SC_BanditSide           	= EAST;

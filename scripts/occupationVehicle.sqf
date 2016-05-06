@@ -119,13 +119,40 @@ if(_vehiclesToSpawn >= 1) then
         _group setVariable ["DMS_SpawnedGroup",true];
         _group setVariable ["DMS_Group_Side", _side];        
         
-        _VehicleClassToUse = SC_VehicleClassToUse call BIS_fnc_selectRandom;
+        _VehicleClass = SC_VehicleClassToUse call BIS_fnc_selectRandom;
+        _VehicleClassToUse = _VehicleClass select 0;
+        vehicleOkToSpawn = false;
         
 		// Percentage chance to spawn a rare vehicle
 		_rareChance = round (random 100);
 		if(_rareChance >= 90) then 
         {
-            _VehicleClassToUse = SC_VehicleClassToUseRare call BIS_fnc_selectRandom;    
+            
+            while{!vehicleOkToSpawn} do
+            {
+                _VehicleClass = SC_VehicleClassToUseRare call BIS_fnc_selectRandom;
+                _VehicleClassToUse = _VehicleClass select 0;
+                _VehicleClassAllowedCount = _VehicleClass select 1;
+                _vehicleCount = 0;
+                {
+                    if(_VehicleClassToUse == typeOf _x) then { _vehicleCount = _vehicleCount + 1; };    
+                }forEach SC_liveVehiclesArray;
+                if(_vehicleCount < _VehicleClassAllowedCount OR _VehicleClassAllowedCount == 0) then { vehicleOkToSpawn = true; };
+            };             
+        }
+        else
+        { 
+            while{!vehicleOkToSpawn} do
+            {
+                _VehicleClass = SC_VehicleClassToUse call BIS_fnc_selectRandom;
+                _VehicleClassToUse = _VehicleClass select 0;
+                _VehicleClassAllowedCount = _VehicleClass select 1;
+                _vehicleCount = 0;
+                {
+                    if(_VehicleClassToUse == typeOf _x) then { _vehicleCount = _vehicleCount + 1; };    
+                }forEach SC_liveVehiclesArray;
+                if(_vehicleCount < _VehicleClassAllowedCount OR _VehicleClassAllowedCount == 0) then { vehicleOkToSpawn = true; };
+            };                            
         };
 		
         

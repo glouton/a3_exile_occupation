@@ -45,7 +45,23 @@ for "_i" from 1 to _vehiclesToSpawn do
 	private["_group"];
 	_spawnLocation = [ 250, 0, 1, 1000, 1000, 1000, 1000, 1000, true, true ] call DMS_fnc_findSafePos; 
     _group = createGroup SC_BanditSide;
-    _VehicleClassToUse = SC_BoatClassToUse call BIS_fnc_selectRandom;
+
+	_VehicleClass = SC_BoatClassToUse call BIS_fnc_selectRandom;
+	_VehicleClassToUse = _VehicleClass select 0; 
+
+	boatOkToSpawn = false;
+	while{!boatOkToSpawn} do
+	{
+		_VehicleClass = SC_BoatClassToUse call BIS_fnc_selectRandom;
+		_VehicleClassToUse = _VehicleClass select 0;
+		_VehicleClassAllowedCount = _VehicleClass select 1;
+		_vehicleCount = 0;
+		{
+			if(_VehicleClassToUse == typeOf _x) then { _vehicleCount = _vehicleCount + 1; };    
+		}forEach SC_liveHelisArray;
+		if(_vehicleCount < _VehicleClassAllowedCount OR _VehicleClassAllowedCount == 0) then { boatOkToSpawn = true; };
+	};       
+
     _vehicle = createVehicle [_VehicleClassToUse, _spawnLocation, [], 0, "NONE"];
     
     if(!isNull _vehicle) then
