@@ -1,5 +1,11 @@
 =================================================================================
-V37 (05-05-2016)
+V38 (08-05-2016)
+=================================================================================
+Added a check to the transport module to check the transport vehicle class name 
+is valid and to to make sure there are valid map markers to use for stopping points
+
+=================================================================================
+V37 (06-05-2016)
 =================================================================================
 Added limit checks for the amount of each class of vehicle in Sky, Sea and Vehicle modules
 
@@ -28,8 +34,13 @@ V27 (26-04-2016)
 =================================================================================
 Added the option fully control the gear assigned to bandit and survivor units
 
-Added the option for helicopters as public transport, the heli travels between traders and lands for about 60 seconds. Setting SC_occupyTransportClass to a helicopter classname will switch it over to using a helicopter, if you want to continue using the land vehicle set SC_occupyTransportClass to a land vehicle.
+Added the option for helicopters as public transport, the heli travels between traders 
+and lands for about 60 seconds. Setting SC_occupyTransportClass to a helicopter classname 
+will switch it over to using a helicopter, if you want to continue using the land vehicle 
+set SC_occupyTransportClass to a land vehicle.
 
-Added the option to set the maximum crew (crew count will be a random number between the max and min). The applies for all AI vehicles.
+Added the option to set the maximum crew (crew count will be a random number between 
+the max and min). The applies for all AI vehicles.
 
-Added a separate SC_VehicleClassToUseRare list of vehicles which spawn 10% of the time in place of the standard SC_VehicleClassToUse list.
+Added a separate SC_VehicleClassToUseRare list of vehicles which spawn 10% of the 
+time in place of the standard SC_VehicleClassToUse list.

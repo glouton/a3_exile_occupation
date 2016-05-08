@@ -1,7 +1,7 @@
 if (!isServer) exitWith {};
 
 
-_logDetail = format ["[OCCUPATION]:: Occupation %2 Initialised at %1",time,SC_occupationVersion];
+_logDetail = format ["[OCCUPATION]:: Occupation %2 Adding modules to Exile system thread manager at %1",time,SC_occupationVersion];
 [_logDetail] call SC_fnc_log;
 
 [] call ExileClient_system_map_initialize;

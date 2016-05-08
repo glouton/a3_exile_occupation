@@ -9,6 +9,7 @@ if(isNil "_vehicle") exitWith{};
 
 if(count(crew _vehicle) > 0)then
 {
+    _vehicleType = TypeOf _vehicle;
     _curPos = position _vehicle;
     _newPos = _curPos;
     _oldvehPos = _vehicle getVariable["vehPos",[0,0,0]];
@@ -25,7 +26,7 @@ if(count(crew _vehicle) > 0)then
             if(time - _engineTime > 10)then
             {
 
-                _logDetail = format ["[OCCUPATION:Unstuck]:: %1 is stuck,attempting to unstick from %2 @ %3",_vehicle,_curPos,time]; 
+                _logDetail = format ["[OCCUPATION:Unstuck]:: %1 is stuck,attempting to unstick from %2 @ %3",_vehicleType,_curPos,time]; 
                 [_logDetail] call SC_fnc_log;
                                 
                 _vehicle setVariable["engineTime",-1];
@@ -59,7 +60,7 @@ if(count(crew _vehicle) > 0)then
                 _group setBehaviour "AWARE";
                 _group setCombatMode "RED"; 
 
-                _logDetail = format ["[OCCUPATION:Unstuck]:: %1 was stuck and was moved from %2 to %3 @ %4",_vehicle,_curPos,_newPos, time]; 
+                _logDetail = format ["[OCCUPATION:Unstuck]:: %1 was stuck and was moved from %2 to %3 @ %4",_vehicleType,_curPos,_newPos, time]; 
                 [_logDetail] call SC_fnc_log;
                 
             };

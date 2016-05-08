@@ -116,8 +116,8 @@ SC_buildings                = [	"Land_TentHangar_V1_F","Land_Hangar_F",
    
 
 SC_occupyStatic	 		    = false;		    	// true if you want to add AI in specific locations
-SC_staticBandits            = [	[[23350,18709,0],12,400,true]	];      //[[pos],ai count,radius,search buildings]
-SC_staticSurvivors          = [	[[23286,18524,0],6,400,true]	];      //[[pos],ai count,radius,search buildings]
+SC_staticBandits            = [	];      //[[pos],ai count,radius,search buildings]
+SC_staticSurvivors          = [	[[3770,8791,0],6,400,true]	];      //[[pos],ai count,radius,search buildings]
 
 SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
