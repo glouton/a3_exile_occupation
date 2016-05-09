@@ -35,7 +35,7 @@ if(_aiActive > _maxAIcount) exitWith
 };
 
 // Select an area to scan as nearObjects on the entire map is slooooooooow
-_areaToScan = [ 0, 900, 1, 500, 500, 0, 0, 0, true, false ] call DMS_fnc_findSafePos;
+_areaToScan = [ false, false ] call SC_fnc_findsafePos;
 
 {
 	_logDetail = format ["[OCCUPATION Military]:: scanning buildings around %2 started at %1",time,_areaToScan];

@@ -232,7 +232,7 @@ for "_i" from 1 to _vehiclesToSpawn do
 		_group setCombatMode "RED";
 		_vehicle addEventHandler ["getin", "_this call SC_fnc_claimVehicle;"];	
 		_vehicle addMPEventHandler ["mpkilled", "_this call SC_fnc_vehicleDestroyed;"];
-		_vehicle addMPEventHandler ["mphit", "_this call SC_fnc_airHit;"];
+		_vehicle addMPEventHandler ["mphit", "_this call SC_fnc_hitAir;"];
 		_vehicle setVariable ["SC_crewEjected", false,true];	
 		sleep 0.2;		
 	}

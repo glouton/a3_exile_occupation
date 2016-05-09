@@ -47,7 +47,7 @@ if(count units _group > 0) then
     _driver setVariable ["DMS_AssignedVeh",_vehicle];  
     _driver setVariable ["SC_drivenVehicle", _vehicle,true];	 
     _vehicle setVariable ["SC_assignedDriver", _driver,true];        
-    _vehicle addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];
+    _vehicle addMPEventHandler ["mphit", "_this call SC_fnc_hitLand;"];
     _driver removeAllMPEventHandlers  "mphit";
     _driver addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
 

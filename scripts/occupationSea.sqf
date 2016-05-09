@@ -43,7 +43,9 @@ _maxDistance = _middle;
 for "_i" from 1 to _vehiclesToSpawn do
 {
 	private["_group"];
-	_spawnLocation = [ 250, 0, 1, 1000, 1000, 1000, 1000, 1000, true, true ] call DMS_fnc_findSafePos; 
+	_potentialspawnLocation = [ _spawnCenter, 0, _maxDistance + 500, 25, 2, 1, 1] call BIS_fnc_findSafePos;
+    _spawnLocation = [_potentialspawnLocation select 0, _potentialspawnLocation select 1,0];
+     
     _group = createGroup SC_BanditSide;
 
 	_VehicleClass = SC_BoatClassToUse call BIS_fnc_selectRandom;
@@ -210,7 +212,7 @@ for "_i" from 1 to _vehiclesToSpawn do
         _group setCombatMode "RED";
         _vehicle addEventHandler ["getin", "_this call SC_fnc_claimVehicle;"];	
         _vehicle addMPEventHandler ["mpkilled", "_this call SC_fnc_vehicleDestroyed;"];
-        _vehicle addMPEventHandler ["mphit", "_this call SC_fnc_boatHit;"];
+        _vehicle addMPEventHandler ["mphit", "_this call SC_fnc_hitSea;"];
         _vehicle setVariable ["SC_crewEjected", false,true];	
         sleep 0.2;               
     }

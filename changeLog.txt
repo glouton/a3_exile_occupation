@@ -1,4 +1,16 @@
 =================================================================================
+V39 (08-05-2016)
+=================================================================================
+Added a check to make sure the array of vehicles checked in the unstick routine exist
+before trying to unstick them
+
+Removed the use dependency on DMS_fnc_findSafePos as the format is changing in the
+test version of DMS, I will switch back to using it once it has been rolled out and 
+everyone is using it
+
+Renamed and reorganised eventhandlers
+
+=================================================================================
 V38 (08-05-2016)
 =================================================================================
 Added a check to the transport module to check the transport vehicle class name 

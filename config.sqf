@@ -115,9 +115,9 @@ SC_buildings                = [	"Land_TentHangar_V1_F","Land_Hangar_F",
                                 ]; 
    
 
-SC_occupyStatic	 		    = false;		    	// true if you want to add AI in specific locations
+SC_occupyStatic	 		    = true;		    	// true if you want to add AI in specific locations
 SC_staticBandits            = [	];      //[[pos],ai count,radius,search buildings]
-SC_staticSurvivors          = [	[[3770,8791,0],6,400,true]	];      //[[pos],ai count,radius,search buildings]
+SC_staticSurvivors          = [	[[3770,8791,0],8,600,true]	];      //[[pos],ai count,radius,search buildings]
 
 SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
@@ -157,6 +157,12 @@ SC_LootCrateItems     = [
                                     ["Exile_Item_CodeLock",0,1]                                 
                             ];
 
+SC_blackListedAreas         =   [
+                                    [[3810,8887,0],500,"Chernarus"],  // Vybor Occupation DMS Static Mission
+                                    [[12571,14337,0],500,"Altis"],    // Neochori Occupation DMS Static Mission
+                                    [[3926,7523,0],500,"Namalsk"]    // Norinsk Occupation DMS Static Mission                             
+                                ];
+
 
 SC_occupyHeliCrashes		= true;					// true if you want to have Dayz style helicrashes
 SC_numberofHeliCrashes      = 5;                    // if SC_occupyHeliCrashes = true spawn this many loot crates (overrided below for Namalsk)
@@ -186,7 +192,7 @@ SC_HeliCrashWeaponsAmount   = [1,3]; // [fixed amount to add, random amount to a
 SC_HeliCrashMagazinesAmount = [2,2]; // [fixed amount to add, random amount to add]
 
 SC_minimumCrewAmount        = 2;     // Maximum amount of AI allowed in a vehicle (applies to ground, air and sea vehicles)
-SC_maximumCrewAmount        = 4;     // Maximum amount of AI allowed in a vehicle (applies to ground, air and sea vehicles) 
+SC_maximumCrewAmount        = 6;     // Maximum amount of AI allowed in a vehicle (applies to ground, air and sea vehicles) 
                                      // (essential crew like drivers and gunners will always spawn regardless of these settings)
 
 // Settings for roaming ground vehicle AI
@@ -246,15 +252,17 @@ if (SC_debug) then
 {
     SC_extendedLogging          = true;
     SC_mapMarkers			    = true;
-    SC_occupyPlaces 			= true;
+    SC_occupyPlaces 			= false;
     SC_occupyVehicle			= true;
-    SC_occupyMilitary 		    = true;
+    SC_occupyMilitary 		    = false;
     SC_occupyStatic	 		    = false;
     SC_occupySky				= true;
-    SC_occupySea				= true;
+    SC_occupySea				= false;
     SC_occupyTransport			= true;
     SC_occupyLootCrates		    = true;
-    SC_occupyHeliCrashes		= true;	   
+    SC_occupyHeliCrashes		= true;	
+    SC_maxNumberofVehicles 	    = 15;
+       
 };
 
 // Don't alter anything below this point, unless you want your server to explode :)
@@ -262,12 +270,13 @@ if(!SC_SurvivorsFriendly) then
 { 
 	CIVILIAN setFriend[RESISTANCE,0]; 
 };
-CIVILIAN setFriend[EAST,0]; 
-CIVILIAN setFriend[WEST,0]; 
-EAST setFriend[CIVILIAN,0]; 
-WEST setFriend[CIVILIAN,0]; 
-EAST setFriend[WEST,0]; 
-WEST setFriend[EAST,0]; 
+CIVILIAN    setFriend [EAST,0]; 
+CIVILIAN    setFriend [WEST,0]; 
+EAST        setFriend [CIVILIAN,0]; 
+WEST        setFriend [CIVILIAN,0]; 
+EAST        setFriend [WEST,0]; 
+WEST        setFriend [EAST,0]; 
+
    
 SC_SurvivorSide         	= CIVILIAN;
 SC_BanditSide           	= EAST;

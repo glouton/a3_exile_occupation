@@ -77,37 +77,11 @@ if(_vehiclesToSpawn >= 1) then
     };
  
 	_useLaunchers = DMS_ai_use_launchers;
-	_locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCityCapital"], _maxDistance]);
-	_i = 0;
-	{
-		_okToUse = true;
-		_pos = position _x;	
-		_nearestMarker = [allMapMarkers, _pos] call BIS_fnc_nearestPosition; // Nearest Marker to the Location		
-		_posNearestMarker = getMarkerPos _nearestMarker;
-		if(_pos distance _posNearestMarker < 2500) exitwith { _okToUse = false; };
-
-		if(!_okToUse) then
-		{
-			_locations deleteAt _i;
-		};
-		_i = _i + 1;
-		sleep 0.2;
-
-	} forEach _locations;
-
-	for "_j" from 1 to _vehiclesToSpawn do
+ 	for "_j" from 1 to _vehiclesToSpawn do
 	{
 		private["_group"];
-		_Location = _locations call BIS_fnc_selectRandom; 
-		_position = position _Location;	
-		_pos = [_position,10,250,5,0,20,0] call BIS_fnc_findSafePos;
-		
-		// Get position of nearest roads
-		_nearRoads = _pos nearRoads 500;
-		_nearestRoad = _nearRoads select 0;
-		_nearestRoad = position (_nearRoads select 0);
-		_spawnLocation = [_nearestRoad select 0, _pos select 1, 0];
-
+        _spawnLocation = [ true, false ] call SC_fnc_findsafePos;
+        diag_log format["[OCCUPATION:Vehicle] found position %1",_spawnLocation];
         _group = createGroup SC_BanditSide;
         if(_side == "survivor") then 
         { 
@@ -190,7 +164,7 @@ if(_vehiclesToSpawn >= 1) then
             _vehicle addEventHandler ["getin", "_this call SC_fnc_getIn;"];
             _vehicle addEventHandler ["getout", "_this call SC_fnc_getOut;"];
             _vehicle addMPEventHandler ["mpkilled", "_this call SC_fnc_vehicleDestroyed;"];
-            _vehicle addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];		
+            _vehicle addMPEventHandler ["mphit", "_this call SC_fnc_hitLand;"];		
         
 
             
@@ -199,7 +173,7 @@ if(_vehiclesToSpawn >= 1) then
             _crewRequired = SC_minimumCrewAmount;
             if(SC_maximumCrewAmount > SC_minimumCrewAmount) then 
             { 
-                _crewRequired = floor(random[SC_minimumCrewAmount,SC_maximumCrewAmount-SC_minimumCrewAmount,SC_maximumCrewAmount]); 
+                _crewRequired = ceil(random[SC_minimumCrewAmount,SC_maximumCrewAmount-SC_minimumCrewAmount,SC_maximumCrewAmount]); 
             };       
             _amountOfCrew = 0;
             _unitPlaced = false;
@@ -215,7 +189,8 @@ if(_vehiclesToSpawn >= 1) then
                     _unitName = [_side] call SC_fnc_selectName;
                     _unit setName _unitName; 
                     _amountOfCrew = _amountOfCrew + 1;
-                    _unit disableAI "FSM";             
+                    _unit disableAI "FSM";    
+                    _unit disableAI "MOVE";         
                     [_side,_unit] call SC_fnc_addMarker;  
                     _unit removeAllMPEventHandlers  "mphit";
                     _unit removeAllMPEventHandlers  "mpkilled";                                            
@@ -273,10 +248,11 @@ if(_vehiclesToSpawn >= 1) then
 
             _logDetail = format['[OCCUPATION:Vehicle] %3 vehicle %1 spawned @ %2',_VehicleClassToUse,_spawnLocation,_side]; 
             [_logDetail] call SC_fnc_log;
-            sleep 15;
+            sleep 2;
             
             {
-                _x enableAI "FSM";     
+                _x enableAI "FSM"; 
+                _x enableAI "MOVE";     
             }forEach units _group;
             
             [_group, _spawnLocation, 2000] call bis_fnc_taskPatrol;

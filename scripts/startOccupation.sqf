@@ -1,5 +1,7 @@
 if (!isServer) exitWith {};
 
+_logDetail = format ["[OCCUPATION]:: Detected DMS version %1",DMS_Version];
+[_logDetail] call SC_fnc_log;
 
 _logDetail = format ["[OCCUPATION]:: Occupation %2 Adding modules to Exile system thread manager at %1",time,SC_occupationVersion];
 [_logDetail] call SC_fnc_log;
@@ -39,6 +41,13 @@ if(SC_occupyHeliCrashes) then
     call compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationHeliCrashes.sqf";
 };
 
+if(SC_occupyVehicle) then
+{
+	uiSleep 15; // delay the start
+	fnc_occupationVehicle = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationVehicle.sqf";
+	[SC_refreshTime, fnc_occupationVehicle, [], true] call ExileServer_system_thread_addTask;
+};
+
 if(SC_occupyStatic) then
 {
 	uiSleep 15; // delay the start
@@ -58,13 +67,6 @@ if(SC_occupySea) then
 	uiSleep 15; // delay the start
 	fnc_occupationSea = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationSea.sqf";
 	[SC_refreshTime, fnc_occupationSea, [], true] call ExileServer_system_thread_addTask;
-};
-
-if(SC_occupyVehicle) then
-{
-	uiSleep 15; // delay the start
-	fnc_occupationVehicle = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationVehicle.sqf";
-	[SC_refreshTime, fnc_occupationVehicle, [], true] call ExileServer_system_thread_addTask;
 };
 
 if(SC_occupyPlaces) then

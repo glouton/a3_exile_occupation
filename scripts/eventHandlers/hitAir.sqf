@@ -117,4 +117,4 @@ if(_heliDamage > 0.7 && _damagedEssentials > 0) then
     _group2 setCombatMode "RED";
 };
 
-_heli addMPEventHandler ["mphit", "_this call SC_fnc_airHit;"];
+_heli addMPEventHandler ["mphit", "_this call SC_fnc_hitAir;"];
