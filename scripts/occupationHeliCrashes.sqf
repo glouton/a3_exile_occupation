@@ -16,7 +16,7 @@ for "_i" from 1 to SC_numberofHeliCrashes do
 	while{!_validspot} do 
 	{
 		sleep 0.2;
-		_position = [ 10, 50, 1, 750, 750, 200, 200, 200, true, false ] call DMS_fnc_findSafePos;
+		_position = [ false, false ] call SC_fnc_findsafePos;
 		_validspot	= true;
 	
 		//Check if near another heli crash site

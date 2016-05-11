@@ -68,6 +68,14 @@ else
     _transport = createVehicle [SC_occupytransportClass, _spawnLocation, [], 0, "CAN_COLLIDE"];    
 };
 
+sleep 0.2;
+
+if(isNull _transport) exitWith 
+{  
+    _logDetail = format ["[OCCUPATION:transport]:: %1 failed to spawn, check it is a valid vehicle class name",SC_occupytransportClass];
+    [_logDetail] call SC_fnc_log;
+};
+
 _transport addEventHandler ["handleDamage", { false }];
 _transport allowdamage false;
 
@@ -112,9 +120,10 @@ _transport setVariable ["ExileIsPersistent", false];
 _transport setVariable["vehPos",_spawnLocation,true];
 _transport setFuel 1;
 
-_logDetail = format['[OCCUPATION:transport] Vehicle spawned @ %1',_spawnLocation];
+_logDetail = format['[OCCUPATION:transport] Vehicle %1 spawned @ %2',SC_occupytransportClass,_spawnLocation];
 [_logDetail] call SC_fnc_log;
-	
+
+_markerCount = 0;	
 {
 	_markerName = _x;
 	_markerPos = getMarkerPos _markerName;
@@ -130,9 +139,19 @@ _logDetail = format['[OCCUPATION:transport] Vehicle spawned @ %1',_spawnLocation
         _wp setWaypointBehaviour "SAFE";
         _wp setWaypointspeed "LIMITED";
         _wp setWaypointTimeout [_transportWaitingTime,_transportWaitingTime,_transportWaitingTime]; 
+        _markerCount = _markerCount + 1;
 	};
   
 } forEach allMapMarkers;
+
+if(_markerCount == 0) exitWith 
+{  
+    _logDetail = format ["[OCCUPATION:transport]:: failed to find any ExileTraderZone or o_unknown map markers @ %1",time];
+    [_logDetail] call SC_fnc_log;
+};
+
+_logDetail = format ["[OCCUPATION:transport]:: Found %1 markers to use as pickup points @ %2",_markerCount,time];
+[_logDetail] call SC_fnc_log;
 
 // Add a final CYCLE
 _wp = _group addWaypoint [_spawnLocation, 20];

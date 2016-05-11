@@ -1,0 +1,58 @@
+=================================================================================
+V39 (08-05-2016)
+=================================================================================
+Added a check to make sure the array of vehicles checked in the unstick routine exist
+before trying to unstick them
+
+Removed the use dependency on DMS_fnc_findSafePos as the format is changing in the
+test version of DMS, I will switch back to using it once it has been rolled out and 
+everyone is using it
+
+Renamed and reorganised eventhandlers
+
+=================================================================================
+V38 (08-05-2016)
+=================================================================================
+Added a check to the transport module to check the transport vehicle class name 
+is valid and to to make sure there are valid map markers to use for stopping points
+
+=================================================================================
+V37 (06-05-2016)
+=================================================================================
+Added limit checks for the amount of each class of vehicle in Sky, Sea and Vehicle modules
+
+=================================================================================
+V36 (05-05-2016)
+=================================================================================
+Fixed the checks for valid vehicles in Sky, Sea and Vehicle modules
+
+=================================================================================
+V35 (05-05-2016)
+=================================================================================
+Added checks for valid vehicles in Sky, Sea and Vehicle modules
+Added the ability to add names to be used for AI
+Altered eventhandlers triggered to repair land vehicles that were getting stuck in a loop
+Added the option to ignore AI count when spawning land vehicles (set SC_occupyVehicleIgnoreCount = true)
+
+=================================================================================
+V28-V31 (27-04-2016)
+=================================================================================
+Altereed a few eventhandlers
+
+Fixed multiple static spawns so they are independent of each other
+
+=================================================================================
+V27 (26-04-2016)
+=================================================================================
+Added the option fully control the gear assigned to bandit and survivor units
+
+Added the option for helicopters as public transport, the heli travels between traders 
+and lands for about 60 seconds. Setting SC_occupyTransportClass to a helicopter classname 
+will switch it over to using a helicopter, if you want to continue using the land vehicle 
+set SC_occupyTransportClass to a land vehicle.
+
+Added the option to set the maximum crew (crew count will be a random number between 
+the max and min). The applies for all AI vehicles.
+
+Added a separate SC_VehicleClassToUseRare list of vehicles which spawn 10% of the 
+time in place of the standard SC_VehicleClassToUse list.

@@ -36,6 +36,7 @@ SC_minDistanceToSpawnZones  = 500;                  // Distance in metres (Briti
 SC_minDistanceToTraders     = 500;                  // Distance in metres (British spelling, sue me :p ) Only used by occupy Places
 
 SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
+SC_occupyVehicleIgnoreCount	= true;					// true if you want spawn vehicles regardless of overall AI count
 SC_occupyVehiclesLocked		= false;				// true if AI vehicles to stay locked until all the linked AI are dead
 
 SC_occupyTraders            = false;                //  (WORK IN PROGRESS, NOT WORKING YET) true if you want to create trader camps at positions specified in SC_occupyTraderDetails
@@ -114,9 +115,9 @@ SC_buildings                = [	"Land_TentHangar_V1_F","Land_Hangar_F",
                                 ]; 
    
 
-SC_occupyStatic	 		    = false;		    	// true if you want to add AI in specific locations
-SC_staticBandits            = [	[[23350,18709,0],12,400,true]	];      //[[pos],ai count,radius,search buildings]
-SC_staticSurvivors          = [	[[23286,18524,0],6,400,true]	];      //[[pos],ai count,radius,search buildings]
+SC_occupyStatic	 		    = true;		    	// true if you want to add AI in specific locations
+SC_staticBandits            = [	];      //[[pos],ai count,radius,search buildings]
+SC_staticSurvivors          = [	[[3770,8791,0],8,600,true]	];      //[[pos],ai count,radius,search buildings]
 
 SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
@@ -156,6 +157,12 @@ SC_LootCrateItems     = [
                                     ["Exile_Item_CodeLock",0,1]                                 
                             ];
 
+SC_blackListedAreas         =   [
+                                    [[3810,8887,0],500,"Chernarus"],  // Vybor Occupation DMS Static Mission
+                                    [[12571,14337,0],500,"Altis"],    // Neochori Occupation DMS Static Mission
+                                    [[3926,7523,0],500,"Namalsk"]    // Norinsk Occupation DMS Static Mission                             
+                                ];
+
 
 SC_occupyHeliCrashes		= true;					// true if you want to have Dayz style helicrashes
 SC_numberofHeliCrashes      = 5;                    // if SC_occupyHeliCrashes = true spawn this many loot crates (overrided below for Namalsk)
@@ -185,45 +192,49 @@ SC_HeliCrashWeaponsAmount   = [1,3]; // [fixed amount to add, random amount to a
 SC_HeliCrashMagazinesAmount = [2,2]; // [fixed amount to add, random amount to add]
 
 SC_minimumCrewAmount        = 2;     // Maximum amount of AI allowed in a vehicle (applies to ground, air and sea vehicles)
-SC_maximumCrewAmount        = 4;     // Maximum amount of AI allowed in a vehicle (applies to ground, air and sea vehicles) 
+SC_maximumCrewAmount        = 6;     // Maximum amount of AI allowed in a vehicle (applies to ground, air and sea vehicles) 
                                      // (essential crew like drivers and gunners will always spawn regardless of these settings)
 
 // Settings for roaming ground vehicle AI
 SC_maxNumberofVehicles 	    = 4;	
 
-// Array of ground vehicles which can be used by AI patrols				
+// Array of arrays of ground vehicles which can be used by AI patrols (the number next to next vehicle is the maximum amount of that class allowed, 0 for no limit)				
 SC_VehicleClassToUse 		=   [	
-                                    "Exile_Car_LandRover_Green",
-                                    "Exile_Bike_QuadBike_Black",
-                                    "Exile_Car_UAZ_Open_Green" 
+                                    ["Exile_Car_LandRover_Green",0],
+                                    ["Exile_Bike_QuadBike_Black",2],
+                                    ["Exile_Car_UAZ_Open_Green",2] 
                                 ];
 SC_VehicleClassToUseRare	=   [	
-                                    "Exile_Car_Hunter",
-                                    "Exile_Car_HEMMT",
-                                    "Exile_Car_Zamak",
-                                    "Exile_Car_Offroad_Armed_Guerilla12",
-                                    "Exile_Car_Offroad_Armed_Guerilla03",
-                                    "Exile_Car_Tempest" 
+                                    ["Exile_Car_Hunter",1],
+                                    ["Exile_Car_HEMMT",1],
+                                    ["Exile_Car_Zamak",1],
+                                    ["Exile_Car_Offroad_Armed_Guerilla12",1],
+                                    ["Exile_Car_Offroad_Armed_Guerilla03",1],
+                                    ["Exile_Car_Tempest",1] 
                                 ];
 
 // Settings for roaming airborne AI (non armed helis will just fly around)
 SC_maxNumberofHelis		    = 1;
 
-// Array of aircraft which can be used by AI patrols
-SC_HeliClassToUse 		    =   [ "Exile_Chopper_Huey_Armed_Green" ];
+// Array of aircraft which can be used by AI patrols (the number next to next vehicle is the maximum amount of that class allowed, 0 for no limit)
+SC_HeliClassToUse 		    =   [ ["Exile_Chopper_Huey_Armed_Green",0] ];
 
 // Settings for roaming seaborne AI (non armed boats will just sail around)
 SC_maxNumberofBoats		    = 1;
 
-// Array of boats which can be used by AI patrols
+// Array of boats which can be used by AI patrols (the number next to next vehicle is the maximum amount of that class allowed, 0 for no limit)
 SC_BoatClassToUse 		    =   [	
-                                    "B_Boat_Armed_01_minigun_F",
-                                    "I_Boat_Armed_01_minigun_F",
-                                    "O_Boat_Transport_01_F",
-                                    "Exile_Boat_MotorBoat_Police" 
+                                    ["B_Boat_Armed_01_minigun_F",1],
+                                    ["I_Boat_Armed_01_minigun_F",1],
+                                    ["O_Boat_Transport_01_F",0],
+                                    ["Exile_Boat_MotorBoat_Police",1] 
                                 ];
 		
-
+// Arrays of names used to generate names for AI
+SC_SurvivorFirstNames   = ["John","Dave","Steve","Rob","Richard","Bob","Andrew","Nick","Adrian","Mark","Adam","Will","Graham"]; 
+SC_SurvivorLastNames    = ["Smith","Jones","Davids","Johnson","Jobs","Andrews","White","Brown","Taylor","Walker","Williams","Clarke","Jackson","Woods"]; 
+SC_BanditFirstNames     = ["Alex","Nikita","George","Daniel","Adam","Alexander","Sasha","Sergey","Dmitry","Anton","Jakub","Vlad","Maxim","Oleg","Denis","Wojtek"]; 
+SC_BanditLastNames      = ["Dimitrov","Petrov","Horvat","Novak","Dvorak","Vesely","Horak","Hansen","Larsen","Tamm","Ivanov","Pavlov","Virtanen"]; 
 
 // namalsk specific settings (if you want to override settings for specific maps if you run multiple servers)
 if (worldName == 'Namalsk') then 
@@ -241,15 +252,17 @@ if (SC_debug) then
 {
     SC_extendedLogging          = true;
     SC_mapMarkers			    = true;
-    SC_occupyPlaces 			= true;
+    SC_occupyPlaces 			= false;
     SC_occupyVehicle			= true;
-    SC_occupyMilitary 		    = true;
+    SC_occupyMilitary 		    = false;
     SC_occupyStatic	 		    = false;
     SC_occupySky				= true;
-    SC_occupySea				= true;
+    SC_occupySea				= false;
     SC_occupyTransport			= true;
     SC_occupyLootCrates		    = true;
-    SC_occupyHeliCrashes		= true;	   
+    SC_occupyHeliCrashes		= true;	
+    SC_maxNumberofVehicles 	    = 15;
+       
 };
 
 // Don't alter anything below this point, unless you want your server to explode :)
@@ -257,10 +270,13 @@ if(!SC_SurvivorsFriendly) then
 { 
 	CIVILIAN setFriend[RESISTANCE,0]; 
 };
-CIVILIAN setFriend[EAST,0]; 
-CIVILIAN setFriend[WEST,0]; 
-EAST setFriend[CIVILIAN,0]; 
-WEST setFriend[CIVILIAN,0]; 
+CIVILIAN    setFriend [EAST,0]; 
+CIVILIAN    setFriend [WEST,0]; 
+EAST        setFriend [CIVILIAN,0]; 
+WEST        setFriend [CIVILIAN,0]; 
+EAST        setFriend [WEST,0]; 
+WEST        setFriend [EAST,0]; 
+
    
 SC_SurvivorSide         	= CIVILIAN;
 SC_BanditSide           	= EAST;

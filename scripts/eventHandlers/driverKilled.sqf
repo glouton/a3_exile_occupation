@@ -8,7 +8,6 @@ if(SC_extendedLogging) then
 };
 
 _deadDriver	= _this select 0;
-//_deadDriver removeAllMPEventHandlers  "mpkilled";
 _vehicle = _deadDriver getVariable "SC_drivenVehicle";
 
 if(SC_debug) then
@@ -36,6 +35,8 @@ if(count units _group > 0) then
     
     _groupMembers = units _group;
     _driver = _groupMembers call BIS_fnc_selectRandom;
+    
+    if(_deadDriver == _driver) exitWith { [_vehicle]  call SC_fnc_vehicleDestroyed; };
 
     _driver disableAI "TARGET";
     _driver disableAI "AUTOTARGET";
@@ -46,7 +47,7 @@ if(count units _group > 0) then
     _driver setVariable ["DMS_AssignedVeh",_vehicle];  
     _driver setVariable ["SC_drivenVehicle", _vehicle,true];	 
     _vehicle setVariable ["SC_assignedDriver", _driver,true];        
-    _vehicle addMPEventHandler ["mphit", "_this call SC_fnc_repairVehicle;"];
+    _vehicle addMPEventHandler ["mphit", "_this call SC_fnc_hitLand;"];
     _driver removeAllMPEventHandlers  "mphit";
     _driver addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
 

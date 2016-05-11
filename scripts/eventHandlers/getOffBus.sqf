@@ -9,4 +9,3 @@ if(_transport isKindOf "LandVehicle") then
     _transportDriver = driver _transport;
     _transportDriver disableAI "MOVE";    
 };
-

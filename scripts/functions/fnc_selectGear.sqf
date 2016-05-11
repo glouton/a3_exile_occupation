@@ -63,7 +63,7 @@ _pistolAttachmentsChance = round (random 100);
 if(_pistolAttachmentsChance < 50) then { _pistolAttachments = [""]; };
 
 _backpackChance = round (random 100);
-if(_backpackChance < 40) then { _backpack = ""; };
+if(_backpackChance < 30) then { _backpack = ""; };
 
 _launcherChance = round (random 100);
 if(_launcherChance < 40 OR isNil "_launcher") then { _launcher = ""; };

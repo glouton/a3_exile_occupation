@@ -194,8 +194,10 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			DMS_ai_use_launchers = false;           
             for "_i" from 1 to _aiCount do
             {		
-                _loadOut = [_side] call SC_fnc_selectGear;
-                _unit = [_group,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier; 
+                _loadOut = [_side] call SC_fnc_selectGear;               
+                _unit = [_group,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier;
+                _unitName = [_side] call SC_fnc_selectName;
+                _unit setName _unitName;
             };            
 			DMS_ai_use_launchers = _useLaunchers;            
             
@@ -277,6 +279,8 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                 {		
                     _loadOut = ["bandit"] call SC_fnc_selectGear;
                     _unit = [_group2,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier; 
+                    _unitName = [_side] call SC_fnc_selectName;
+                    _unit setName _unitName;
                 };            
                 DMS_ai_use_launchers = _useLaunchers;                 
                          

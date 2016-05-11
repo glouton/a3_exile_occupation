@@ -3,7 +3,7 @@ if (!isServer) exitWith {};
 _logDetail = format ["[OCCUPATION:LootCrates]:: Starting Occupation Loot Crates"];
 [_logDetail] call SC_fnc_log;
 
-_logDetail = format['[OCCUPATION:LootCrates]::  worldname: %1 crates to spawn: %2',worldName,SC_numberofLootCrates];
+_logDetail = format["[OCCUPATION:LootCrates]:: worldname: %1 crates to spawn: %2",worldName,SC_numberofLootCrates];
 [_logDetail] call SC_fnc_log;
 
 private['_position'];
@@ -14,7 +14,7 @@ for "_i" from 1 to SC_numberofLootCrates do
 	while{!_validspot} do 
 	{
 		sleep 0.2;
-		_position = [ 10, 50, 1, 750, 750, 200, 200, 200, true, false ] call DMS_fnc_findSafePos;
+		_position = [ false, false ] call SC_fnc_findsafePos;
 		_validspot	= true;
 		
 		//Check if near another crate site
@@ -55,6 +55,8 @@ for "_i" from 1 to SC_numberofLootCrates do
         {		
 			_loadOut = ["bandit"] call SC_fnc_selectGear;
 			_unit = [_group,_spawnPosition,"custom","random","bandit","soldier",_loadOut] call DMS_fnc_SpawnAISoldier; 
+			_unitName = ["bandit"] call SC_fnc_selectName;
+			_unit setName _unitName;
 		};
 		
 		// Get the AI to shut the fuck up :)
