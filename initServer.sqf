@@ -48,14 +48,16 @@ SC_occupationVersion = "v39 (09-05-2016)";
     SC_fnc_getIn			    	= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\eventHandlers\getIn.sqf";
     SC_fnc_getOut			    	= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\eventHandlers\getOut.sqf";
  
+    SC_fnc_getOffBus				= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\eventHandlers\getOffBus.sqf";
+    SC_fnc_getOnBus			        = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\eventHandlers\getOnBus.sqf";
+    SC_fnc_locationUnitMPKilled     = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\eventHandlers\locationUnitMPKilled.sqf";
+    SC_fnc_staticUnitMPKilled		= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\eventHandlers\staticUnitMPKilled.sqf";    
     SC_fnc_unitMPHit            	= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\eventHandlers\unitMPHit.sqf";
     SC_fnc_unitMPKilled        	    = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\eventHandlers\unitMPKilled.sqf";
-    SC_fnc_staticUnitMPKilled		= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\eventHandlers\staticUnitMPKilled.sqf";
-    SC_fnc_getOnBus			        = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\eventHandlers\getOnBus.sqf";
-    SC_fnc_getOffBus				= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\eventHandlers\getOffBus.sqf";
     
     SC_fnc_addMarker				= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_addMarker.sqf";
-    SC_fnc_findsafePos              = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_findsafePos.sqf";  
+    SC_fnc_findsafePos              = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_findsafePos.sqf";
+    SC_fnc_isSafePos                = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_isSafePos.sqf";  
     SC_fnc_selectGear               = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_selectGear.sqf";
     SC_fnc_selectName               = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_selectName.sqf";
     SC_fnc_spawnstatics				= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_spawnStatics.sqf";

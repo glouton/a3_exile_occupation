@@ -83,7 +83,7 @@ for "_i" from 1 to SC_numberofLootCrates do
 	clearWeaponCargoGlobal _box;
 	clearItemCargoGlobal _box;
 	
-	_box enableRopeAttach false; 			// Stop people airlifting the crate
+	_box enableRopeAttach SC_ropeAttach; 	// Stop people airlifting the crate
 	_box setVariable ["permaLoot",true]; 	// Crate stays until next server restart
 	_box allowDamage false; 				// Stop crates taking damage
 

@@ -21,7 +21,7 @@ SC_mapMarkers			    = false;			    // Place map markers at the occupied areas (o
 SC_minFPS 				    = 5;					// any lower than minFPS on the server and additional AI won't spawn
 SC_scaleAI 				    = 10; 					// any more than _scaleAI players on the server and _maxAIcount is reduced for each extra player
 
-SC_removeUserMapMarkers     = true;                 // true to delete map markers place by players every 10 seconds
+SC_removeUserMapMarkers     = true;                 // true to delete map markers placed by players every 10 seconds
 
 SC_fastNights               = true;                 // true if you want night time to go faster than daytime
 SC_fastNightsStarts         = 18;                   // Start fast nights at this hour (24 hour clock) eg. 18 for 6pm
@@ -115,9 +115,13 @@ SC_buildings                = [	"Land_TentHangar_V1_F","Land_Hangar_F",
                                 ]; 
    
 
-SC_occupyStatic	 		    = true;		    	// true if you want to add AI in specific locations
-SC_staticBandits            = [	];      //[[pos],ai count,radius,search buildings]
-SC_staticSurvivors          = [	[[3770,8791,0],8,600,true]	];      //[[pos],ai count,radius,search buildings]
+SC_occupyStatic	 		    = false;		    	// true if you want to add AI in specific locations
+SC_staticBandits            = [                     //[[pos],ai count,radius,search buildings]	
+    
+                              ];     
+SC_staticSurvivors          = [	                    //[[pos],ai count,radius,search buildings]
+                                [[3770,8791,0],8,250,true]	
+                              ];      
 
 SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
@@ -132,6 +136,8 @@ SC_numberofLootCrates       = 6;                    // if SC_occupyLootCrates = 
 SC_LootCrateGuards          = 4;                    // number of AI to spawn at each crate
 SC_LootCrateGuardsRandomize = true;                 // Use a random number of guards up to a maximum = SC_numberofGuards (so between 1 and SC_numberofGuards)
 SC_occupyLootCratesMarkers	= true;					// true if you want to have markers on the loot crate spawns
+
+SC_ropeAttach               = false;                // Allow lootcrates to be airlifted (for SC_occupyLootCrates and SC_occupyHeliCrashes)
 
 // Array of possible common items to go in loot crates ["classname",fixed amount,random amount]
 // ["Exile_Item_Matches",1,2] this example would add between 1 and 3 Exile_Item_Matches to the crate (1 + 0 to 2 more)
@@ -158,9 +164,9 @@ SC_LootCrateItems     = [
                             ];
 
 SC_blackListedAreas         =   [
-                                    [[3810,8887,0],500,"Chernarus"],  // Vybor Occupation DMS Static Mission
-                                    [[12571,14337,0],500,"Altis"],    // Neochori Occupation DMS Static Mission
-                                    [[3926,7523,0],500,"Namalsk"]    // Norinsk Occupation DMS Static Mission                             
+                                    [[3810,8887,0],500,"Chernarus"],    // Vybor Occupation DMS Static Mission
+                                    [[12571,14337,0],500,"Altis"],      // Neochori Occupation DMS Static Mission
+                                    [[3926,7523,0],500,"Namalsk"]       // Norinsk Occupation DMS Static Mission                             
                                 ];
 
 
@@ -252,16 +258,19 @@ if (SC_debug) then
 {
     SC_extendedLogging          = true;
     SC_mapMarkers			    = true;
-    SC_occupyPlaces 			= false;
+    SC_occupyPlaces 			= true;
     SC_occupyVehicle			= true;
-    SC_occupyMilitary 		    = false;
-    SC_occupyStatic	 		    = false;
+    SC_occupyMilitary 		    = true;
+    SC_occupyStatic	 		    = true;
     SC_occupySky				= true;
-    SC_occupySea				= false;
+    SC_occupySea				= true;
     SC_occupyTransport			= true;
     SC_occupyLootCrates		    = true;
     SC_occupyHeliCrashes		= true;	
-    SC_maxNumberofVehicles 	    = 15;
+    SC_maxNumberofVehicles 	    = 4;
+    SC_maxNumberofBoats		    = 1;
+    SC_maxNumberofHelis		    = 1;
+    
        
 };
 

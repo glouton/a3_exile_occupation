@@ -60,7 +60,7 @@ if(count(crew _vehicle) > 0)then
                 _group setBehaviour "AWARE";
                 _group setCombatMode "RED"; 
 
-                _logDetail = format ["[OCCUPATION:Unstuck]:: %1 was stuck and was moved from %2 to %3 @ %4",_vehicleType,_curPos,_newPos, time]; 
+                _logDetail = format ["[OCCUPATION:Unstuck]:: %1 was stuck and was moved from %2 to %3 resetting patrol around point %5 @ %4",_vehicleType,_curPos,_newPos, time,_originalSpawnLocation]; 
                 [_logDetail] call SC_fnc_log;
                 
             };
