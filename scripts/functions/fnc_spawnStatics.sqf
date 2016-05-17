@@ -127,8 +127,9 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 						_wpPosition = _highest;
 						diag_log format ["Static Patrol %3 waypoint added - building: %1 position: %2",_y,_highest,_group];
 						_i = _buildingPositions find _wpPosition;
-						_wp = _group addWaypoint [_wpPosition, 0] ;
+						_wp = _group addWaypoint [_wpPosition, 5] ;
 						_wp setWaypointBehaviour "AWARE";
+						_wp setWaypointSpeed "NORMAL";
 						_wp setWaypointCombatMode "RED";
 						_wp setWaypointCompletionRadius 1;
 						_wp waypointAttachObject _y;
@@ -137,10 +138,15 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 
 					};
 				} foreach _buildings;
-				if(count _buildings > 0 && !isNil "_wp") then
+				if(count _buildings > 1 && !isNil "_wp") then
 				{
 					_wp setWaypointType "CYCLE";
-				};			
+				}
+				else
+				{
+					_group setBehaviour "AWARE";
+					_group setCombatMode "RED";												
+				};
 			};
 
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////

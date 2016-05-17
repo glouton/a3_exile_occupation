@@ -72,7 +72,7 @@ if(_launcherChance < 40 OR isNil "_launcher") then { _launcher = ""; };
 if(_weapon != "") then
 {
     _weaponMagazinesToAdd = getArray (configFile >> "CfgWeapons" >> _weapon >> "magazines");
-    _weaponMagazineAmount = 1 + round random (1);	
+    _weaponMagazineAmount = 2 + round random (1);	
     _magazines pushBack [_weaponMagazinesToAdd select 0,_weaponMagazineAmount];    
 };
 
@@ -80,7 +80,7 @@ if(_weapon != "") then
 if(_pistol != "") then
 {
     _pistolMagazinesToAdd = getArray (configFile >> "CfgWeapons" >> _pistol >> "magazines");
-    _pistolMagazineAmount = 1 + round random (1);
+    _pistolMagazineAmount = 2 + round random (1);
     _magazines pushBack [_pistolMagazinesToAdd select 0,_pistolMagazineAmount]; 
 };
 

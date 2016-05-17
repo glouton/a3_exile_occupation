@@ -160,7 +160,9 @@ SC_LootCrateItems     = [
                                     ["Exile_Item_WoodDoorwayKit",1,1],
                                     ["Exile_Item_WoodFloorPortKit",1,2],   
                                     ["Exile_Item_Laptop",0,1],
-                                    ["Exile_Item_CodeLock",0,1]                                 
+                                    ["Exile_Item_CodeLock",0,1],
+									["Exile_Item_Cement",2,10],
+									["Exile_Item_Sand",2,10]
                             ];
 
 SC_blackListedAreas         =   [
@@ -236,6 +238,8 @@ SC_BoatClassToUse 		    =   [
                                     ["Exile_Boat_MotorBoat_Police",1] 
                                 ];
 		
+SC_useRealNames         = true;
+        
 // Arrays of names used to generate names for AI
 SC_SurvivorFirstNames   = ["John","Dave","Steve","Rob","Richard","Bob","Andrew","Nick","Adrian","Mark","Adam","Will","Graham"]; 
 SC_SurvivorLastNames    = ["Smith","Jones","Davids","Johnson","Jobs","Andrews","White","Brown","Taylor","Walker","Williams","Clarke","Jackson","Woods"]; 
@@ -309,9 +313,5 @@ publicVariable "SC_numberofLootCrates";
 publicVariable "SC_transportArray";
 publicVariable "SC_SurvivorSide";
 publicVariable "SC_BanditSide";
-
-// Override a few DMS settings
-//DMS_Show_Kill_Poptabs_Notification	= false;
-//DMS_Show_Kill_Respect_Notification	= false;
 
 SC_CompiledOkay = true;
