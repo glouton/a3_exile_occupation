@@ -26,9 +26,8 @@ if(diag_fps < SC_minFPS) exitWith
     _logDetail = format ["[OCCUPATION:Vehicle]:: Held off spawning more AI as the server FPS is only %1",diag_fps]; 
     [_logDetail] call SC_fnc_log; 
 };
-
-_aiActive = {alive _x && (side _x == SC_BanditSide OR side _x == SC_SurvivorSide) && !SC_occupyVehicleIgnoreCount} count allUnits;
-if(_aiActive > _maxAIcount) exitWith 
+_aiActive = { !isPlayer _x } count allunits;
+if((_aiActive > _maxAIcount) && !SC_occupyVehicleIgnoreCount) exitWith 
 { 
     _logDetail = format ["[OCCUPATION:Vehicle]:: %1 active AI, so not spawning AI this time",_aiActive]; 
     [_logDetail] call SC_fnc_log; 

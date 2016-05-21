@@ -1,4 +1,18 @@
 =================================================================================
+V41 (15-05-2016)
+=================================================================================
+Dead AI should be ejected from any captured land vehicle when you get in them
+
+=================================================================================
+V40 (12-05-2016)
+=================================================================================
+Added SC_ropeAttach variable to the config.sqf to allow/disallow airlifting of lootcrates
+Renamed and altered folder structure for functions and some eventhandlers
+Map markers on occupationPlaces and now get removed when the AI are all killed
+Tweaked the land vehicle repair event handler
+Added SC_blackListedAreas to allow blacklisting of areas of the map
+
+=================================================================================
 V39 (08-05-2016)
 =================================================================================
 Added a check to make sure the array of vehicles checked in the unstick routine exist
@@ -7,8 +21,6 @@ before trying to unstick them
 Removed the use dependency on DMS_fnc_findSafePos as the format is changing in the
 test version of DMS, I will switch back to using it once it has been rolled out and 
 everyone is using it
-
-Renamed and reorganised eventhandlers
 
 =================================================================================
 V38 (08-05-2016)

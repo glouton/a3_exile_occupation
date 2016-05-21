@@ -44,7 +44,7 @@ for "_i" from 1 to SC_numberofHeliCrashes do
 	clearMagazineCargoGlobal _box;
 	clearWeaponCargoGlobal _box;
 	clearItemCargoGlobal _box;
-	_box enableRopeAttach false;
+	_box enableRopeAttach SC_ropeAttach;
 	_box setVariable ["permaLoot",true];
 	_box allowDamage false;
 

@@ -38,7 +38,8 @@ if(diag_fps < _minFPS) exitWith
     };
 };
 
-_aiActive = {alive _x && (side _x == SC_BanditSide OR side _x == SC_SurvivorSide)} count allUnits;
+_aiActive = { !isPlayer _x } count allunits;
+
 if(_aiActive > _maxAIcount) exitWith 
 { 
     if(SC_extendedLogging) then 
@@ -55,6 +56,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 	_locationName = text _x;
 	_locationType = type _x;
 	_pos = [_temppos select 0, _temppos select 1, 0];
+    
 	
 	if(SC_extendedLogging) then 
     { 
@@ -75,61 +77,8 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                 [_logDetail] call SC_fnc_log;
             };
         };
-			
-		// Don't spawn if too near a player base
-		_nearBase = (nearestObjects [_pos,["Exile_Construction_Flag_Static"],500]) select 0;
-		if (!isNil "_nearBase") exitwith 
-        { 
-            _okToSpawn = false; 
-            if(SC_extendedLogging) then 
-            { 
-                _logDetail = format ["[OCCUPATION:Places]:: %1 is too close to player base",_locationName];
-                [_logDetail] call SC_fnc_log;
-            };
-        };
 		
-		// Don't spawn AI near traders and spawn zones
-        {
-            switch (getMarkerType _x) do 
-            {
-                case "ExileSpawnZone":
-                {
-                    if(_pos distance (getMarkerPos _x) < SC_minDistanceToSpawnZones) exitWith
-                    {
-                        _okToSpawn = false; 
-                        if(SC_extendedLogging) then 
-                        { 
-                            _logDetail = format ["[OCCUPATION:Places]:: %1 is too close to a Spawn Zone",_locationName];
-                            [_logDetail] call SC_fnc_log;
-                        };                         
-                    };
-                };
-                case "ExileTraderZone": 
-                {
-                    if(_pos distance (getMarkerPos _x) < SC_minDistanceToTraders) exitWith
-                    {
-                        _okToSpawn = false; 
-                        if(SC_extendedLogging) then 
-                        { 
-                            _logDetail = format ["[OCCUPATION:Places]:: %1 is too close to a Trader Zone",_locationName];
-                            [_logDetail] call SC_fnc_log;
-                        };                         
-                    };
-                };
-            };
-        }
-        forEach allMapMarkers;
-        
-		// Don't spawn additional AI if there are players in range
-		if([_pos, 250] call ExileClient_util_world_isAlivePlayerInRange) exitwith 
-        { 
-            _okToSpawn = false; 
-            if(SC_extendedLogging) then 
-            { 
-                _logDetail = format ["[OCCUPATION:Places]:: %1 has players too close",_locationName];
-                [_logDetail] call SC_fnc_log;
-            }; 
-        };
+        _okToSpawn = [ _pos ] call SC_fnc_isSafePos;
     
 		// Don't spawn additional AI if there are already AI in range
         _nearBanditAI = { side _x == SC_BanditSide AND _x distance _pos < 500 } count allUnits;
@@ -197,6 +146,10 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                 _loadOut = [_side] call SC_fnc_selectGear;               
                 _unit = [_group,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier;
                 _unitName = [_side] call SC_fnc_selectName;
+                _unit setVariable ["SC_unitLocationName", _locationName,true]; 
+                _unit setVariable ["SC_unitLocationPosition", _pos,true];
+                _unit setVariable ["SC_unitSide", _side,true]; 
+                _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_locationUnitMPKilled;"];
                 _unit setName _unitName;
             };            
 			DMS_ai_use_launchers = _useLaunchers;            
@@ -281,6 +234,10 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                     _unit = [_group2,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier; 
                     _unitName = [_side] call SC_fnc_selectName;
                     _unit setName _unitName;
+                    _unit setVariable ["SC_unitLocationName", _locationName,true]; 
+                    _unit setVariable ["SC_unitLocationPosition", _pos,true];
+                    _unit setVariable ["SC_unitSide", _side,true]; 
+                    _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_locationUnitMPKilled;"];
                 };            
                 DMS_ai_use_launchers = _useLaunchers;                 
                          
@@ -310,7 +267,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 			
 			if(SC_mapMarkers) then 
 			{
-				deleteMarker format ["%1", _spawnPosition];   
+				deleteMarker format ["%1", _locationName];   
                 _nearBanditAI = { side _x == SC_BanditSide AND _x distance _pos < 500 } count allUnits;
                 _nearSurvivorAI = { side _x == SC_SurvivorSide AND _x distance _pos < 500 } count allUnits;  
                 
@@ -330,7 +287,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                     _markerColour = "ColorRed";   
                 };                                          
                 
-                _marker = createMarker [format ["%1", _spawnPosition],_pos];
+                _marker = createMarker [format ["%1", _locationName],_pos];
 				_marker setMarkerShape "Icon";
 				_marker setMarkerSize [3,3];
 				_marker setMarkerType "mil_dot";

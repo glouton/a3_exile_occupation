@@ -6,6 +6,11 @@ _unit		= _this select 2;
 
 if(isPlayer _unit) then
 {
+	_group = group _vehicle;
+	{
+		if(!alive _x) then { _x action ["EJECT", _vehicle]; };     
+	}forEach units _group; 
+
     [_vehicle]  call SC_fnc_vehicleDestroyed;
 
 	if(SC_extendedLogging) then 

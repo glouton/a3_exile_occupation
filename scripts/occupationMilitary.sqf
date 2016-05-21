@@ -26,7 +26,7 @@ if(diag_fps < _minFPS) exitWith
     [_logDetail] call SC_fnc_log;
 };
 
-_aiActive = {alive _x && (side _x == SC_BanditSide OR side _x == SC_SurvivorSide)} count allUnits;
+_aiActive = { !isPlayer _x } count allunits;
 
 if(_aiActive > _maxAIcount) exitWith 
 { 
@@ -142,7 +142,7 @@ _areaToScan = [ false, false ] call SC_fnc_findsafePos;
 				{
 					DMS_ai_use_launchers = false;
 					_group = [_spawnPosition, _aiCount, _difficulty, "random", "bandit"] call DMS_fnc_SpawnAIGroup;
-					DMS_ai_use_launchers = true;
+					DMS_ai_use_launchers = _useLaunchers;
 
                     {	
                         _unit = _x;
@@ -166,7 +166,7 @@ _areaToScan = [ false, false ] call SC_fnc_findsafePos;
 									
 					DMS_ai_use_launchers = false;
 					_group = [_spawnPosition, _aiCount, _difficulty, "random", "bandit"] call DMS_fnc_SpawnAIGroup;
-					DMS_ai_use_launchers = true;
+					DMS_ai_use_launchers = _useLaunchers;
 
                     {	
                         _unit = _x;

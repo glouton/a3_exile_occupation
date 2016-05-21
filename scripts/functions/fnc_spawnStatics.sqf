@@ -10,11 +10,11 @@ _staticUID				= 1;
 if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 
 {
-	_currentStatic 	= _x;
-	_spawnPosition 	= _currentStatic select 0;
-	_aiCount 		= _currentStatic select 1;
-	_radius 		= _currentStatic select 2;
-	_staticSearch 	= _currentStatic select 3;
+	_currentStatic = _x;
+	_spawnPosition = _currentStatic select 0;
+	_aiCount = _currentStatic select 1;
+	_radius = _currentStatic select 2;
+	_staticSearch = _currentStatic select 3;
 	
 	_logDetail = format ["[OCCUPATION Static]:: Checking static spawn @ %1 for existing %2 AI",_spawnPosition,_currentSide];
     [_logDetail] call SC_fnc_log;
@@ -88,7 +88,7 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
                 _unit = _x;           
                 [_unit] joinSilent grpNull;
                 [_unit] joinSilent _group;
-                [_side,_unit] call SC_fnc_addMarker;  
+                [_side,_unit] call SC_fnc_addMarker; 
 				_unit setCaptive false;                               
             }foreach units _initialGroup;            
 				
@@ -127,8 +127,9 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 						_wpPosition = _highest;
 						diag_log format ["Static Patrol %3 waypoint added - building: %1 position: %2",_y,_highest,_group];
 						_i = _buildingPositions find _wpPosition;
-						_wp = _group addWaypoint [_wpPosition, 0] ;
+						_wp = _group addWaypoint [_wpPosition, 5] ;
 						_wp setWaypointBehaviour "AWARE";
+						_wp setWaypointSpeed "NORMAL";
 						_wp setWaypointCombatMode "RED";
 						_wp setWaypointCompletionRadius 1;
 						_wp waypointAttachObject _y;
@@ -137,10 +138,15 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 
 					};
 				} foreach _buildings;
-				if(count _buildings > 0 && !isNil "_wp") then
+				if(count _buildings > 1 && !isNil "_wp") then
 				{
 					_wp setWaypointType "CYCLE";
-				};			
+				}
+				else
+				{
+					_group setBehaviour "AWARE";
+					_group setCombatMode "RED";												
+				};
 			};
 
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,7 +155,7 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
 
 			if(SC_mapMarkers && !isNil "_foundBuilding") then 
 			{
-				_marker = createMarker [format ["%1", _foundBuilding],_spawnPosition];
+				_marker = createMarker [format ["%1", _staticUID],_spawnPosition];
 				_marker setMarkerShape "Icon";
 				_marker setMarkerSize [3,3];
 				_marker setMarkerType "mil_dot";
