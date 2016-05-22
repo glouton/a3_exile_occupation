@@ -109,6 +109,7 @@ _transport setVariable ["SC_assignedDriver", _transportDriver,true];
 _transport setVariable ["SC_transport", true,true];
 _transport setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];
 _transportDriver setVariable ["DMS_AssignedVeh",_transport]; 
+_transportDriver setVariable ["DMS_AllowFreezing",false,true]; 
 _transport addEventHandler ["getin", "_this call SC_fnc_getOnBus;"];
 _transport addEventHandler ["getout", "_this call SC_fnc_getOffBus;"];
 

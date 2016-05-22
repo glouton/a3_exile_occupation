@@ -201,6 +201,7 @@ if(_vehiclesToSpawn >= 1) then
                     _unit assignAsDriver _vehicle;
                     _unit moveInDriver _vehicle;                
                     _unit setVariable ["DMS_AssignedVeh",_vehicle];
+                    _unit setVariable ["DMS_AllowFreezing",false,true];
                     _unit setVariable ["SC_drivenVehicle", _vehicle,true]; 
                     _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
                     _vehicle setVariable ["SC_assignedDriver", _unit,true];	
@@ -251,7 +252,8 @@ if(_vehiclesToSpawn >= 1) then
             
             {
                 _x enableAI "FSM"; 
-                _x enableAI "MOVE";     
+                _x enableAI "MOVE";  
+                reload _x;   
             }forEach units _group;
             
             [_group, _spawnLocation, 2000] call bis_fnc_taskPatrol;

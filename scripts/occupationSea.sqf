@@ -114,6 +114,7 @@ for "_i" from 1 to _vehiclesToSpawn do
                 _unit assignAsDriver _vehicle;
                 _unit moveInDriver _vehicle;
                 _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
+                _unit setVariable ["DMS_AllowFreezing",false,true];
                 _unitPlaced = true;
             };
             if(_vehicleRole == "Turret") then

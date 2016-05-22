@@ -2,7 +2,6 @@
 //
 //		Server Occupation script by second_coming
 //
-SC_occupationVersion = "v41 (17-05-2016)";
 //
 //		http://www.exilemod.com/profile/60-second_coming/
 //
@@ -19,6 +18,8 @@ SC_occupationVersion = "v41 (17-05-2016)";
 //		second_coming 2016
 //
 ////////////////////////////////////////////////////////////////////////////////////////////
+
+SC_occupationVersion = getText (configFile >> "CfgPatches" >> "a3_exile_occupation" >> "a3_exile_occupation_version");
 
 [] spawn 
 {

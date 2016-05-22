@@ -1,4 +1,11 @@
 =================================================================================
+V42 (18-05-2016)
+=================================================================================
+Forced reload after spawning AI to make sure they are ready to fire when they spot 
+an enemy
+Added in compatibility with the new DMS feature AI freezing
+
+=================================================================================
 V41 (15-05-2016)
 =================================================================================
 Dead AI should be ejected from any captured land vehicle when you get in them
