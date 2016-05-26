@@ -55,6 +55,7 @@ SC_occupationVersion = getText (configFile >> "CfgPatches" >> "a3_exile_occupati
     SC_fnc_staticUnitMPKilled		= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\eventHandlers\staticUnitMPKilled.sqf";    
     SC_fnc_unitMPHit            	= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\eventHandlers\unitMPHit.sqf";
     SC_fnc_unitMPKilled        	    = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\eventHandlers\unitMPKilled.sqf";
+    SC_fnc_unitFired        	    = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\eventHandlers\unitFired.sqf";
     
     SC_fnc_addMarker				= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_addMarker.sqf";
     SC_fnc_findsafePos              = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_findsafePos.sqf";

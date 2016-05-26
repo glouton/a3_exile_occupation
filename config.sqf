@@ -31,15 +31,27 @@ SC_fastNightsMultiplierDay  = 4;                    // the time multiplier to us
 
 SC_useWaypoints			    = true;					// When spawning AI create waypoints to make them enter buildings (can affect performance when the AI is spawned and the waypoints are calculated)
 
+                                                    // Distance limits for selecting safe places to spawn AI
+SC_minDistanceToSpawnZones  = 500;                  // Minimum distance in metres to the nearest spawn zone
+SC_minDistanceToTraders     = 500;                  // Minimum distance in metres to the nearest trader zone
+SC_minDistanceToTerritory   = 500;                  // Minimum distance in metres to the nearest player territory
+SC_minDistanceToPlayer      = 250;                  // Minimum distance in metres to the nearest player
+
+
+SC_occupyRandomSpawn        = false;                // (WORK IN PROGRESS, NOT WORKING YET) true if you want random spawning AI that hunt for nearby players
+SC_randomSpawnMinPlayers    = 1;                    // Minimum number of players to be online before random spawning AI can spawn
+SC_randomSpawnMaxAI         = 5;                    // Maximum amount of random AI groups allowed at any time
+SC_randomSpawnIgnoreCount	= true;					// true if you want spawn random AI groups regardless of overall AI count (they still count towards the total though)
+
 SC_occupyPlaces 			= true;				    // true if you want villages,towns,cities patrolled by bandits
-SC_minDistanceToSpawnZones  = 500;                  // Distance in metres (British spelling, sue me :p ) Only used by occupy Places
-SC_minDistanceToTraders     = 500;                  // Distance in metres (British spelling, sue me :p ) Only used by occupy Places
+
+
 
 SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
 SC_occupyVehicleIgnoreCount	= true;					// true if you want spawn vehicles regardless of overall AI count
 SC_occupyVehiclesLocked		= false;				// true if AI vehicles to stay locked until all the linked AI are dead
 
-SC_occupyTraders            = false;                //  (WORK IN PROGRESS, NOT WORKING YET) true if you want to create trader camps at positions specified in SC_occupyTraderDetails
+SC_occupyTraders            = false;                // (WORK IN PROGRESS, NOT WORKING YET) true if you want to create trader camps at positions specified in SC_occupyTraderDetails
 SC_occupyTraderDetails      = [
                                 ["Test Trader1",[23718,16223,0],"trader1.sqf",true],
                                 ["Test Trader2",[10666,10262,0],"trader1.sqf",true]
@@ -127,7 +139,7 @@ SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
 
 SC_occupyTransport 	        = true;					// true if you want pubic transport (travels between traders)
-SC_occupyTransportClass 	= "Exile_Chopper_Mohawk_FIA";
+SC_occupyTransportClass 	= ["Exile_Car_LandRover_Urban","Exile_Chopper_Mohawk_FIA"]; // to always use the same vehicle, specify one option only
 SC_occupyTransportStartPos  = [];                   // if empty defaults to map centre
 
 
@@ -173,6 +185,7 @@ SC_blackListedAreas         =   [
 
 
 SC_occupyHeliCrashes		= true;					// true if you want to have Dayz style helicrashes
+SC_numberofHeliCrashesFire  = true;                 // true if you want the crash on fire, false if you just want smoke
 SC_numberofHeliCrashes      = 5;                    // if SC_occupyHeliCrashes = true spawn this many loot crates (overrided below for Namalsk)
 
 // Array of possible common items to go in heli crash crates ["classname",fixed amount,random amount] NOT INCLUDING WEAPONS

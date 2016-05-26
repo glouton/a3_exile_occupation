@@ -1,4 +1,15 @@
 =================================================================================
+V43 (26-05-2016)
+=================================================================================
+Added the option to specify multiple class names to potentially be used for the 
+public transport option. Tweaked Icon for Occupation Airlines
+
+Added an option (SC_numberofHeliCrashesFire) in the config that allows you to turn 
+off the fire at heli crashes
+
+AI units should attempt to take ammo from dead players/dead AI and loot spawns if
+they run out of ammo and there is suitable ammo available
+=================================================================================
 V42 (22-05-2016)
 =================================================================================
 Forced reload after spawning AI to make sure they are ready to fire when they spot 

@@ -87,7 +87,7 @@ if(_vehiclesToSpawn >= 1) then
             deleteGroup _group;
             _group = createGroup SC_SurvivorSide; 
         };        
-        
+        _group setVariable ["DMS_AllowFreezing",false,true];
         _group setVariable ["DMS_LockLocality",nil];
         _group setVariable ["DMS_SpawnedGroup",true];
         _group setVariable ["DMS_Group_Side", _side];        
@@ -201,7 +201,6 @@ if(_vehiclesToSpawn >= 1) then
                     _unit assignAsDriver _vehicle;
                     _unit moveInDriver _vehicle;                
                     _unit setVariable ["DMS_AssignedVeh",_vehicle];
-                    _unit setVariable ["DMS_AllowFreezing",false,true];
                     _unit setVariable ["SC_drivenVehicle", _vehicle,true]; 
                     _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_driverKilled;"];
                     _vehicle setVariable ["SC_assignedDriver", _unit,true];	

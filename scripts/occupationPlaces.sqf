@@ -2,7 +2,7 @@ if (!isServer) exitWith {};
 
 private["_wp","_wp2","_wp3"];
 
-_logDetail = format ["[OCCUPATION]:: Starting Occupation Monitor @ %1",time];
+_logDetail = format ["[OCCUPATION:Places]:: Starting Occupation Monitor @ %1",time];
 [_logDetail] call SC_fnc_log;
 
 _middle 		    = worldSize/2;			
@@ -139,7 +139,8 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                 deleteGroup _group;
                 _group = createGroup SC_SurvivorSide;              
             };
-            
+            _group setVariable ["DMS_AllowFreezing",false];
+             
 			DMS_ai_use_launchers = false;           
             for "_i" from 1 to _aiCount do
             {		
@@ -166,7 +167,9 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                 [_side,_unit] call SC_fnc_addMarker;
                 reload _unit;
             }foreach units _group;
-						
+            
+			_group setVariable ["DMS_AllowFreezing",true];	
+            		
 			// Get the AI to shut the fuck up :)
 			enableSentences false;
 			enableRadio false;
@@ -227,6 +230,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                     _group2 = createGroup SC_SurvivorSide;
                 };
                 
+                _group2 setVariable ["DMS_AllowFreezing",false];
                 
                 DMS_ai_use_launchers = false;           
                 for "_i" from 1 to 5 do
@@ -257,6 +261,8 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                     [_side,_unit] call SC_fnc_addMarker;
                     reload _unit;
                 }foreach units _group2;
+                
+                _group2 setVariable ["DMS_AllowFreezing",true];
                 
 				[_group2, _pos, _groupRadius] call bis_fnc_taskPatrol;
 				_group2 setBehaviour "AWARE";

@@ -34,7 +34,15 @@ for "_i" from 1 to SC_numberofHeliCrashes do
     
 	_helicopter = "Land_UWreck_MV22_F";
 	_vehHeli = _helicopter createVehicle [0,0,0];
-	_heliFire = "test_EmptyObjectForFireBig" createVehicle (position _vehHeli);  
+	
+	_effect = "test_EmptyObjectForSmoke";  
+	
+	if(SC_numberofHeliCrashesFire) then 
+	{
+		_effect = "test_EmptyObjectForFireBig";	
+	};
+
+	_heliFire = _effect createVehicle (position _vehHeli);   
 	_heliFire attachto [_vehHeli, [0,0,-1]];
 	_vehHeli setPos _position;
 		

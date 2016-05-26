@@ -18,6 +18,13 @@ if (SC_fastNights) then
 	[60, fnc_checkMultiplier, [], true] call ExileServer_system_thread_addTask;
 };
 
+if(SC_occupyRandomSpawn) then
+{
+	uiSleep 15; // delay the start
+    call compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationRandomSpawn.sqf";
+};
+
+
 if(SC_occupyTraders) then
 {
 	uiSleep 15; // delay the start

@@ -21,8 +21,8 @@ _validspot      = true;
     };     
 }forEach SC_blackListedAreas;
 
-//Check if near player base
-_nearBase = (nearestObjects [_position,["Exile_Construction_Flag_Static"],500]) select 0;
+//Check if near player territory
+_nearBase = (nearestObjects [_position,["Exile_Construction_Flag_Static"],SC_minDistanceToTerritory]) select 0;
 if (!isNil "_nearBase") then { _validspot = false;  };	
 
 // Don't spawn AI near traders and spawn zones
@@ -48,7 +48,7 @@ if (!isNil "_nearBase") then { _validspot = false;  };
 forEach allMapMarkers; 
 
 // Don't spawn additional AI if there are players in range
-if([_position, 250] call ExileClient_util_world_isAlivePlayerInRange) exitwith { _validspot = false; };         
+if([_position, SC_minDistanceToPlayer] call ExileClient_util_world_isAlivePlayerInRange) exitwith { _validspot = false; };         
 
 
 _validspot	

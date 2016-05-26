@@ -47,7 +47,7 @@ for "_i" from 1 to _vehiclesToSpawn do
     _spawnLocation = [_potentialspawnLocation select 0, _potentialspawnLocation select 1,0];
      
     _group = createGroup SC_BanditSide;
-
+    _group setVariable ["DMS_AllowFreezing",false,true];
 	_VehicleClass = SC_BoatClassToUse call BIS_fnc_selectRandom;
 	_VehicleClassToUse = _VehicleClass select 0; 
 
@@ -114,7 +114,6 @@ for "_i" from 1 to _vehiclesToSpawn do
                 _unit assignAsDriver _vehicle;
                 _unit moveInDriver _vehicle;
                 _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
-                _unit setVariable ["DMS_AllowFreezing",false,true];
                 _unitPlaced = true;
             };
             if(_vehicleRole == "Turret") then

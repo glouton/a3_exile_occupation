@@ -70,6 +70,7 @@ for "_i" from 1 to _vehiclesToSpawn do
 	_spawnLocation = [_safePos select 0, _safePos select 1, _height];
    
     _group = createGroup SC_BanditSide;
+  	_group setVariable ["DMS_AllowFreezing",false,true];
   
 	_VehicleClass = SC_HeliClassToUse call BIS_fnc_selectRandom;
 	_VehicleClassToUse = _VehicleClass select 0;  
@@ -132,7 +133,6 @@ for "_i" from 1 to _vehiclesToSpawn do
 				_unit moveInDriver _vehicle;
 				//_vehicle lockDriver true;
 				_unit setVariable ["DMS_AssignedVeh",_vehicle]; 
-				_unit setVariable ["DMS_AllowFreezing",false,true];
 				removeBackpackGlobal _unit;
 				_unit addBackpackGlobal "B_Parachute";
 				_unitPlaced = true;
