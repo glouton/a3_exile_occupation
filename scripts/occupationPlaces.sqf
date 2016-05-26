@@ -164,6 +164,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                 [_unit] joinSilent grpNull;
                 [_unit] joinSilent _group;        
                 [_side,_unit] call SC_fnc_addMarker;
+                reload _unit;
             }foreach units _group;
 						
 			// Get the AI to shut the fuck up :)
@@ -254,6 +255,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                     [_unit] joinSilent grpNull;
                     [_unit] joinSilent _group2;
                     [_side,_unit] call SC_fnc_addMarker;
+                    reload _unit;
                 }foreach units _group2;
                 
 				[_group2, _pos, _groupRadius] call bis_fnc_taskPatrol;

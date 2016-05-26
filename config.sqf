@@ -23,7 +23,7 @@ SC_scaleAI 				    = 10; 					// any more than _scaleAI players on the server an
 
 SC_removeUserMapMarkers     = true;                 // true to delete map markers placed by players every 10 seconds
 
-SC_fastNights               = true;                 // true if you want night time to go faster than daytime
+SC_fastNights               = false;                // true if you want night time to go faster than daytime
 SC_fastNightsStarts         = 18;                   // Start fast nights at this hour (24 hour clock) eg. 18 for 6pm
 SC_fastNightsMultiplierNight= 16;                   // the time multiplier to use at night (12 = 12x speed)
 SC_fastNightsEnds           = 6;                    // End fast nights at this hour (24 hour clock) eg. 6 for 6am

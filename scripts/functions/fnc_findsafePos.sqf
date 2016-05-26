@@ -52,6 +52,14 @@ while{!_validspot} do
         };        
     };
     
+    _isOverWater = surfaceIsWater _position;
+    
+    if(!_waterSpawn && _isOverWater) then
+    {
+        _validspot = false;  
+        diag_log format["BIS_fnc_findSafePos none waterspawn over water  %1",_position];
+    };
+    
     if(_validspot) then
     {
          _validspot = [ _position ] call SC_fnc_isSafePos;     

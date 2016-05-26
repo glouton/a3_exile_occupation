@@ -149,7 +149,8 @@ _areaToScan = [ false, false ] call SC_fnc_findsafePos;
                         [_unit] joinSilent grpNull;
                         [_unit] joinSilent _group;
 						_unitName = ["bandit"] call SC_fnc_selectName;
-						_unit setName _unitName;						
+						_unit setName _unitName;
+						reload _unit;						
                         if(SC_debug) then
                         {
                             _tag = createVehicle ["Sign_Arrow_Blue_F", position _unit, [], 0, "CAN_COLLIDE"];
