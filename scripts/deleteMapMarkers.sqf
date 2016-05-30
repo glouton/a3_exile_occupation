@@ -21,7 +21,7 @@ for "_i" from 1 to SC_numberofLootCrates do
 if(SC_removeUserMapMarkers) then
 {
 	{
-		if(_x find '_USER_DEFINED' > -1)then 
+		if( (_x find '_USER_DEFINED' > -1) OR (markerShape _x == 'POLYLINE'))then 
 		{
 			deleteMarker _x;
 		} 
