@@ -185,8 +185,6 @@ if(_vehiclesToSpawn >= 1) then
                 {
                     _loadOut = [_side] call SC_fnc_selectGear;
                     _unit = [_group,_spawnLocation,"custom","random",_side,"Vehicle",_loadOut] call DMS_fnc_SpawnAISoldier;
-                    _unitName = [_side] call SC_fnc_selectName;
-                    _unit setName _unitName; 
                     _amountOfCrew = _amountOfCrew + 1;
                     _unit disableAI "FSM";    
                     _unit disableAI "MOVE";         
@@ -209,9 +207,7 @@ if(_vehiclesToSpawn >= 1) then
                 if(_vehicleRole == "Turret" && _amountOfCrew < _crewRequired) then
                 {
                     _loadOut = [_side] call SC_fnc_selectGear;
-                    _unit = [_group,_spawnLocation,"custom","random",_side,"Vehicle",_loadOut] call DMS_fnc_SpawnAISoldier;
-                    _unitName = [_side] call SC_fnc_selectName;
-                    _unit setName _unitName;   
+                    _unit = [_group,_spawnLocation,"custom","random",_side,"Vehicle",_loadOut] call DMS_fnc_SpawnAISoldier;  
                     _amountOfCrew = _amountOfCrew + 1;                            
                     [_side,_unit] call SC_fnc_addMarker;                            
                     _unit moveInTurret [_vehicle, _vehicleSeat];
@@ -222,9 +218,7 @@ if(_vehiclesToSpawn >= 1) then
                 if(_vehicleRole == "CARGO" && _amountOfCrew < _crewRequired) then
                 {
                     _loadOut = [_side] call SC_fnc_selectGear;
-                    _unit = [_group,_spawnLocation,"custom","random",_side,"Vehicle",_loadOut] call DMS_fnc_SpawnAISoldier; 
-                    _unitName = [_side] call SC_fnc_selectName;
-                    _unit setName _unitName;                  
+                    _unit = [_group,_spawnLocation,"custom","random",_side,"Vehicle",_loadOut] call DMS_fnc_SpawnAISoldier;               
                     _amountOfCrew = _amountOfCrew + 1;           
                     [_side,_unit] call SC_fnc_addMarker;                                               
                     _unit assignAsCargo _vehicle; 
@@ -250,9 +244,12 @@ if(_vehiclesToSpawn >= 1) then
             sleep 2;
             
             {
-                _x enableAI "FSM"; 
-                _x enableAI "MOVE";  
-                reload _x;   
+                _unit = _x;
+                _unit enableAI "FSM"; 
+                _unit enableAI "MOVE";  
+                reload _unit;   
+                _unitName = [_side] call SC_fnc_selectName;
+                if(!isNil "_unitName") then { _unit setName _unitName; }; 
             }forEach units _group;
             
             [_group, _spawnLocation, 2000] call bis_fnc_taskPatrol;

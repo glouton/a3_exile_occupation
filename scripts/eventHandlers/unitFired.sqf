@@ -8,9 +8,7 @@ _count = _unit ammo _weapon;
 
 if(_count < 1) then
 {
-    _logDetail = format ["[OCCUPATION:unitFired]:: unit: %1 out of ammo for weapon %2",_unit,_weapon];
-    [_logDetail] call SC_fnc_log;	
-       
+    diag_log format ["[OCCUPATION:unitFired]:: unit: %1 out of ammo for weapon %2",_unit,_weapon];
 
     _weaponHolder = nearestObjects [_unit, ["WeaponHolder"], 75];
     _weapons = weapons _unit;
@@ -38,8 +36,15 @@ if(_count < 1) then
         _unit doMove (position _item);
         {
             _unit action ["TakeMagazine", _item, _x];
-            _logDetail = format ["[OCCUPATION:unitFired]:: unit: %1 took ammo %2",_unit,_x];
-            [_logDetail] call SC_fnc_log;	
+            diag_log format ["[OCCUPATION:unitFired]:: unit: %1 took ammo %2",_unit,_x];	
         }forEach _magazinesToAdd;
+        
+        {
+            diag_log format ["[processReporter] %1 @ %2",_x,time];
+        } forEach diag_activeSQFScripts;
+
+        {
+            diag_log format ["[processReporter] %1 @ %2",_x,time];
+        } forEach diag_activeSQSScripts;
     };    
 };

@@ -38,10 +38,10 @@ if(count units _group > 0) then
     
     if(_deadDriver == _driver) exitWith { [_vehicle]  call SC_fnc_vehicleDestroyed; };
 
-    _driver disableAI "TARGET";
-    _driver disableAI "AUTOTARGET";
-    _driver disableAI "AUTOCOMBAT";
-    _driver disableAI "COVER"; 
+    //_driver disableAI "TARGET";
+    //_driver disableAI "AUTOTARGET";
+    //_driver disableAI "AUTOCOMBAT";
+    //_driver disableAI "COVER"; 
     
     _driver assignAsDriver _vehicle;
     _driver setVariable ["DMS_AssignedVeh",_vehicle];  

@@ -145,13 +145,11 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
             for "_i" from 1 to _aiCount do
             {		
                 _loadOut = [_side] call SC_fnc_selectGear;               
-                _unit = [_group,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier;
-                _unitName = [_side] call SC_fnc_selectName;
+                _unit = [_group,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier;               
                 _unit setVariable ["SC_unitLocationName", _locationName,true]; 
                 _unit setVariable ["SC_unitLocationPosition", _pos,true];
                 _unit setVariable ["SC_unitSide", _side,true]; 
                 _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_locationUnitMPKilled;"];
-                _unit setName _unitName;
             };            
 			DMS_ai_use_launchers = _useLaunchers;            
             
@@ -163,7 +161,9 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
             {	
                 _unit = _x;           
                 [_unit] joinSilent grpNull;
-                [_unit] joinSilent _group;        
+                [_unit] joinSilent _group;      
+                _unitName = [_side] call SC_fnc_selectName;
+                if(!isNil "_unitName") then { _unit setName _unitName; }; 	  
                 [_side,_unit] call SC_fnc_addMarker;
                 reload _unit;
             }foreach units _group;
@@ -237,8 +237,6 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                 {		
                     _loadOut = ["bandit"] call SC_fnc_selectGear;
                     _unit = [_group2,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier; 
-                    _unitName = [_side] call SC_fnc_selectName;
-                    _unit setName _unitName;
                     _unit setVariable ["SC_unitLocationName", _locationName,true]; 
                     _unit setVariable ["SC_unitLocationPosition", _pos,true];
                     _unit setVariable ["SC_unitSide", _side,true]; 
@@ -259,6 +257,8 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                     [_unit] joinSilent grpNull;
                     [_unit] joinSilent _group2;
                     [_side,_unit] call SC_fnc_addMarker;
+                    _unitName = [_side] call SC_fnc_selectName;
+                    if(!isNil "_unitName") then { _unit setName _unitName; };                     
                     reload _unit;
                 }foreach units _group2;
                 

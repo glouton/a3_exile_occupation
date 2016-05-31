@@ -169,9 +169,13 @@ for "_i" from 1 to _vehiclesToSpawn do
 
 		{	
 			_unit = _x;
+			_unitName = ["bandit"] call SC_fnc_selectName;
+            if(!isNil "_unitName") then { _unit setName _unitName; }; 
 			[_unit] joinSilent grpNull;
 			[_unit] joinSilent _group;
 		}foreach units _group;
+
+		_group setVariable ["DMS_AllowFreezing",false,true];
 
 		if(SC_extendedLogging && _unitPlaced) then 
 		{ 

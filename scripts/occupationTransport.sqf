@@ -51,7 +51,7 @@ else
 // Create the driver/pilot and ensure he doest react to gunfire or being shot at.
 _group = createGroup resistance;
 _group setCombatMode "BLUE";
-
+_group setVariable ["DMS_AllowFreezing",false,true];
 
 // Spawn Vehicle
 
@@ -94,7 +94,7 @@ else
 
 
 _group addVehicle _transport;
-_group setVariable ["DMS_AllowFreezing",false,true];	
+	
 _transport enableCopilot false;
 
 _transportDriver = _group createUnit [DMS_AI_Classname, _spawnLocation, [], 0,"FORM"];
@@ -120,6 +120,7 @@ _transport setVariable ["SC_assignedDriver", _transportDriver,true];
 _transport setVariable ["SC_transport", true,true];
 _transport setVariable ["SC_vehicleSpawnLocation", _spawnLocation,true];
 _transportDriver setVariable ["DMS_AssignedVeh",_transport]; 
+_transportDriver setVariable ["SC_lastSpoke", time, true]; 
 _transport addEventHandler ["getin", "_this call SC_fnc_getOnBus;"];
 _transport addEventHandler ["getout", "_this call SC_fnc_getOffBus;"];
 
@@ -220,6 +221,14 @@ while {true} do
         _transportDriver enableAI "MOVE";     
     };
     if(!Alive _transportDriver) exitWith {};
+    _transportDriverlastSpoke = _transportDriver getVariable "SC_lastSpoke"; 
+    if(time - _transportDriverlastSpoke > 30) then 
+    {
+        _randomChat = [SC_occupyTransportMessages] call BIS_fnc_selectRandom;
+        _speech = _randomChat select 0;
+        _transportDriver vehiclechat _speech; 
+        _transportDriver setVariable ["SC_lastSpoke", time, true];               
+    };
     uiSleep 5;   
 };		
 deleteMarker _mk;

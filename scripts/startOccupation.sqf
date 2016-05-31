@@ -1,12 +1,26 @@
 if (!isServer) exitWith {};
 
+if(SC_processReporter) then
+{
+	_logDetail = format ["[processReporter]:: Initialised at %1",time];
+	[_logDetail] call SC_fnc_log;
+	fnc_processReporter = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\extras\processReporter.sqf";
+	[60, fnc_processReporter, [], true] call ExileServer_system_thread_addTask;	
+};
+
 _logDetail = format ["[OCCUPATION]:: Detected DMS version %1",DMS_Version];
 [_logDetail] call SC_fnc_log;
 
 _logDetail = format ["[OCCUPATION]:: Occupation %2 Adding modules to Exile system thread manager at %1",time,SC_occupationVersion];
 [_logDetail] call SC_fnc_log;
 
-[] call ExileClient_system_map_initialize;
+
+if(SC_occupyLootCratesMarkers OR SC_removeUserMapMarkers) then
+{
+	uiSleep 15; // delay the start
+	fnc_occupationDeleteMapMarker 	= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\deleteMapMarkers.sqf";
+	[10, fnc_occupationDeleteMapMarker, [], true] call ExileServer_system_thread_addTask;	
+};
 
 if(SC_debug) then { SC_refreshTime = 60; }else{ SC_refreshTime = 300; };
 
@@ -33,12 +47,7 @@ if(SC_occupyTraders) then
 
 if(SC_occupyLootCrates) then
 {
-	if(SC_occupyLootCratesMarkers) then
-	{
-	    uiSleep 15; // delay the start
-		fnc_occupationDeleteMapMarker 	= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\deleteMapMarkers.sqf";
-		[10, fnc_occupationDeleteMapMarker, [], true] call ExileServer_system_thread_addTask;	
-	};
+	uiSleep 15; // delay the start
 	call compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\occupationLootCrates.sqf";
 };
 

@@ -1,11 +1,12 @@
 ////////////////////////////////////////////////////////////////////////
 //
-//		Server Occupation script by second_coming
-//
+//		Exile Occupation by second_coming
 //		http://www.exilemod.com/profile/60-second_coming/
 //
-//		This script uses the fantastic DMS by Defent and eraser1
+//      For support, visit:
+//      http://www.exilemod.com/topic/12517-release-exile-occupation-roaming-ai-more/
 //
+//		This script uses the fantastic DMS by Defent and eraser1:
 //		http://www.exilemod.com/topic/61-dms-defents-mission-system/
 //
 ////////////////////////////////////////////////////////////////////////
@@ -15,7 +16,8 @@
 
 SC_debug 				    = false;			    // set to true to turn on debug features (not for live servers) 
 SC_extendedLogging          = false;                // set to true for additional logging
-SC_infiSTAR_log			    = true;			        // true Use infiSTAR logging, false logs to server rpt
+SC_processReporter          = true;                 // log the a list of active server processes every 60 seconds (useful for debugging server problems)
+SC_infiSTAR_log			    = true;		        // true Use infiSTAR logging, false logs to server rpt
 SC_maxAIcount 			    = 100;					// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
 SC_mapMarkers			    = false;			    // Place map markers at the occupied areas (occupyPlaces and occupyMilitary only) true/false
 SC_minFPS 				    = 5;					// any lower than minFPS on the server and additional AI won't spawn
@@ -45,16 +47,14 @@ SC_randomSpawnIgnoreCount	= true;					// true if you want spawn random AI groups
 
 SC_occupyPlaces 			= true;				    // true if you want villages,towns,cities patrolled by bandits
 
-
-
 SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
 SC_occupyVehicleIgnoreCount	= true;					// true if you want spawn vehicles regardless of overall AI count
 SC_occupyVehiclesLocked		= false;				// true if AI vehicles to stay locked until all the linked AI are dead
 
 SC_occupyTraders            = false;                // (WORK IN PROGRESS, NOT WORKING YET) true if you want to create trader camps at positions specified in SC_occupyTraderDetails
 SC_occupyTraderDetails      = [
-                                ["Test Trader1",[23718,16223,0],"trader1.sqf",true],
-                                ["Test Trader2",[10666,10262,0],"trader1.sqf",true]
+                                ["Bubendorf Traders",[3896,14467,0],"trader1.sqf",true],
+                                ["Schrattendamm Traders",[10584,4975,0],"trader1.sqf",true]
                               ];  //["Name",[x,y,z],"filename",true] trader name, location, safezone true/false
                                                     
 SC_SurvivorsChance          = 20;                   // chance in % to spawn survivors instead of bandits (for places and land vehicles)
@@ -89,43 +89,7 @@ SC_BanditPistol             = ["hgun_ACPC2_F","hgun_P07_F","hgun_Pistol_heavy_01
 SC_BanditPistolAttachments  = [];
 SC_BanditAssignedItems      = ["ItemMap","ItemCompass","ItemRadio","ItemWatch"]; // all these items will be added
 SC_BanditLauncher           = [];
-SC_BanditBackpack           = ["B_HuntingBackpack","B_Kitbag_cbr","B_Kitbag_mcamo","B_Kitbag_sgg","B_OutdoorPack_blk","B_OutdoorPack_blu","B_OutdoorPack_tan","B_TacticalPack_blk","B_TacticalPack_mcamo","B_TacticalPack_ocamo","B_TacticalPack_oli","B_TacticalPack_rgr"];
-
-
-
-SC_occupyMilitary 		    = false;			    // true if you want military buildings patrolled
-
-// Array of buildings to add military patrols to
-SC_buildings                = [	"Land_TentHangar_V1_F","Land_Hangar_F",
-                                "Land_Airport_Tower_F","Land_Cargo_House_V1_F",
-                                "Land_Cargo_House_V3_F","Land_Cargo_HQ_V1_F",
-                                "Land_Cargo_HQ_V2_F","Land_Cargo_HQ_V3_F",
-                                "Land_u_Barracks_V2_F","Land_i_Barracks_V2_F",
-                                "Land_i_Barracks_V1_F","Land_Cargo_Patrol_V1_F",
-                                "Land_Cargo_Patrol_V2_F","Land_Cargo_Tower_V1_F",
-                                "Land_Cargo_Tower_V1_No1_F","Land_Cargo_Tower_V1_No2_F",
-                                "Land_Cargo_Tower_V1_No3_F","Land_Cargo_Tower_V1_No4_F",
-                                "Land_Cargo_Tower_V1_No5_F","Land_Cargo_Tower_V1_No6_F",
-                                "Land_Cargo_Tower_V1_No7_F","Land_Cargo_Tower_V2_F",
-                                "Land_Cargo_Tower_V3_F","Land_MilOffices_V1_F",
-                                "Land_Radar_F","Land_budova4_winter","land_hlaska",                            
-                                "Land_Vysilac_FM","land_st_vez","Land_ns_Jbad_Mil_Barracks",
-                                "Land_ns_Jbad_Mil_ControlTower","Land_ns_Jbad_Mil_House",
-                                "land_pozorovatelna","Land_vys_budova_p1",
-                                "Land_Vez","Land_Mil_Barracks_i",
-                                "Land_Mil_Barracks_L","Land_Mil_Barracks",
-                                "Land_Hlidac_budka","Land_Ss_hangar",
-                                "Land_Mil_ControlTower","Land_a_stationhouse",
-                                "Land_Farm_WTower","Land_Mil_Guardhouse",
-                                "Land_A_statue01","Land_A_Castle_Gate",
-                                "Land_A_Castle_Donjon","Land_A_Castle_Wall2_30",
-                                "Land_A_Castle_Stairs_A",
-                                "Land_i_Barracks_V1_dam_F","Land_Cargo_Patrol_V3_F",
-                                "Land_Radar_Small_F","Land_Dome_Big_F",
-                                "Land_Dome_Small_F","Land_Army_hut3_long_int",
-                                "Land_Army_hut_int","Land_Army_hut2_int"
-                                ]; 
-   
+SC_BanditBackpack           = ["B_HuntingBackpack","B_Kitbag_cbr","B_Kitbag_mcamo","B_Kitbag_sgg","B_OutdoorPack_blk","B_OutdoorPack_blu","B_OutdoorPack_tan","B_TacticalPack_blk","B_TacticalPack_mcamo","B_TacticalPack_ocamo","B_TacticalPack_oli","B_TacticalPack_rgr"];  
 
 SC_occupyStatic	 		    = false;		    	// true if you want to add AI in specific locations
 SC_staticBandits            = [                     //[[pos],ai count,radius,search buildings]	
@@ -139,13 +103,17 @@ SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
 
 SC_occupyTransport 	        = true;					// true if you want pubic transport (travels between traders)
-SC_occupyTransportClass 	= ["Exile_Car_LandRover_Urban","Exile_Chopper_Mohawk_FIA"]; // to always use the same vehicle, specify one option only
+SC_occupyTransportClass 	= ["Exile_Car_LandRover_Urban","Exile_Chopper_Mohawk_FIA","Exile_Chopper_Mohawk_FIA"]; // to always use the same vehicle, specify one option only
 SC_occupyTransportStartPos  = [];                   // if empty defaults to map centre
+SC_occupyTransportAnnounce  = true;                 // true if you want the pilot/driver to talk to passengers in vehicle chat, false if not
+SC_occupyTransportGetIn     = ["Hello and welcome to Occupation Transport. We hope you enjoy the ride!"];
+SC_occupyTransportGetOut    = ["Thanks for using Occupation Transport. We hope to see you again!"];
+SC_occupyTransportMessages  = ["You guys should totally visit our website","No mooning out of the window please!","Scream if you want to go faster!","frrt"];
 
 
 SC_occupyLootCrates		    = true;					// true if you want to have random loot crates with guards
-SC_numberofLootCrates       = 6;                    // if SC_occupyLootCrates = true spawn this many loot crates (overrided below for Namalsk)
-SC_LootCrateGuards          = 4;                    // number of AI to spawn at each crate
+SC_numberofLootCrates       = 2;                    // if SC_occupyLootCrates = true spawn this many loot crates (overrided below for Namalsk)
+SC_LootCrateGuards          = 7;                    // number of AI to spawn at each crate
 SC_LootCrateGuardsRandomize = true;                 // Use a random number of guards up to a maximum = SC_numberofGuards (so between 1 and SC_numberofGuards)
 SC_occupyLootCratesMarkers	= true;					// true if you want to have markers on the loot crate spawns
 
@@ -180,7 +148,8 @@ SC_LootCrateItems     = [
 SC_blackListedAreas         =   [
                                     [[3810,8887,0],500,"Chernarus"],    // Vybor Occupation DMS Static Mission
                                     [[12571,14337,0],500,"Altis"],      // Neochori Occupation DMS Static Mission
-                                    [[3926,7523,0],500,"Namalsk"]       // Norinsk Occupation DMS Static Mission                             
+                                    [[3926,7523,0],500,"Namalsk"],      // Norinsk Occupation DMS Static Mission  
+                                    [[3926,7523,0],500,"Napf"]          // Lenzburg Occupation DMS Static Mission                            
                                 ];
 
 
@@ -259,6 +228,40 @@ SC_SurvivorLastNames    = ["Smith","Jones","Davids","Johnson","Jobs","Andrews","
 SC_BanditFirstNames     = ["Alex","Nikita","George","Daniel","Adam","Alexander","Sasha","Sergey","Dmitry","Anton","Jakub","Vlad","Maxim","Oleg","Denis","Wojtek"]; 
 SC_BanditLastNames      = ["Dimitrov","Petrov","Horvat","Novak","Dvorak","Vesely","Horak","Hansen","Larsen","Tamm","Ivanov","Pavlov","Virtanen"]; 
 
+
+SC_occupyMilitary 		    = false;			    // true if you want military buildings patrolled
+
+// Array of buildings to add military patrols to
+SC_buildings                = [	"Land_TentHangar_V1_F","Land_Hangar_F",
+                                "Land_Airport_Tower_F","Land_Cargo_House_V1_F",
+                                "Land_Cargo_House_V3_F","Land_Cargo_HQ_V1_F",
+                                "Land_Cargo_HQ_V2_F","Land_Cargo_HQ_V3_F",
+                                "Land_u_Barracks_V2_F","Land_i_Barracks_V2_F",
+                                "Land_i_Barracks_V1_F","Land_Cargo_Patrol_V1_F",
+                                "Land_Cargo_Patrol_V2_F","Land_Cargo_Tower_V1_F",
+                                "Land_Cargo_Tower_V1_No1_F","Land_Cargo_Tower_V1_No2_F",
+                                "Land_Cargo_Tower_V1_No3_F","Land_Cargo_Tower_V1_No4_F",
+                                "Land_Cargo_Tower_V1_No5_F","Land_Cargo_Tower_V1_No6_F",
+                                "Land_Cargo_Tower_V1_No7_F","Land_Cargo_Tower_V2_F",
+                                "Land_Cargo_Tower_V3_F","Land_MilOffices_V1_F",
+                                "Land_Radar_F","Land_budova4_winter","land_hlaska",                            
+                                "Land_Vysilac_FM","land_st_vez","Land_ns_Jbad_Mil_Barracks",
+                                "Land_ns_Jbad_Mil_ControlTower","Land_ns_Jbad_Mil_House",
+                                "land_pozorovatelna","Land_vys_budova_p1",
+                                "Land_Vez","Land_Mil_Barracks_i",
+                                "Land_Mil_Barracks_L","Land_Mil_Barracks",
+                                "Land_Hlidac_budka","Land_Ss_hangar",
+                                "Land_Mil_ControlTower","Land_a_stationhouse",
+                                "Land_Farm_WTower","Land_Mil_Guardhouse",
+                                "Land_A_statue01","Land_A_Castle_Gate",
+                                "Land_A_Castle_Donjon","Land_A_Castle_Wall2_30",
+                                "Land_A_Castle_Stairs_A",
+                                "Land_i_Barracks_V1_dam_F","Land_Cargo_Patrol_V3_F",
+                                "Land_Radar_Small_F","Land_Dome_Big_F",
+                                "Land_Dome_Small_F","Land_Army_hut3_long_int",
+                                "Land_Army_hut_int","Land_Army_hut2_int"
+                                ]; 
+
 // namalsk specific settings (if you want to override settings for specific maps if you run multiple servers)
 if (worldName == 'Namalsk') then 
 { 
@@ -274,6 +277,7 @@ if (worldName == 'Namalsk') then
 if (SC_debug) then
 {
     SC_extendedLogging          = true;
+    SC_processReporter          = true;
     SC_mapMarkers			    = true;
     SC_occupyPlaces 			= true;
     SC_occupyVehicle			= true;

@@ -65,6 +65,7 @@ SC_occupationVersion = getText (configFile >> "CfgPatches" >> "a3_exile_occupati
     SC_fnc_spawnstatics				= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_spawnStatics.sqf";
     SC_fnc_unstick          	    = compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\functions\fnc_unstick.sqf"; 
 
+
     _logDetail = "=============================================================================================================";
     [_logDetail] call SC_fnc_log;
     _logDetail = format ["[OCCUPATION MOD]:: Occupation %2 Initialised at %1",time,SC_occupationVersion];

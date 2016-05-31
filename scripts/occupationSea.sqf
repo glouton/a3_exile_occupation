@@ -107,9 +107,7 @@ for "_i" from 1 to _vehiclesToSpawn do
             _vehicleSeat = _x select 1;
             if(_vehicleRole == "Driver") then
             {
-                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier; 
-                _unitName = ["bandit"] call SC_fnc_selectName;
-                _unit setName _unitName;            
+                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;           
                 _amountOfCrew = _amountOfCrew + 1;  
                 _unit assignAsDriver _vehicle;
                 _unit moveInDriver _vehicle;
@@ -118,9 +116,7 @@ for "_i" from 1 to _vehiclesToSpawn do
             };
             if(_vehicleRole == "Turret") then
             {
-                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;
-                _unitName = ["bandit"] call SC_fnc_selectName;
-                _unit setName _unitName;            
+                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;         
                 _amountOfCrew = _amountOfCrew + 1;   
                 _unit moveInTurret [_vehicle, _vehicleSeat];
                 _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
@@ -128,9 +124,7 @@ for "_i" from 1 to _vehiclesToSpawn do
             };
             if(_vehicleRole == "CARGO" && _amountOfCrew < _crewRequired) then
             {
-                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier; 
-                _unitName = ["bandit"] call SC_fnc_selectName;
-                _unit setName _unitName;            
+                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;           
                 _amountOfCrew = _amountOfCrew + 1;  
                 _unit assignAsCargo _vehicle; 
                 _unit moveInCargo _vehicle;
@@ -147,6 +141,8 @@ for "_i" from 1 to _vehiclesToSpawn do
         
         {	
             _unit = _x;
+            _unitName = ["bandit"] call SC_fnc_selectName;
+            if(!isNil "_unitName") then { _unit setName _unitName; }; 
             [_unit] joinSilent grpNull;
             [_unit] joinSilent _group;
         }foreach units _group;
