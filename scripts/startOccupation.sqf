@@ -15,7 +15,7 @@ _logDetail = format ["[OCCUPATION]:: Occupation %2 Adding modules to Exile syste
 [_logDetail] call SC_fnc_log;
 
 
-if(SC_occupyLootCratesMarkers OR SC_removeUserMapMarkers) then
+if(SC_occupyLootCratesMarkers) then
 {
 	uiSleep 15; // delay the start
 	fnc_occupationDeleteMapMarker 	= compile preprocessFileLineNumbers "\x\addons\a3_exile_occupation\scripts\deleteMapMarkers.sqf";

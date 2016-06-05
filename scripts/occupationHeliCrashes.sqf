@@ -85,7 +85,41 @@ for "_i" from 1 to SC_numberofHeliCrashes do
 			_box addBackpackCargoGlobal [_item, _amount];	
 		};					
 	}forEach SC_HeliCrashItems;	
-    
+
+	{
+		_spawnChance = round (random 100);		
+		if(_spawnChance <= SC_HeliCrashRareItemChance) then
+		{
+			_item = _x select 0;
+			_amount = _x select 1;
+			_randomAmount = _x select 2;
+			_amount = _amount + (random _randomAmount);
+			_itemType = _x call BIS_fnc_itemType;
+			
+			
+			if((_itemType select 0) == "Weapon") then
+			{
+				_box addWeaponCargoGlobal [_item, _amount];	
+			};
+			if((_itemType select 0) == "Magazine") then
+			{
+				_box addMagazineCargoGlobal [_item, _amount];	
+			};
+			if((_itemType select 0) == "Item") then
+			{
+				_box addItemCargoGlobal [_item, _amount];	
+			};
+			if((_itemType select 0) == "Equipment") then
+			{
+				_box addItemCargoGlobal [_item, _amount];	
+			};	
+			if((_itemType select 0) == "Backpack") then
+			{
+				_box addBackpackCargoGlobal [_item, _amount];	
+			};			
+		};						
+	}forEach SC_HeliCrashRareItems;	
+	
 	// Add weapons with ammo to the Box
 	_possibleWeapons = SC_HeliCrashWeapons;
 	_amountOfWeapons = (SC_HeliCrashWeaponsAmount select 0) + round random (SC_HeliCrashWeaponsAmount select 1);

@@ -12,8 +12,7 @@ if( count SC_occupyTransportStartPos   == 0) then
     SC_occupyTransportStartPos  = _spawnCenter;
 };
 
-_transportVehicle = [SC_occupyTransportClass] call BIS_fnc_selectRandom;
-SC_occupyTransportClassToUse = _transportVehicle select 0;
+SC_occupyTransportClassToUse = SC_occupyTransportClass call BIS_fnc_selectRandom;
 
 if!(SC_occupyTransportClassToUse isKindOf "LandVehicle" OR SC_occupyTransportClassToUse isKindOf "Air") exitWith 
 {  

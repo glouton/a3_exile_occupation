@@ -54,11 +54,30 @@ if(count(crew _vehicle) > 0)then
                 {
                     _newPos = _curPos;    
                 };
+                
+                _side = side _group;
+                _group2 = createGroup _side;
+                _group2 setVariable ["DMS_AllowFreezing",false,true];
+                _group2 setVariable ["DMS_LockLocality",nil];
+                _group2 setVariable ["DMS_SpawnedGroup",true];
+                _group2 setVariable ["DMS_Group_Side", _side];
+                [_vehicle] joinSilent _group2;
+                
+                {	
+                    _unit = _x;           
+                    [_unit] joinSilent grpNull;
+                    [_unit] joinSilent _group2;   
+                    _unit enableAI "FSM"; 
+                    _unit enableAI "MOVE";  
+                    reload _unit;
+                }foreach units _group;  
+                                            
+                
                 _GroupLeader = leader (group _vehicle); 
                 _GroupLeader doMove _originalSpawnLocation;
                 [_group, _originalSpawnLocation, 2000] call bis_fnc_taskPatrol;
-                _group setBehaviour "AWARE";
-                _group setCombatMode "RED"; 
+                _group2 setBehaviour "AWARE";
+                _group2 setCombatMode "RED"; 
 
                 _logDetail = format ["[OCCUPATION:Unstuck]:: %1 was stuck and was moved from %2 to %3 resetting patrol around point %5 @ %4",_vehicleType,_curPos,_newPos, time,_originalSpawnLocation]; 
                 [_logDetail] call SC_fnc_log;

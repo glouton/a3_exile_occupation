@@ -17,7 +17,7 @@
 SC_debug 				    = false;			    // set to true to turn on debug features (not for live servers) 
 SC_extendedLogging          = false;                // set to true for additional logging
 SC_processReporter          = true;                 // log the a list of active server processes every 60 seconds (useful for debugging server problems)
-SC_infiSTAR_log			    = true;		        // true Use infiSTAR logging, false logs to server rpt
+SC_infiSTAR_log			    = true;		            // true Use infiSTAR logging, false logs to server rpt
 SC_maxAIcount 			    = 100;					// the maximum amount of AI, if the AI count is above this then additional AI won't spawn
 SC_mapMarkers			    = false;			    // Place map markers at the occupied areas (occupyPlaces and occupyMilitary only) true/false
 SC_minFPS 				    = 5;					// any lower than minFPS on the server and additional AI won't spawn
@@ -96,23 +96,23 @@ SC_staticBandits            = [                     //[[pos],ai count,radius,sea
     
                               ];     
 SC_staticSurvivors          = [	                    //[[pos],ai count,radius,search buildings]
-                                [[3770,8791,0],8,250,true]	
+                                //[[3770,8791,0],8,250,true]	
                               ];      
 
 SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
 
 SC_occupyTransport 	        = true;					// true if you want pubic transport (travels between traders)
-SC_occupyTransportClass 	= ["Exile_Car_LandRover_Urban","Exile_Chopper_Mohawk_FIA","Exile_Chopper_Mohawk_FIA"]; // to always use the same vehicle, specify one option only
+SC_occupyTransportClass 	= ["Exile_Chopper_Mohawk_FIA","Exile_Chopper_Mohawk_FIA","Exile_Car_LandRover_Urban"]; // to always use the same vehicle, specify one option only
 SC_occupyTransportStartPos  = [];                   // if empty defaults to map centre
-SC_occupyTransportAnnounce  = true;                 // true if you want the pilot/driver to talk to passengers in vehicle chat, false if not
+SC_occupyTransportAnnounce  = false;                 // true if you want the pilot/driver to talk to passengers in vehicle chat, false if not
 SC_occupyTransportGetIn     = ["Hello and welcome to Occupation Transport. We hope you enjoy the ride!"];
 SC_occupyTransportGetOut    = ["Thanks for using Occupation Transport. We hope to see you again!"];
 SC_occupyTransportMessages  = ["You guys should totally visit our website","No mooning out of the window please!","Scream if you want to go faster!","frrt"];
 
 
 SC_occupyLootCrates		    = true;					// true if you want to have random loot crates with guards
-SC_numberofLootCrates       = 2;                    // if SC_occupyLootCrates = true spawn this many loot crates (overrided below for Namalsk)
+SC_numberofLootCrates       = 6;                    // if SC_occupyLootCrates = true spawn this many loot crates (overrided below for Namalsk)
 SC_LootCrateGuards          = 7;                    // number of AI to spawn at each crate
 SC_LootCrateGuardsRandomize = true;                 // Use a random number of guards up to a maximum = SC_numberofGuards (so between 1 and SC_numberofGuards)
 SC_occupyLootCratesMarkers	= true;					// true if you want to have markers on the loot crate spawns
@@ -161,8 +161,6 @@ SC_numberofHeliCrashes      = 5;                    // if SC_occupyHeliCrashes =
 // ["HandGrenade",0,2] this example would add between 0 and 2 HandGrenade to the crate (fixed 0 plus 0-2 random)
 // to add a fixed amount make the second number 0
 SC_HeliCrashItems           =   [
-                                    ["HandGrenade",0,2],
-                                    ["APERSBoundingMine_Range_Mag",0,2],
                                     ["B_Parachute",1,1],
                                     ["H_CrewHelmetHeli_B",1,1],
                                     ["ItemGPS",0,1],
@@ -170,6 +168,13 @@ SC_HeliCrashItems           =   [
                                     ["Exile_Item_PlasticBottleFreshWater",2,2],
                                     ["Exile_Item_EMRE",2,2]                                 
                                 ];
+
+SC_HeliCrashRareItems       =   [
+                                    ["HandGrenade",0,2],
+                                    ["APERSBoundingMine_Range_Mag",0,2]                 
+                                ];
+SC_HeliCrashRareItemChance  = 10;                   // percentage chance to spawn each SC_HeliCrashRareItems
+                                
 // Array of possible weapons to place in the crate                            
 SC_HeliCrashWeapons         =   [
                                     "srifle_DMR_02_camo_F",
@@ -272,6 +277,12 @@ if (worldName == 'Namalsk') then
     SC_numberofHeliCrashes  = 2;
     SC_maxNumberofBoats		= 1;
     SC_occupyTransportClass = "Exile_Car_LandRover_Urban"; // the ikarus bus gets stuck on Namalsk
+};
+
+// Napf specific settings (if you want to override settings for specific maps if you run multiple servers)
+if (worldName == 'Napf') then 
+{ 
+	SC_occupyTraders		= true;
 };
 
 if (SC_debug) then

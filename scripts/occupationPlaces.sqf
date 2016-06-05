@@ -206,7 +206,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 						
 						_i = _buildingPositions find _wpPosition;
 						_wp = _group addWaypoint [_wpPosition, 0] ;
-						_wp setWaypointBehaviour "COMBAT";
+						_wp setWaypointBehaviour "AWARE";
 						_wp setWaypointCombatMode "RED";
 						_wp setWaypointCompletionRadius 1;
 						_wp waypointAttachObject _y;

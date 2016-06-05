@@ -1,4 +1,13 @@
 =================================================================================
+V45 (05-06-2016)
+=================================================================================
+Helicrash rare loot option added
+Fixed the number of Loot crates spawning
+Fixed the random public transport selection
+Improved vehicle AI (they shouldn't stop patrolling now)
+
+
+=================================================================================
 V44 (31-05-2016)
 =================================================================================
 Fixed error when real names were disabled
@@ -7,7 +16,7 @@ Added a process reporter module which logs server processes every 60 seconds to
 the rpt or dedicated log file if using infiSTAR logging (useful for diagnosing 
 poor server performance)
 
-Fixed map marker removal (including line drawing)
+
 
 =================================================================================
 V43 (26-05-2016)

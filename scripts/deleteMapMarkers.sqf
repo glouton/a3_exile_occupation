@@ -21,14 +21,3 @@ if (SC_occupyLootCratesMarkers) then
 		};
 	};						
 };
-
-
-if(SC_removeUserMapMarkers) then
-{
-	{
-		if( (_x find '_USER_DEFINED' > -1) OR (markerShape _x == 'POLYLINE'))then 
-		{
-			deleteMarker _x;
-		} 
-	} forEach allMapMarkers;		
-};
