@@ -5,8 +5,7 @@ _logDetail = format ["[OCCUPATION:LootCrates]:: Starting Occupation Loot Crates"
 
 _logDetail = format["[OCCUPATION:LootCrates]:: worldname: %1 crates to spawn: %2",worldName,SC_numberofLootCrates];
 [_logDetail] call SC_fnc_log;
-
-private['_position'];
+private _position = [0,0,0];
 
 for "_i" from 1 to SC_numberofLootCrates do
 {
@@ -19,8 +18,7 @@ for "_i" from 1 to SC_numberofLootCrates do
 		
 		//Check if near another crate site
 		_nearOtherCrate = (nearestObjects [_position,["CargoNet_01_box_F"],500]) select 0;	
-		if (!isNil "_nearOtherCrate") then { _validspot = false; };		
-	
+		if (!isNil "_nearOtherCrate") then { _validspot = false; };			
 	};	
 	
 	_mapMarkerName = format ["loot_marker_%1", _i];

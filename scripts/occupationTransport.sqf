@@ -220,14 +220,6 @@ while {true} do
         _transportDriver enableAI "MOVE";     
     };
     if(!Alive _transportDriver) exitWith {};
-    _transportDriverlastSpoke = _transportDriver getVariable "SC_lastSpoke"; 
-    if(time - _transportDriverlastSpoke > 30) then 
-    {
-        _randomChat = [SC_occupyTransportMessages] call BIS_fnc_selectRandom;
-        _speech = _randomChat select 0;
-        _transportDriver vehiclechat _speech; 
-        _transportDriver setVariable ["SC_lastSpoke", time, true];               
-    };
     uiSleep 5;   
 };		
 deleteMarker _mk;

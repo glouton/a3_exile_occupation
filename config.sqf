@@ -51,11 +51,12 @@ SC_occupyVehicle			= true;					// true if you want to have roaming AI vehicles
 SC_occupyVehicleIgnoreCount	= true;					// true if you want spawn vehicles regardless of overall AI count
 SC_occupyVehiclesLocked		= false;				// true if AI vehicles to stay locked until all the linked AI are dead
 
-SC_occupyTraders            = false;                // (WORK IN PROGRESS, NOT WORKING YET) true if you want to create trader camps at positions specified in SC_occupyTraderDetails
+SC_occupyTraders            = true;                // (WORK IN PROGRESS, NOT WORKING YET) true if you want to create trader camps at positions specified in SC_occupyTraderDetails
 SC_occupyTraderDetails      = [
-                                ["Bubendorf Traders",[3896,14467,0],"trader1.sqf",true],
-                                ["Schrattendamm Traders",[10584,4975,0],"trader1.sqf",true]
-                              ];  //["Name",[x,y,z],"filename",true] trader name, location, safezone true/false
+                                ["Tanoa","Lifou Traders",[7317,7217,0],"trader1.sqf",true],
+                                ["Tanoa","Lijnhaven Traders",[11580,2051,0],"trader1.sqf",true],
+                                ["Napf","Hafen Traders",[9286,17606,0],"trader1.sqf",true]
+                              ];  //["mapname","Name",[x,y,z],"filename",true] trader name, location, safezone true/false
                                                     
 SC_SurvivorsChance          = 20;                   // chance in % to spawn survivors instead of bandits (for places and land vehicles)
 SC_occupyPlacesSurvivors	= true;	                // true if you want a chance to spawn survivor AI as well as bandits (SC_occupyPlaces must be true to use this option)
@@ -103,18 +104,18 @@ SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
 
 SC_occupyTransport 	        = true;					// true if you want pubic transport (travels between traders)
-SC_occupyTransportClass 	= ["Exile_Chopper_Mohawk_FIA","Exile_Chopper_Mohawk_FIA","Exile_Car_LandRover_Urban"]; // to always use the same vehicle, specify one option only
+SC_occupyTransportClass 	= ["Exile_Chopper_Mohawk_FIA","Exile_Chopper_Mohawk_FIA",Exile_Car_LandRover_Urban]; // to always use the same vehicle, specify one option only
 SC_occupyTransportStartPos  = [];                   // if empty defaults to map centre
 SC_occupyTransportAnnounce  = false;                 // true if you want the pilot/driver to talk to passengers in vehicle chat, false if not
-SC_occupyTransportGetIn     = ["Hello and welcome to Occupation Transport. We hope you enjoy the ride!"];
-SC_occupyTransportGetOut    = ["Thanks for using Occupation Transport. We hope to see you again!"];
-SC_occupyTransportMessages  = ["You guys should totally visit our website","No mooning out of the window please!","Scream if you want to go faster!","frrt"];
+SC_occupyTransportGetIn     = [];
+SC_occupyTransportGetOut    = [];
+SC_occupyTransportMessages  = [];
 
 
 SC_occupyLootCrates		    = true;					// true if you want to have random loot crates with guards
 SC_numberofLootCrates       = 6;                    // if SC_occupyLootCrates = true spawn this many loot crates (overrided below for Namalsk)
 SC_LootCrateGuards          = 7;                    // number of AI to spawn at each crate
-SC_LootCrateGuardsRandomize = true;                 // Use a random number of guards up to a maximum = SC_numberofGuards (so between 1 and SC_numberofGuards)
+SC_LootCrateGuardsRandomize = false;                 // Use a random number of guards up to a maximum = SC_LootCrateGuards (so between 1 and SC_LootCrateGuards)
 SC_occupyLootCratesMarkers	= true;					// true if you want to have markers on the loot crate spawns
 
 SC_ropeAttach               = false;                // Allow lootcrates to be airlifted (for SC_occupyLootCrates and SC_occupyHeliCrashes)
@@ -146,10 +147,10 @@ SC_LootCrateItems     = [
                             ];
 
 SC_blackListedAreas         =   [
-                                    [[3810,8887,0],500,"Chernarus"],    // Vybor Occupation DMS Static Mission
-                                    [[12571,14337,0],500,"Altis"],      // Neochori Occupation DMS Static Mission
-                                    [[3926,7523,0],500,"Namalsk"],      // Norinsk Occupation DMS Static Mission  
-                                    [[3926,7523,0],500,"Napf"]          // Lenzburg Occupation DMS Static Mission                            
+                                    [[3810,8887,0],     500,    "Chernarus"],       // Vybor Occupation DMS Static Mission
+                                    [[12571,14337,0],   500,    "Altis"],           // Neochori Occupation DMS Static Mission
+                                    [[3926,7523,0],     500,    "Namalsk"],         // Norinsk Occupation DMS Static Mission  
+                                    [[3926,7523,0],     500,    "Napf"]             // Lenzburg Occupation DMS Static Mission                            
                                 ];
 
 
@@ -285,20 +286,26 @@ if (worldName == 'Napf') then
 	SC_occupyTraders		= true;
 };
 
+// Napf specific settings (if you want to override settings for specific maps if you run multiple servers)
+if (worldName == 'Tanoa') then 
+{ 
+	SC_occupyTraders		= true;
+};
+
 if (SC_debug) then
 {
     SC_extendedLogging          = true;
     SC_processReporter          = true;
     SC_mapMarkers			    = true;
-    SC_occupyPlaces 			= true;
-    SC_occupyVehicle			= true;
-    SC_occupyMilitary 		    = true;
-    SC_occupyStatic	 		    = true;
-    SC_occupySky				= true;
-    SC_occupySea				= true;
-    SC_occupyTransport			= true;
-    SC_occupyLootCrates		    = true;
-    SC_occupyHeliCrashes		= true;	
+    //SC_occupyPlaces 			= true;
+    //SC_occupyVehicle			= true;
+    //SC_occupyMilitary 		    = true;
+    //SC_occupyStatic	 		    = true;
+    //SC_occupySky				= true;
+    //SC_occupySea				= true;
+    //SC_occupyTransport			= true;
+    //SC_occupyLootCrates		    = true;
+    //SC_occupyHeliCrashes		= true;	
     SC_maxNumberofVehicles 	    = 4;
     SC_maxNumberofBoats		    = 1;
     SC_maxNumberofHelis		    = 1;

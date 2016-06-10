@@ -1,4 +1,12 @@
 =================================================================================
+V46 (05-06-2016)
+=================================================================================
+Dynamic Traders are now working (placement of the base can be temperamental)
+If you want to design your own trader base, traders are automatically placed in front
+of the large trader signs. Look in the example trader1.sqf to see how it works. The
+example file was exported from Eden using M3Editor.
+
+=================================================================================
 V45 (05-06-2016)
 =================================================================================
 Helicrash rare loot option added
@@ -15,8 +23,6 @@ Fixed error when real names were disabled
 Added a process reporter module which logs server processes every 60 seconds to 
 the rpt or dedicated log file if using infiSTAR logging (useful for diagnosing 
 poor server performance)
-
-
 
 =================================================================================
 V43 (26-05-2016)
