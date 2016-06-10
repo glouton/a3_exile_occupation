@@ -104,7 +104,7 @@ SC_occupySky				= true;					// true if you want to have roaming AI helis
 SC_occupySea				= false;		        // true if you want to have roaming AI boats
 
 SC_occupyTransport 	        = true;					// true if you want pubic transport (travels between traders)
-SC_occupyTransportClass 	= ["Exile_Chopper_Mohawk_FIA","Exile_Chopper_Mohawk_FIA",Exile_Car_LandRover_Urban]; // to always use the same vehicle, specify one option only
+SC_occupyTransportClass 	= ["Exile_Chopper_Mohawk_FIA","Exile_Chopper_Mohawk_FIA","Exile_Car_LandRover_Urban"]; // to always use the same vehicle, specify one option only
 SC_occupyTransportStartPos  = [];                   // if empty defaults to map centre
 SC_occupyTransportAnnounce  = false;                 // true if you want the pilot/driver to talk to passengers in vehicle chat, false if not
 SC_occupyTransportGetIn     = [];

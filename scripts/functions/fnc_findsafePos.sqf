@@ -58,10 +58,8 @@ while{!_validspot} do
     if(_validspot) then
     {
         _validspot = [ _position ] call SC_fnc_isSafePos;     
-    };  
-
-
-       
+    };      
+    if (isNil "_validspot") then { _validspot	= false; };   
 };
 
 _position	

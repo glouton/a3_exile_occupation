@@ -14,6 +14,7 @@ _minFPS 			= SC_minFPS;
 _useLaunchers 	    = DMS_ai_use_launchers;
 _scaleAI			= SC_scaleAI;
 _side               = "bandit"; 
+_okToSpawn          = true;
 
 if(SC_occupyPlacesSurvivors) then 
 { 
