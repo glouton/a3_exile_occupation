@@ -67,7 +67,7 @@ if(_side == "survivor") then { _currentSide = SC_SurvivorSide };
                 _loadOut = [_side] call SC_fnc_selectGear;
                 _unit = [_initialGroup,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier;
                 _unitName = [_side] call SC_fnc_selectName;
-                _unit setName _unitName;				 
+                if(!isNil "_unitName") then { _unit setName _unitName; }; 				 
 				_unit setVariable ["SC_staticUID",_staticUID];
 				_unit setVariable ["SC_staticSpawnPos",_spawnPosition];
 				_unit addMPEventHandler ["mpkilled", "_this call SC_fnc_staticUnitMPKilled;"];

@@ -49,14 +49,16 @@ for "_i" from 1 to SC_numberofLootCrates do
 	{
 		_spawnPosition = [_position select 0, _position select 1, 0];
 		
-		_group = createGroup SC_BanditSide;
-	
+		_initialGroup = createGroup SC_BanditSide;
+		_initialGroup setCombatMode "BLUE";
+        _initialGroup setBehaviour "SAFE";
+		
         for "_i" from 1 to _AICount do
         {		
 			_loadOut = ["bandit"] call SC_fnc_selectGear;
-			_unit = [_group,_spawnPosition,"custom","random","bandit","soldier",_loadOut] call DMS_fnc_SpawnAISoldier; 
+			_unit = [_initialGroup,_spawnPosition,"custom","random","bandit","soldier",_loadOut] call DMS_fnc_SpawnAISoldier; 
 			_unitName = ["bandit"] call SC_fnc_selectName;
-			_unit setName _unitName;
+			if(!isNil "_unitName") then { _unit setName _unitName; }; 
 			reload _unit;
 		};
 		
@@ -64,6 +66,20 @@ for "_i" from 1 to SC_numberofLootCrates do
 		enableSentences false;
 		enableRadio false;
 
+	      
+		_group = createGroup SC_BanditSide;           
+		_group setVariable ["DMS_LockLocality",nil];
+		_group setVariable ["DMS_SpawnedGroup",true];
+		_group setVariable ["DMS_Group_Side", SC_BanditSide];
+
+		{	
+			_unit = _x;           
+			[_unit] joinSilent grpNull;
+			[_unit] joinSilent _group;
+			_unit setCaptive false;                               
+		}foreach units _initialGroup;  		
+		
+		
 		[_group, _spawnPosition, 100] call bis_fnc_taskPatrol;
 		_group setBehaviour "AWARE";
 		_group setCombatMode "RED";

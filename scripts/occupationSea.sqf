@@ -47,7 +47,7 @@ for "_i" from 1 to _vehiclesToSpawn do
     _spawnLocation = [_potentialspawnLocation select 0, _potentialspawnLocation select 1,0];
      
     _group = createGroup SC_BanditSide;
-
+    _group setVariable ["DMS_AllowFreezing",false,true];
 	_VehicleClass = SC_BoatClassToUse call BIS_fnc_selectRandom;
 	_VehicleClassToUse = _VehicleClass select 0; 
 
@@ -107,21 +107,16 @@ for "_i" from 1 to _vehiclesToSpawn do
             _vehicleSeat = _x select 1;
             if(_vehicleRole == "Driver") then
             {
-                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier; 
-                _unitName = ["bandit"] call SC_fnc_selectName;
-                _unit setName _unitName;            
+                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;           
                 _amountOfCrew = _amountOfCrew + 1;  
                 _unit assignAsDriver _vehicle;
                 _unit moveInDriver _vehicle;
                 _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
-                _unit setVariable ["DMS_AllowFreezing",false,true];
                 _unitPlaced = true;
             };
             if(_vehicleRole == "Turret") then
             {
-                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;
-                _unitName = ["bandit"] call SC_fnc_selectName;
-                _unit setName _unitName;            
+                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;         
                 _amountOfCrew = _amountOfCrew + 1;   
                 _unit moveInTurret [_vehicle, _vehicleSeat];
                 _unit setVariable ["DMS_AssignedVeh",_vehicle]; 
@@ -129,9 +124,7 @@ for "_i" from 1 to _vehiclesToSpawn do
             };
             if(_vehicleRole == "CARGO" && _amountOfCrew < _crewRequired) then
             {
-                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier; 
-                _unitName = ["bandit"] call SC_fnc_selectName;
-                _unit setName _unitName;            
+                _unit = [_group,_spawnLocation,"assault","random","bandit","Vehicle"] call DMS_fnc_SpawnAISoldier;           
                 _amountOfCrew = _amountOfCrew + 1;  
                 _unit assignAsCargo _vehicle; 
                 _unit moveInCargo _vehicle;
@@ -148,6 +141,8 @@ for "_i" from 1 to _vehiclesToSpawn do
         
         {	
             _unit = _x;
+            _unitName = ["bandit"] call SC_fnc_selectName;
+            if(!isNil "_unitName") then { _unit setName _unitName; }; 
             [_unit] joinSilent grpNull;
             [_unit] joinSilent _group;
         }foreach units _group;

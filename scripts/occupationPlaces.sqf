@@ -2,7 +2,7 @@ if (!isServer) exitWith {};
 
 private["_wp","_wp2","_wp3"];
 
-_logDetail = format ["[OCCUPATION]:: Starting Occupation Monitor @ %1",time];
+_logDetail = format ["[OCCUPATION:Places]:: Starting Occupation Monitor @ %1",time];
 [_logDetail] call SC_fnc_log;
 
 _middle 		    = worldSize/2;			
@@ -139,18 +139,17 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                 deleteGroup _group;
                 _group = createGroup SC_SurvivorSide;              
             };
-            
+            _group setVariable ["DMS_AllowFreezing",false];
+             
 			DMS_ai_use_launchers = false;           
             for "_i" from 1 to _aiCount do
             {		
                 _loadOut = [_side] call SC_fnc_selectGear;               
-                _unit = [_group,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier;
-                _unitName = [_side] call SC_fnc_selectName;
+                _unit = [_group,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier;               
                 _unit setVariable ["SC_unitLocationName", _locationName,true]; 
                 _unit setVariable ["SC_unitLocationPosition", _pos,true];
                 _unit setVariable ["SC_unitSide", _side,true]; 
                 _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_locationUnitMPKilled;"];
-                _unit setName _unitName;
             };            
 			DMS_ai_use_launchers = _useLaunchers;            
             
@@ -162,11 +161,15 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
             {	
                 _unit = _x;           
                 [_unit] joinSilent grpNull;
-                [_unit] joinSilent _group;        
+                [_unit] joinSilent _group;      
+                _unitName = [_side] call SC_fnc_selectName;
+                if(!isNil "_unitName") then { _unit setName _unitName; }; 	  
                 [_side,_unit] call SC_fnc_addMarker;
                 reload _unit;
             }foreach units _group;
-						
+            
+			_group setVariable ["DMS_AllowFreezing",true];	
+            		
 			// Get the AI to shut the fuck up :)
 			enableSentences false;
 			enableRadio false;
@@ -203,7 +206,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
 						
 						_i = _buildingPositions find _wpPosition;
 						_wp = _group addWaypoint [_wpPosition, 0] ;
-						_wp setWaypointBehaviour "COMBAT";
+						_wp setWaypointBehaviour "AWARE";
 						_wp setWaypointCombatMode "RED";
 						_wp setWaypointCompletionRadius 1;
 						_wp waypointAttachObject _y;
@@ -227,14 +230,13 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                     _group2 = createGroup SC_SurvivorSide;
                 };
                 
+                _group2 setVariable ["DMS_AllowFreezing",false];
                 
                 DMS_ai_use_launchers = false;           
                 for "_i" from 1 to 5 do
                 {		
                     _loadOut = ["bandit"] call SC_fnc_selectGear;
                     _unit = [_group2,_spawnPosition,"custom","random",_side,"soldier",_loadOut] call DMS_fnc_SpawnAISoldier; 
-                    _unitName = [_side] call SC_fnc_selectName;
-                    _unit setName _unitName;
                     _unit setVariable ["SC_unitLocationName", _locationName,true]; 
                     _unit setVariable ["SC_unitLocationPosition", _pos,true];
                     _unit setVariable ["SC_unitSide", _side,true]; 
@@ -255,8 +257,12 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
                     [_unit] joinSilent grpNull;
                     [_unit] joinSilent _group2;
                     [_side,_unit] call SC_fnc_addMarker;
+                    _unitName = [_side] call SC_fnc_selectName;
+                    if(!isNil "_unitName") then { _unit setName _unitName; };                     
                     reload _unit;
                 }foreach units _group2;
+                
+                _group2 setVariable ["DMS_AllowFreezing",true];
                 
 				[_group2, _pos, _groupRadius] call bis_fnc_taskPatrol;
 				_group2 setBehaviour "AWARE";

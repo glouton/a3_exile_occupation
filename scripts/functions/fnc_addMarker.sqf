@@ -26,3 +26,4 @@ if((vehicle _unit != _unit) && SC_debug) then
 };
 
 _unit addMPEventHandler ["mpkilled", "_this call SC_fnc_unitMPKilled;"];
+//_unit addEventHandler ["Fired", "_this call SC_fnc_unitFired;"];
