@@ -79,7 +79,7 @@ for "_i" from 1 to SC_numberofLootCrates do
 		
 		
 		[_group, _spawnPosition, 100] call bis_fnc_taskPatrol;
-		_group setBehaviour "AWARE";
+		_group setBehaviour "STEALTH";
 		_group setCombatMode "RED";
 
 		_logDetail = format ["[OCCUPATION:LootCrates]::  Creating crate %3 at drop zone %1 with %2 guards",_position,_AICount,_i];

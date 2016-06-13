@@ -80,6 +80,7 @@ _locations = (nearestLocations [_spawnCenter, ["NameVillage","NameCity", "NameCi
         };
 		
         _okToSpawn = [ _pos ] call SC_fnc_isSafePos;
+        if(isNil "_okToSpawn") then { _okToSpawn = false; };
     
 		// Don't spawn additional AI if there are already AI in range
         _nearBanditAI = { side _x == SC_BanditSide AND _x distance _pos < 500 } count allUnits;
