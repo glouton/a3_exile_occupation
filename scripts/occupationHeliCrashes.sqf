@@ -37,13 +37,17 @@ for "_i" from 1 to SC_numberofHeliCrashes do
 	
 	_effect = "test_EmptyObjectForSmoke";  
 	
-	if(SC_numberofHeliCrashesFire) then 
-	{
-		_effect = "test_EmptyObjectForFireBig";	
-	};
+	// Smoke and fire?
+	if (SC_HeliCrashesSmoke) {
+		if(SC_numberofHeliCrashesFire) then 
+		{
+			_effect = "test_EmptyObjectForFireBig";	
+		};
 
-	_heliFire = _effect createVehicle (position _vehHeli);   
-	_heliFire attachto [_vehHeli, [0,0,-1]];
+		_heliFire = _effect createVehicle (position _vehHeli);   
+		_heliFire attachto [_vehHeli, [0,0,-1]];
+	};
+	
 	_vehHeli setPos _position;
 		
 	_positionOfBox = [_position,3,10,1,0,10,0] call BIS_fnc_findSafePos;
