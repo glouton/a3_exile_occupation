@@ -38,7 +38,8 @@ for "_i" from 1 to SC_numberofHeliCrashes do
 	_effect = "test_EmptyObjectForSmoke";  
 	
 	// Smoke and fire?
-	if (SC_HeliCrashesSmoke) {
+	if (SC_HeliCrashesSmoke) then
+	{
 		if(SC_numberofHeliCrashesFire) then 
 		{
 			_effect = "test_EmptyObjectForFireBig";	
